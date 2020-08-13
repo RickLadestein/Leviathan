@@ -13,7 +13,6 @@ workspace "Leviathan"
       architecture "x86_64"
 
 outputdir = "%{prj.name}/%{cfg.buildcfg}"
-sandboxdir = "Sandbox/%{cfg.buildcfg}"
 
 project "Leviathan"
 	location "Leviathan"
@@ -31,7 +30,8 @@ project "Leviathan"
 	
 	includedirs
 	{
-		"%{prj.name}/external/include"
+		"%{prj.name}/external/include",
+		"%{prj.name}/src"
 	}
 	
 	defines
@@ -39,6 +39,11 @@ project "Leviathan"
 		"LV_PLATFORM_WINDOWS",
 		"LV_BUILD_DLL",
 		"_WINDLL"
+	}
+	
+	postbuildcommands
+	{
+		("{COPY} %{cfg.buildtarget.relpath} %{wks.location}/bin/Sandbox/%{cfg.buildcfg}")
 	}
 	
 	
@@ -51,6 +56,8 @@ project "Leviathan"
 			"glfw3.lib"
 			
 		}
+		
+		
 	filter "configurations:*64"
 		libdirs {"%{prj.name}/external/libs/%{cfg.architecture}"}
 		links 
@@ -60,10 +67,7 @@ project "Leviathan"
 			"glfw3.lib"
 		}
 	
-	postbuildcommands
-	{
-		("{COPY} %{cfg.buildtarget.relpath} ../bin/" .. sandboxdir .. "/")
-	}
+	
 	
 	filter "configurations:Debug_x86"
 		defines "LV_DEBUG"
@@ -95,7 +99,8 @@ project "Sandbox"
 	includedirs
 	{
 		"%{prj.name}/external/include",
-		"Leviathan/src"
+		"Leviathan/src",
+		"Leviathan/external/include"
 	}
 	
 	defines

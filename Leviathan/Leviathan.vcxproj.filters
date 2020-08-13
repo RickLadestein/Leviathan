@@ -4,19 +4,42 @@
     <Filter Include="Leviathan">
       <UniqueIdentifier>{E16A6934-4DD5-1DAB-9613-CF5002BDFBFF}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Leviathan\Input">
+      <UniqueIdentifier>{A0FF49D7-0C8B-B79B-159C-3A9081A6139C}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Leviathan.h" />
+    <ClInclude Include="src\Leviathan\Application.h">
+      <Filter>Leviathan</Filter>
+    </ClInclude>
     <ClInclude Include="src\Leviathan\Core.h">
       <Filter>Leviathan</Filter>
     </ClInclude>
-    <ClInclude Include="src\Leviathan\Test.h">
+    <ClInclude Include="src\Leviathan\Event.h">
       <Filter>Leviathan</Filter>
     </ClInclude>
+    <ClInclude Include="src\Leviathan\Input\Keyboard.h">
+      <Filter>Leviathan\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Leviathan\Window.h">
+      <Filter>Leviathan</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Leviathan\Input\Mouse.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Leviathan\Test.cpp">
+    <ClCompile Include="src\Leviathan\Application.cpp">
       <Filter>Leviathan</Filter>
     </ClCompile>
+    <ClCompile Include="src\Leviathan\Event.cpp">
+      <Filter>Leviathan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Leviathan\Input\Keyboard.cpp">
+      <Filter>Leviathan\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Leviathan\Window.cpp">
+      <Filter>Leviathan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Leviathan\Input\Mouse.cpp" />
   </ItemGroup>
 </Project>
