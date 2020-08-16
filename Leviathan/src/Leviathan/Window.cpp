@@ -1,5 +1,5 @@
 #include "Window.h"
-
+#include <iostream>
 
 
 Window::Window(int width, int height, std::string title, WindowMode mode)
@@ -16,10 +16,13 @@ Window::Window(int width, int height, std::string title, WindowMode mode)
 	this->w_data.title = title;
 	this->w_data.keyboard = std::make_shared<Keyboard>();
 	this->w_data.mouse = std::make_shared<Mouse>();
+	this->image.pixels = nullptr;
 }
 
 Window::~Window()
 {
+	if(this->image.pixels)
+		delete[] this->image.pixels;
 }
 
 bool Window::Open()
@@ -32,7 +35,7 @@ bool Window::Open()
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
 	glfwWindowHint(GLFW_DOUBLEBUFFER, GL_TRUE);
 
 	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
@@ -63,6 +66,14 @@ bool Window::Open()
 		this->w_data.height = vidmode->height;
 		break;
 	}
+	if (!w_handle) {
+		return false;
+	}
+	glfwMakeContextCurrent(this->w_handle);
+	int status = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+	if (!status) {
+		std::cout << "Failed to initialize glad" << std::endl;
+	}
 
 	//Set the window position data
 	int pos_x, pos_y;
@@ -71,16 +82,10 @@ bool Window::Open()
 	this->w_data.pos_y = pos_y;
 
 	//Set the window aspect ratio
-
 	this->SetWindowCallbacks();
-	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+	glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
 	this->ResetGlView();
 
-	glfwMakeContextCurrent(this->w_handle);
-	GLenum err = glewInit();
-	if (err != GLEW_OK) {
-		return false;
-	}
 	
 	glfwSetWindowUserPointer(this->w_handle, &this->w_data);
 	return true;
@@ -89,6 +94,8 @@ bool Window::Open()
 void Window::Close()
 {
 	this->w_data.should_close = true;
+	glfwSetWindowShouldClose(this->w_handle, GLFW_TRUE);
+	glfwDestroyWindow(this->w_handle);
 	//Delete unmanaged resources
 }
 
@@ -99,12 +106,50 @@ void Window::ResetGlView()
 
 void Window::Refresh()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	
+	glClear(GL_COLOR_BUFFER_BIT);
+	glfwSwapBuffers(this->w_handle);
 	glfwPollEvents();
 
 	double current_time = glfwGetTime();
 	RefreshEvent ev(current_time - this->last_refresh_time);
 	w_data.EventCallback(&ev);
+	this->last_refresh_time = current_time;
+}
+
+void Window::SetWindowIcon(std::shared_ptr<leviathan::Image> im)
+{
+	if (this->image.pixels) {
+		delete[] this->image.pixels;
+	}
+	int components = im->GetChannelCount();
+	if (components < 4 || components > 4) {
+		std::cerr << "Could not use image: image needs to have RGBA components" << std::endl;
+	}
+	int width, height, char_cnt;
+	im->GetDimensions(&width, &height);
+	char_cnt = (width * height) * components;
+	this->image.pixels = new unsigned char[char_cnt];
+	memcpy(this->image.pixels, im->GetDataPtr(), (char_cnt * sizeof(unsigned char)));
+	this->image.width = width;
+	this->image.height = height;
+	glfwSetWindowIcon(this->w_handle, 1, &this->image);
+}
+
+void Window::SetWindowIcon(unsigned char* data, int width, int height, int components)
+{
+	if (this->image.pixels) {
+		delete[] this->image.pixels;
+	}
+	if (components < 4 || components > 4) {
+		std::cerr << "Could not use image: image needs to have RGBA components" << std::endl;
+	}
+	int char_cnt = (width * height) * components;
+	this->image.pixels = new unsigned char[char_cnt];
+	memcpy(this->image.pixels, data, (char_cnt * sizeof(unsigned char)));
+	this->image.width = width;
+	this->image.height = height;
+	glfwSetWindowIcon(this->w_handle, 1, &this->image);
 }
 
 void Window::SetEventCallback(std::function<void(Event* e)> event)
@@ -153,6 +198,16 @@ void Window::SetCursorMode(MouseMode mode)
 		break;
 	}
 	this->w_data.mouse->mousemode = mode;
+}
+
+void Window::SetSize(int width, int height)
+{
+	glfwSetWindowSize(this->w_handle, width, height);
+}
+
+void Window::SetTitle(std::string title)
+{
+	glfwSetWindowTitle(this->w_handle, title.c_str());
 }
 
 void Window::SetWindowCallbacks()
@@ -254,6 +309,12 @@ void Window::SetWindowCallbacks()
 			w_data->mouse->onEvent(&ev);
 			w_data->EventCallback(&ev);
 		});
+	glfwSetScrollCallback(w_handle, [](GLFWwindow* w_handle, double x_scroll, double y_scroll) 
+		{
+			WindowData* w_data = (WindowData*)glfwGetWindowUserPointer(w_handle);
+			MouseWheelEvent ev(x_scroll, y_scroll);
+			w_data->EventCallback(&ev);
+		});
 }
 
 void Window::OnEvent(Event* event)
@@ -262,15 +323,14 @@ void Window::OnEvent(Event* event)
 	case EventType::ResizeEvent:
 	{
 		ResizeEvent* ev1 = dynamic_cast<ResizeEvent*> (event);
-		this->w_data.width = ev1->getSizeX();
-		this->w_data.height = ev1->getSizeY();
+		ev1->GetSize(&this->w_data.width, &this->w_data.height);
+		this->ResetGlView();
 	}
 		break;
 	case EventType::MoveEvent:
 	{
 		MoveEvent* ev2 = dynamic_cast<MoveEvent*> (event);
-		this->w_data.pos_x = ev2->getPosX();
-		this->w_data.pos_y = ev2->getPosY();
+		ev2->GetPos(&this->w_data.pos_x, &this->w_data.pos_y);
 	}
 		break;
 	case EventType::FocusEvent:

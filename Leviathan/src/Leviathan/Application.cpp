@@ -1,5 +1,6 @@
 #include "Application.h"
-
+#include <iostream>
+#include <thread>
 Application::Application()
 {
 	this->window = std::make_shared<Window>(1920, 1080, "Test", WindowMode::WINDOWED);

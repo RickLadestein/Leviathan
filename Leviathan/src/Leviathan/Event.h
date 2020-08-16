@@ -1,8 +1,10 @@
 #pragma once
 #include "Core.h"
 #include <functional>
+#include <string>
 
 enum class EventType{
+	None,
 	MouseMoveEvent,
 	MousePressEvent,
 	MouseReleaseEvent,
@@ -22,6 +24,7 @@ enum class EventType{
 };
 
 enum class EventCategory {
+	None,
 	MouseEvent,
 	KeyboardEvent,
 	WindowEvent
@@ -31,11 +34,11 @@ class LEVIATHAN_API  Event {
 public:
 	inline const EventType GetType() { return this->type; }
 	inline const EventCategory GetCategory() { return this->category; }
-	virtual inline const char* GetString() { return "Empty event"; }
+	virtual inline std::string GetString() { return "Empty event"; }
 protected:
-	EventCategory category;
-	EventType type;
-	bool handled;
+	EventCategory category = EventCategory::None;
+	EventType type = EventType::None;
+	bool handled = false;
 };
 
 #pragma region Window_Events
@@ -43,8 +46,8 @@ class LEVIATHAN_API  RefreshEvent : public Event {
 public:
 	RefreshEvent(double frametime);
 	~RefreshEvent() = default;
-	inline double getFrametime() { return frametime; }
-	inline const char* GetString() { return  "Window RefreshEvent"; }
+	inline double GetFrametime() { return frametime; }
+	std::string GetString();
 private:
 	double frametime;
 };
@@ -53,9 +56,8 @@ class LEVIATHAN_API  ResizeEvent : public Event {
 public:
 	ResizeEvent(int size_x, int size_y);
 	~ResizeEvent() = default;
-	inline int getSizeX() { return size_x; }
-	inline int getSizeY() { return size_y; }
-	inline const char* GetString() { return  "Window ResizeEvent"; }
+	inline void GetSize(int* x, int* y) { *x = size_x; *y = size_y; }
+	std::string GetString();
 private:
 	int size_x, size_y;
 };
@@ -64,9 +66,8 @@ class LEVIATHAN_API  MoveEvent : public Event {
 public:
 	MoveEvent(int x, int y);
 	~MoveEvent() = default;
-	inline int getPosX() { return x; };
-	inline int getPosY() { return y; };
-	inline const char* GetString() { return  "Window MoveEvent"; }
+	inline void GetPos(int* x, int* y) { *x = this->x; *y = this->y; }
+	std::string GetString();
 private:
 	int x, y;
 };
@@ -76,7 +77,7 @@ public:
 	FocusEvent(int hasfocus);
 	~FocusEvent() = default;
 	inline bool hasFocus() { return hasfocus; };
-	inline const char* GetString() { return  "Window FocusEvent"; }
+	std::string GetString();
 private:
 	bool hasfocus;
 };
@@ -87,7 +88,9 @@ class LEVIATHAN_API  MouseMoveEvent : public Event {
 public:
 	MouseMoveEvent(double x_pos, double y_pos, double x_delta, double y_delta);
 	~MouseMoveEvent() = default;
-	inline const char* GetString() { return  "MouseMoveEvent"; }
+	std::string GetString();
+	inline void GetPosition(double* x, double* y) { *x = x_pos; *y = y_pos; }
+	inline void GetDelta(double* dx, double* dy) { *dx = x_delta; *dy = y_delta; }
 private:
 	double x_pos, y_pos;
 	double x_delta, y_delta;
@@ -98,7 +101,8 @@ class LEVIATHAN_API  MousePressEvent : public Event {
 public:
 	MousePressEvent(int button);
 	~MousePressEvent() = default;
-	inline const char* GetString() { return  "MousePressEvent"; }
+	std::string GetString();
+	inline int GetButton() { return button; }
 private:
 	int button;
 	friend class Mouse;
@@ -108,7 +112,8 @@ class LEVIATHAN_API  MouseReleaseEvent : public Event {
 public:
 	MouseReleaseEvent(int button);
 	~MouseReleaseEvent() = default;
-	inline const char* GetString() { return  "MouseReleaseEvent"; }
+	std::string GetString();
+	inline int GetButton() { return button; }
 private:
 	int button;
 	friend class Mouse;
@@ -116,11 +121,12 @@ private:
 
 class LEVIATHAN_API  MouseWheelEvent : public Event {
 public:
-	MouseWheelEvent(int scroll);
+	MouseWheelEvent(double x, double y);
 	~MouseWheelEvent() = default;
-	inline const char* GetString() { return  "MouseWheelEvent"; }
+	std::string GetString();
+	inline void GetScroll(double* x, double* y) { *x = x_scroll; *y = y_scroll; }
 private:
-	int scroll;
+	double x_scroll, y_scroll;
 	friend class Mouse;
 };
 #pragma endregion
@@ -130,7 +136,8 @@ class LEVIATHAN_API  KeyPressEvent : public Event {
 public:
 	KeyPressEvent(int key);
 	~KeyPressEvent() = default;
-	inline const char* GetString() { return  "KeyPressEvent"; }
+	std::string GetString();
+	inline int GetKey() { return key; }
 private:
 	int key;
 friend class Keyboard;
@@ -141,7 +148,8 @@ class LEVIATHAN_API  KeyReleaseEvent : public Event {
 public:
 	KeyReleaseEvent(int key);
 	~KeyReleaseEvent() = default;
-	inline const char* GetString() { return  "KeyReleaseEvent"; }
+	std::string GetString();
+	inline int GetKey() { return key; }
 protected:
 	int key;
 };
@@ -151,7 +159,8 @@ class LEVIATHAN_API  KeyRepeatEvent : public Event {
 public:
 	KeyRepeatEvent(int key);
 	~KeyRepeatEvent() = default;
-	inline const char* GetString() { return  "KeyRepeatEvent"; }
+	std::string GetString();
+	inline int GetKey() { return key; }
 protected:
 	int key;
 };
@@ -161,7 +170,8 @@ class LEVIATHAN_API  KeyTypeEvent : public Event {
 public:
 	KeyTypeEvent(int key);
 	~KeyTypeEvent() = default;
-	inline const char* GetString() { return  "KeyTypeEvent"; }
+	std::string GetString();
+	inline int GetKey() { return key; }
 protected:
 	int key;
 };

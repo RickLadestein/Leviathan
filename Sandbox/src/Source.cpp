@@ -1,6 +1,10 @@
 #include <Leviathan.h>
 #include <functional>
+#include "Leviathan/Util/FileManager.h"
 #include <iostream>
+#include <string>
+#include "Leviathan/Data/Image.h"
+#include <memory>
 
 class Game : public Application {
 public:
@@ -8,13 +12,19 @@ public:
 	~Game() = default;
 
 	 void OnEvent(Event* event) override {
-		if (event->GetType() != EventType::RefreshEvent) {
+		if (event->GetCategory() == EventCategory::MouseEvent) {
 			std::cout << event->GetString() << std::endl;
 		}
 	 }
 };
 int main() {
 	std::shared_ptr<Game> app = std::make_shared<Game>();
+	FileManager::RegisterDirectory("default", FileManager::GetWorkingDir());
+	std::shared_ptr<leviathan::Image> im = leviathan::Image::Load("default", "logo.png");
+	std::shared_ptr<Window> window = app->GetWindow().lock();
+	window->SetWindowIcon(im);
+	window->SetTitle("Minecraft");
+
 	app->Run();
 	app.reset();
 	return 1;

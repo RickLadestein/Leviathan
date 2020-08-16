@@ -4,6 +4,8 @@
 #include "Event.h"
 #include <memory>
 
+LEVIATHAN_API typedef std::shared_ptr<Window> WINDOW_PTR;
+
 class LEVIATHAN_API Application {
 protected:
 	Application();
@@ -15,5 +17,5 @@ public:
 	virtual void OnEvent(Event* event) {};
 	inline std::weak_ptr<Window> GetWindow() { return this->window; }
 private:
-	std::shared_ptr<Window> window;
+	WINDOW_PTR window;
 };

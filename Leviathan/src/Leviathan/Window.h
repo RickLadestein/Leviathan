@@ -1,14 +1,16 @@
 #pragma once
 #include "Core.h"
-#define GLEW_STATIC
-#include "GL/glew.h"
-#include "GLFW/glfw3.h"
 #include "Event.h"
 #include <functional>
 #include <string>
 #include "Input/Keyboard.h"
 #include "Input/Mouse.h"
 #include <memory>
+#include <string>
+#include "Data/Image.h"
+
+#include "glad/glad.h"
+#include "GLFW/glfw3.h"
 
 using EventCallbackFn = std::function<void(Event* e)>;
 
@@ -49,9 +51,12 @@ public:
 	void SetCursorPos(unsigned int x, unsigned int y);
 	void SetRawMouseInput(bool val);
 	void SetCursorMode(MouseMode mode);
+	void SetSize(int width, int height);
+	void SetTitle(std::string title);
 	void ResetGlView();
 	void Refresh();
-
+	void SetWindowIcon(std::shared_ptr<leviathan::Image> im);
+	void SetWindowIcon(unsigned char* data, int width, int height, int components);
 
 	inline bool GetWindowShouldCloseFlag() { return this->w_data.should_close; };
 	inline std::weak_ptr<Keyboard> GetKeyboard() { return this->w_data.keyboard; }
@@ -60,6 +65,7 @@ private:
 	void SetWindowCallbacks();
 	void OnEvent(Event* event);
 	WindowData w_data;
+	GLFWimage image;
 	GLFWwindow* w_handle;
 	double last_refresh_time;
 };

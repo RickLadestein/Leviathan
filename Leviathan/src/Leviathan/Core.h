@@ -1,7 +1,6 @@
 #pragma once
-
-#ifndef GLEW_STATIC
-	#define GLEW_STATIC
+#ifndef STB_IMAGE_IMPLEMENTATION
+	#define STB_IMAGE_IMPLEMENTATION
 #endif
 
 #ifdef LV_PLATFORM_WINDOWS

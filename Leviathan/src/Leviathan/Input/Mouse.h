@@ -21,7 +21,7 @@ public:
 	void GetMousePosition(double* x, double* y);
 	void onEvent(Event* event);
 private:
-	int pos_x, pos_y;
+	double pos_x, pos_y;
 	double x_delta, y_delta;
 	int* mouse_btns;
 	MouseInputMode mouseinputmode;

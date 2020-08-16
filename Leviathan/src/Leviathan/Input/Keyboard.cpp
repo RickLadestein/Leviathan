@@ -2,6 +2,7 @@
 
 Keyboard::Keyboard()
 {
+	this->mode = KeyboardMode::INPUT;
 	keys = new int[MAX_KEY_PRESSED];
 	for (int i = 0; i < MAX_KEY_PRESSED; i++) {
 		keys[i] = GLFW_KEY_UNKNOWN;
