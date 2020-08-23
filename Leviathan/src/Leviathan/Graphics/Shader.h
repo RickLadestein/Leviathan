@@ -2,7 +2,7 @@
 #include "Leviathan/Core.h"
 #include "glm/glm.hpp"
 #include <string>
-
+#include <memory>
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
@@ -52,6 +52,7 @@ public:
 	~ShaderProgram();
 
 	GLuint id;
+	bool rtg;
 	void bind();
 
 	ShaderProgram(const ShaderProgram&) = delete;
@@ -62,7 +63,13 @@ public:
 	void setUniform(const char* name, const glm::vec4& value);
 	void setUniform(const char* name, const glm::mat4& value);
 
+	static bool AddShader(std::string shader_id, std::string folder_id, std::string frag_file, std::string vert_file);
+	static bool AddShader(std::string shader_id, std::string folder_id, std::string frag_file, std::string vert_file, std::string geo_file);
+	static std::weak_ptr<ShaderProgram> GetShader(std::string id);
+	static bool DeleteShader(std::string id);
+
 private:
 	std::string GetInfoLog();
+	
 };
 

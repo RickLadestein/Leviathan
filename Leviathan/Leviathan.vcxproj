@@ -209,6 +209,7 @@
     <ClInclude Include="src\Leviathan\Data\Structures.h" />
     <ClInclude Include="src\Leviathan\Event.h" />
     <ClInclude Include="src\Leviathan\Graphics\Shader.h" />
+    <ClInclude Include="src\Leviathan\Graphics\Texture.h" />
     <ClInclude Include="src\Leviathan\Input\Keyboard.h" />
     <ClInclude Include="src\Leviathan\Input\Mouse.h" />
     <ClInclude Include="src\Leviathan\Util\FileManager.h" />
@@ -219,6 +220,7 @@
     <ClCompile Include="src\Leviathan\Data\Image.cpp" />
     <ClCompile Include="src\Leviathan\Event.cpp" />
     <ClCompile Include="src\Leviathan\Graphics\Shader.cpp" />
+    <ClCompile Include="src\Leviathan\Graphics\Texture.cpp" />
     <ClCompile Include="src\Leviathan\Input\Keyboard.cpp" />
     <ClCompile Include="src\Leviathan\Input\Mouse.cpp" />
     <ClCompile Include="src\Leviathan\Util\FileManager.cpp" />

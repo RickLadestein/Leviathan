@@ -4,25 +4,33 @@
 #include <sstream>
 #include "glm/glm.hpp"
 #include "glm/gtc/type_ptr.hpp"
+#include <unordered_map>
 
 #define GL_UNIFORM_NOT_FOUND -1
 int current_bound_program = 0;
 ShaderProgram::ShaderProgram(VertexShader& v_shader, FragmentShader& f_shader)
 {
 	this->id = 0;
-	if (!v_shader.rtg && !f_shader.rtg) {
+	if (!v_shader.rtg || !f_shader.rtg) {
+		this->rtg = false;
 		return;
 	}
 	this->id = glCreateProgram();
 	glAttachShader(this->id, v_shader.handle);
 	glAttachShader(this->id, f_shader.handle);
 	glLinkProgram(this->id);
+	if (!this->GetInfoLog().empty()) {
+		this->rtg = false;
+		return;
+	}
+	this->rtg = true;
 }
 
 ShaderProgram::ShaderProgram(VertexShader& v_shader, GeometryShader& g_shader, FragmentShader& f_shader)
 {
 	this->id = 0;
 	if (!v_shader.rtg || !f_shader.rtg || !g_shader.rtg) {
+		this->rtg = false;
 		return;
 	}
 	this->id = glCreateProgram();
@@ -30,6 +38,11 @@ ShaderProgram::ShaderProgram(VertexShader& v_shader, GeometryShader& g_shader, F
 	glAttachShader(this->id, f_shader.handle);
 	glAttachShader(this->id, g_shader.handle);
 	glLinkProgram(this->id);
+	if (!this->GetInfoLog().empty()) {
+		this->rtg = false;
+		return;
+	}
+	this->rtg = true;
 }
 
 ShaderProgram::~ShaderProgram()
@@ -90,6 +103,70 @@ void ShaderProgram::setUniform(const char* name, const glm::mat4& value)
 	}
 }
 
+std::unordered_map<std::string, std::shared_ptr<ShaderProgram>> programs;
+
+bool ShaderProgram::AddShader(std::string shader_id, std::string folder_id, std::string frag_file, std::string vert_file)
+{
+	VertexShader v_shader(folder_id, vert_file);
+	FragmentShader f_shader(folder_id, frag_file);
+
+	try {
+		if (programs.at(shader_id)) {
+			return false;
+		}
+	}
+	catch (std::exception e) {
+		std::shared_ptr<ShaderProgram> prg = std::make_shared<ShaderProgram>(v_shader, f_shader);
+		if (prg->rtg) {
+			programs[shader_id] = prg;
+			return true;
+		}
+	}
+	return false;
+}
+
+bool ShaderProgram::AddShader(std::string shader_id, std::string folder_id, std::string frag_file, std::string vert_file, std::string geo_file)
+{
+	VertexShader v_shader(folder_id, vert_file);
+	FragmentShader f_shader(folder_id, frag_file);
+	GeometryShader g_shader(folder_id, geo_file);
+	try {
+		if (programs.at(shader_id)) {
+			return false;
+		}
+	}
+	catch (std::exception e) {
+		std::shared_ptr<ShaderProgram> prg = std::make_shared<ShaderProgram>(v_shader, g_shader, f_shader);
+		if (prg->rtg) {
+			programs[shader_id] = prg;
+			return true;
+		}
+	}
+	return false;
+}
+
+std::weak_ptr<ShaderProgram> ShaderProgram::GetShader(std::string id)
+{
+	try {
+		return programs.at(id);
+	}
+	catch (std::exception e) {
+		return std::weak_ptr<ShaderProgram>();
+	}
+}
+
+bool ShaderProgram::DeleteShader(std::string id)
+{
+	try {
+		std::weak_ptr<ShaderProgram> prg =  programs.at(id);
+		programs.erase(id);
+		return true;
+	}
+	catch (std::exception e) {
+		return false;
+	}
+}
+
 std::string ShaderProgram::GetInfoLog()
 {
 	int success;
@@ -101,10 +178,8 @@ std::string ShaderProgram::GetInfoLog()
 		std::stringstream ss;
 		ss << "ERROR::PROGRAM::LINKING_FAILED: \n";
 		ss << infoLog;
-		delete[] &infoLog;
 		return ss.str();
 	}
-	delete[] &infoLog;
 	return std::string();
 }
 
@@ -116,8 +191,9 @@ VertexShader::VertexShader(std::string folder_id, std::string file)
 		this->rtg = false;
 	}
 	this->handle = glCreateShader(GL_VERTEX_SHADER);
-	const char* src = result.c_str();
+	const GLchar* src = result.c_str();
 	glShaderSource(this->handle, 1, &src, NULL);
+	glCompileShader(this->handle);
 	std::string error = this->GetInfoLog(this->handle, ShaderType::VERTEX);
 	this->rtg = error.empty();
 }
@@ -136,6 +212,7 @@ FragmentShader::FragmentShader(std::string folder_id, std::string file)
 	this->handle = glCreateShader(GL_FRAGMENT_SHADER);
 	const char* src = result.c_str();
 	glShaderSource(this->handle, 1, &src, NULL);
+	glCompileShader(this->handle);
 	std::string error = this->GetInfoLog(this->handle, ShaderType::FRAGMENT);
 	this->rtg = error.empty();
 }
@@ -154,6 +231,7 @@ GeometryShader::GeometryShader(std::string folder_id, std::string file)
 	this->handle = glCreateShader(GL_GEOMETRY_SHADER);
 	const char* src = result.c_str();
 	glShaderSource(this->handle, 1, &src, NULL);
+	glCompileShader(this->handle);
 	std::string error = this->GetInfoLog(this->handle, ShaderType::GEOMETRY);
 	this->rtg = error.empty();
 }
@@ -165,11 +243,11 @@ GeometryShader::~GeometryShader()
 
 std::string Shader::GetInfoLog(GLuint handle, ShaderType type)
 {
-	int success;
+	int success = GL_FALSE;
 	char infoLog[512];
 	std::stringstream ss;
 	glGetShaderiv(handle, GL_COMPILE_STATUS, &success);
-	if (!success)
+	if (success == GL_FALSE)
 	{
 		glGetShaderInfoLog(handle, 512, NULL, infoLog);
 		std::string s_type = std::string();
@@ -186,9 +264,8 @@ std::string Shader::GetInfoLog(GLuint handle, ShaderType type)
 		}
 		ss << "ERROR::SHADER::" << s_type << "::COMPILATION_FAILED: \n";
 		ss << infoLog;
-		delete[] &infoLog;
+		std::cout << infoLog << std::endl;
 		return ss.str();
 	};
-	delete[] &infoLog;
 	return std::string();
 }

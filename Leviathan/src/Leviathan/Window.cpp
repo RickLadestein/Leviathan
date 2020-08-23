@@ -86,7 +86,6 @@ bool Window::Open()
 	glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
 	this->ResetGlView();
 
-	
 	glfwSetWindowUserPointer(this->w_handle, &this->w_data);
 	return true;
 }

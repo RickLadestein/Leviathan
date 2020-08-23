@@ -4,6 +4,7 @@
 #include <iostream>
 #include <string>
 #include "Leviathan/Data/Image.h"
+#include "Leviathan/Graphics/Shader.h"
 #include <memory>
 
 class Game : public Application {
@@ -19,8 +20,16 @@ public:
 };
 int main() {
 	std::shared_ptr<Game> app = std::make_shared<Game>();
+
 	FileManager::RegisterDirectory("default", FileManager::GetWorkingDir());
+	FileManager::RegisterDirectory("shaders", "C:\\Users\\dazle\\source\\repos\\Leviathan\\Sandbox\\resources\\shaders");
+	FileManager::RegisterDirectory("textures", "C:\\Users\\dazle\\source\\repos\\Leviathan\\Sandbox\\resources\\textures");
+	FileManager::RegisterDirectory("models", "C:\\Users\\dazle\\source\\repos\\Leviathan\\Sandbox\\resources\\models");
+	FileManager::RegisterDirectory("images", "C:\\Users\\dazle\\source\\repos\\Leviathan\\Sandbox\\resources\\images");
+
 	std::shared_ptr<leviathan::Image> im = leviathan::Image::Load("default", "logo.png");
+	ShaderProgram::AddShader("default", "shaders", "default.frag", "default.vert");
+	ShaderProgram::DeleteShader("default");
 	std::shared_ptr<Window> window = app->GetWindow().lock();
 	window->SetWindowIcon(im);
 	window->SetTitle("Minecraft");

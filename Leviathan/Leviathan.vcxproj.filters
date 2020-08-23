@@ -49,6 +49,7 @@
     <ClInclude Include="src\Leviathan\Window.h">
       <Filter>Leviathan</Filter>
     </ClInclude>
+    <ClInclude Include="src\Leviathan\Graphics\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Leviathan\Application.cpp">
@@ -75,5 +76,6 @@
     <ClCompile Include="src\Leviathan\Window.cpp">
       <Filter>Leviathan</Filter>
     </ClCompile>
+    <ClCompile Include="src\Leviathan\Graphics\Texture.cpp" />
   </ItemGroup>
 </Project>
