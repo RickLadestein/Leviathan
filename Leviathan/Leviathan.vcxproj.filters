@@ -19,9 +19,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Leviathan.h" />
-    <ClInclude Include="src\Leviathan\Application.h">
-      <Filter>Leviathan</Filter>
-    </ClInclude>
     <ClInclude Include="src\Leviathan\Core.h">
       <Filter>Leviathan</Filter>
     </ClInclude>
@@ -31,10 +28,19 @@
     <ClInclude Include="src\Leviathan\Data\Structures.h">
       <Filter>Leviathan\Data</Filter>
     </ClInclude>
-    <ClInclude Include="src\Leviathan\Event.h">
-      <Filter>Leviathan</Filter>
+    <ClInclude Include="src\Leviathan\Graphics\Drawable.h">
+      <Filter>Leviathan\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Leviathan\Graphics\GenericMesh.h">
+      <Filter>Leviathan\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Leviathan\Graphics\Shader.h">
+      <Filter>Leviathan\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Leviathan\Graphics\Texture.h">
+      <Filter>Leviathan\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Leviathan\Graphics\VertexBuffer.h">
       <Filter>Leviathan\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Leviathan\Input\Keyboard.h">
@@ -46,22 +52,30 @@
     <ClInclude Include="src\Leviathan\Util\FileManager.h">
       <Filter>Leviathan\Util</Filter>
     </ClInclude>
-    <ClInclude Include="src\Leviathan\Window.h">
+    <ClInclude Include="src\Leviathan\Core\Application.h">
       <Filter>Leviathan</Filter>
     </ClInclude>
-    <ClInclude Include="src\Leviathan\Graphics\Texture.h" />
+    <ClInclude Include="src\Leviathan\Core\Event.h">
+      <Filter>Leviathan</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Leviathan\Core\Window.h">
+      <Filter>Leviathan</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Leviathan\Application.cpp">
-      <Filter>Leviathan</Filter>
-    </ClCompile>
     <ClCompile Include="src\Leviathan\Data\Image.cpp">
       <Filter>Leviathan\Data</Filter>
     </ClCompile>
-    <ClCompile Include="src\Leviathan\Event.cpp">
-      <Filter>Leviathan</Filter>
+    <ClCompile Include="src\Leviathan\Graphics\Drawable.cpp">
+      <Filter>Leviathan\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Leviathan\Graphics\Shader.cpp">
+      <Filter>Leviathan\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Leviathan\Graphics\Texture.cpp">
+      <Filter>Leviathan\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Leviathan\Graphics\VertexBuffer.cpp">
       <Filter>Leviathan\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Leviathan\Input\Keyboard.cpp">
@@ -73,9 +87,14 @@
     <ClCompile Include="src\Leviathan\Util\FileManager.cpp">
       <Filter>Leviathan\Util</Filter>
     </ClCompile>
-    <ClCompile Include="src\Leviathan\Window.cpp">
+    <ClCompile Include="src\Leviathan\Core\Application.cpp">
       <Filter>Leviathan</Filter>
     </ClCompile>
-    <ClCompile Include="src\Leviathan\Graphics\Texture.cpp" />
+    <ClCompile Include="src\Leviathan\Core\Event.cpp">
+      <Filter>Leviathan</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Leviathan\Core\Window.cpp">
+      <Filter>Leviathan</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

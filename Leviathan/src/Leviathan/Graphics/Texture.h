@@ -34,21 +34,27 @@ enum class LEVIATHAN_API TextureType {
 
 class LEVIATHAN_API Texture {
 public:
-	
-	static void Bind(std::weak_ptr<Texture> tex);
-	static void Unbind();
-	static void BindMultiTex(std::vector<std::weak_ptr<Texture>>* textures);
-
-	void Bind();
-	void SetTextureWrapSetting(TextureWrapSetting s, TextureWrapSetting t);
-	void SetMinMagSetting(MinMagSetting min, MinMagSetting mag);
-	void SetMipMapMinMagSetting(MipmapMinMagSetting min, MipmapMinMagSetting mag);
-protected:
 	Texture() = default;
 	~Texture() = default;
 
+	static void bind(std::weak_ptr<Texture> tex);
+	static void unbind();
+	static void BindMultiTex(std::vector<std::weak_ptr<Texture>>* textures);
+
+	void bind();
+	void SetTextureWrapSetting(TextureWrapSetting s, TextureWrapSetting t);
+	void SetMinMagSetting(MinMagSetting min, MinMagSetting mag);
+	void SetMipMapMinMagSetting(MipmapMinMagSetting min, MipmapMinMagSetting mag);
+
+	static bool AddTexture(std::string texture_id, std::string folder_id, std::string texture_file, bool mipmap);
+	static std::weak_ptr<Texture> GetTexture(std::string id);
+	static bool DeleteTexture(std::string id);
+protected:
+	
+
 	TextureType type = TextureType::NONE;
 	bool hasMipmap = false;
+	bool rtg = false;
 	GLuint handle = 0;
 };
 

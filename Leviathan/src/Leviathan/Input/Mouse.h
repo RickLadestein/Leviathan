@@ -1,5 +1,5 @@
 #pragma once
-#include "Leviathan/Event.h"
+#include "Leviathan/Core/Event.h"
 #include "GLFW/glfw3.h"
 #define MAX_MOUSE_PRESS 5
 

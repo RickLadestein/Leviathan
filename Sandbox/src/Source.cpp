@@ -29,7 +29,7 @@ int main() {
 
 	std::shared_ptr<leviathan::Image> im = leviathan::Image::Load("default", "logo.png");
 	ShaderProgram::AddShader("default", "shaders", "default.frag", "default.vert");
-	ShaderProgram::DeleteShader("default");
+	//ShaderProgram::DeleteShader("default");
 	std::shared_ptr<Window> window = app->GetWindow().lock();
 	window->SetWindowIcon(im);
 	window->SetTitle("Minecraft");

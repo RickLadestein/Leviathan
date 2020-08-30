@@ -1,10 +1,13 @@
 #pragma once
-#include "Core.h"
+#include "Leviathan/Core.h"
 #include "Window.h"
 #include "Event.h"
 #include <memory>
 
-LEVIATHAN_API typedef std::shared_ptr<Window> WINDOW_PTR;
+typedef LEVIATHAN_API std::shared_ptr<Window> WINDOW_PTR;
+
+template class LEVIATHAN_API std::shared_ptr<Window>;
+template class LEVIATHAN_API std::weak_ptr<Window>;
 
 class LEVIATHAN_API Application {
 protected:

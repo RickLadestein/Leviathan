@@ -43,6 +43,7 @@ project "Leviathan"
 		"%{prj.name}/external/include",
 		"%{prj.name}/external/Glad/include",
 		"%{prj.name}/external/Glfw/include",
+		"%{prj.name}/external/Tinyobj/include",
 		"%{prj.name}/src"
 	}
 	
@@ -51,6 +52,7 @@ project "Leviathan"
 		"LV_PLATFORM_WINDOWS",
 		"LV_BUILD_DLL",
 		"_WINDLL",
+		"TINYOBJLOADER_IMPLEMENTATION",
 		"GLFW_INCLUDE_NONE"
 	}
 	

@@ -1,5 +1,6 @@
 #include "Texture.h"
 #include "Leviathan/Util/FileManager.h"
+#include <unordered_map>
 
 int current_texture_layer_count = 0;
 Texture2D::Texture2D(std::string folder_id, std::string texture_file, bool mipmap)
@@ -27,19 +28,20 @@ Texture2D::Texture2D(std::string folder_id, std::string texture_file, bool mipma
 			glGenerateMipmap(GL_TEXTURE_2D);
 		}
 	}
+	this->rtg = true;
 }
 
-void Texture::Bind(std::weak_ptr<Texture> tex)
+void Texture::bind(std::weak_ptr<Texture> tex)
 {
 	if (current_texture_layer_count > 0)
-		Texture::Unbind();
+		Texture::unbind();
 
 	std::shared_ptr<Texture> texture = tex.lock();
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, texture->handle);
 }
 
-void Texture::Unbind()
+void Texture::unbind()
 {
 	for (int i = 0; i < current_texture_layer_count; i++) {
 		glActiveTexture(GL_TEXTURE0 + i);
@@ -54,7 +56,7 @@ void Texture::BindMultiTex(std::vector<std::weak_ptr<Texture>>* textures)
 	for each (std::weak_ptr<Texture> tex in *textures)
 	{
 		glActiveTexture(GL_TEXTURE0 + index);
-		Texture::Bind(tex);
+		Texture::bind(tex);
 		index += 1;
 		current_texture_layer_count += 1;
 		if (index == 31) // LIMIT TEXTURE SAMPLER COUNT TO 31
@@ -62,10 +64,10 @@ void Texture::BindMultiTex(std::vector<std::weak_ptr<Texture>>* textures)
 	}
 }
 
-void Texture::Bind()
+void Texture::bind()
 {
 	if (current_texture_layer_count > 0)
-		Texture::Unbind();
+		Texture::unbind();
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, this->handle);
@@ -73,23 +75,64 @@ void Texture::Bind()
 
 void Texture::SetTextureWrapSetting(TextureWrapSetting s, TextureWrapSetting t)
 {
-	this->Bind();
+	this->bind();
 	glTexParameteri((GLenum)this->type, GL_TEXTURE_WRAP_S, (GLint)s);
 	glTexParameteri((GLenum)this->type, GL_TEXTURE_WRAP_T, (GLint)t);
 }
 
 void Texture::SetMinMagSetting(MinMagSetting min, MinMagSetting mag)
 {
-	this->Bind();
+	this->bind();
 	glTexParameteri((GLenum)this->type, GL_TEXTURE_MIN_FILTER, (GLint)min);
 	glTexParameteri((GLenum)this->type, GL_TEXTURE_MAG_FILTER, (GLint)mag);
 }
 
 void Texture::SetMipMapMinMagSetting(MipmapMinMagSetting min, MipmapMinMagSetting mag)
 {
-	this->Bind();
+	this->bind();
 	if(!this->hasMipmap)
 		glGenerateMipmap((GLenum)this->type);
 	glTexParameteri((GLenum)this->type, GL_TEXTURE_MIN_FILTER, (GLint)min);
 	glTexParameteri((GLenum)this->type, GL_TEXTURE_MAG_FILTER, (GLint)mag);
+}
+
+
+std::unordered_map<std::string, std::shared_ptr<Texture>> textures;
+bool Texture::AddTexture(std::string texture_id, std::string folder_id, std::string texture_file, bool mipmap)
+{
+	try {
+		if (textures.at(texture_id)) {
+			return false;
+		}
+	}
+	catch (std::exception e) {
+		std::shared_ptr<Texture> tex = std::make_shared<Texture2D>(folder_id, texture_file, mipmap);
+		if (tex->rtg) {
+			textures[texture_id] = tex;
+			return true;
+		}
+	}
+	return false;
+}
+
+std::weak_ptr<Texture> Texture::GetTexture(std::string id)
+{
+	try {
+		return textures.at(id);
+	}
+	catch (std::exception e) {
+		return std::weak_ptr<Texture>();
+	}
+}
+
+bool Texture::DeleteTexture(std::string id)
+{
+	try {
+		std::weak_ptr<Texture> prg = textures.at(id);
+		textures.erase(id);
+		return true;
+	}
+	catch (std::exception e) {
+		return false;
+	}
 }

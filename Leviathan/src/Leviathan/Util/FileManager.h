@@ -1,7 +1,9 @@
 #pragma once
 #include "Leviathan/Core.h"
 #include "Leviathan/Data/Image.h"
+#include "Leviathan/Data/Structures.h"
 #include <string>
+#include <vector>
 
 class LEVIATHAN_API FileManager {
 public:
@@ -16,4 +18,6 @@ public:
 	static std::string ReadTextFile(std::string folder_id, std::string filename);
 	static bool WriteStringToFile(std::string folder_id, std::string filename, std::string content, bool trunc = true);
 	static bool WriteDataToFile(std::string folder_id, std::string filename, char* data, size_t size, bool trunc = true);
+
+	static bool ImportObjFile(std::string folder_id, std::string filename, std::vector<Primitive>* result);
 };

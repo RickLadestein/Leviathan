@@ -1,13 +1,14 @@
 #pragma once
-#include "Core.h"
+#include "Leviathan/Core.h"
 #include "Event.h"
 #include <functional>
 #include <string>
-#include "Input/Keyboard.h"
-#include "Input/Mouse.h"
+#include "Leviathan/Input/Keyboard.h"
+#include "Leviathan/Input/Mouse.h"
+#include "Leviathan/Data/Image.h"
 #include <memory>
 #include <string>
-#include "Data/Image.h"
+
 
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
