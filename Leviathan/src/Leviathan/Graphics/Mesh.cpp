@@ -1,11 +1,20 @@
 #include "Mesh.h"
 #include <unordered_map>
+#include "Leviathan/Util/FileManager.h"
 Mesh::Mesh(std::string src)
 {
+	
 }
 
 Mesh::Mesh(std::string folder, std::string file)
 {
+	FileManager::ImportObjFile(folder, file, this->data);
+	if (this->data.size() > 0) {
+		this->ready = true;
+	}
+	else {
+		this->ready = false;
+	}
 }
 
 

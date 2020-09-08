@@ -11,7 +11,8 @@ Texture2D::Texture2D(std::string folder_id, std::string texture_file, bool mipma
 	std::shared_ptr<leviathan::Image> image = leviathan::Image::Load(folder_id, texture_file);
 	if (image) {
 		glGenTextures(1, &this->handle);
-		glBindTexture(this->handle, GL_TEXTURE_2D);
+		glBindTexture(GL_TEXTURE_2D, this->handle);
+
 		int nrChannels = image->GetChannelCount();
 		int width, height;
 		unsigned char* data = image->GetDataPtr();
@@ -23,7 +24,6 @@ Texture2D::Texture2D(std::string folder_id, std::string texture_file, bool mipma
 		else if (nrChannels == 4) {
 			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, data);
 		}
-
 		if (mipmap) {
 			glGenerateMipmap(GL_TEXTURE_2D);
 		}

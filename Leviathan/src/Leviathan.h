@@ -14,6 +14,8 @@
 #include "Leviathan/Graphics/Shader.h"
 #include "Leviathan/Graphics/Texture.h"
 #include "Leviathan/Graphics/VertexBuffer.h"
+#include "Leviathan/Graphics/Camera.h"
+#include "Leviathan/Graphics/Mesh.h"
 
 //Input components
 #include "Leviathan/Input/Keyboard.h"

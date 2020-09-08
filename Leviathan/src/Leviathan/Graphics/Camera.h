@@ -1,6 +1,7 @@
 #pragma once
 #include "Leviathan/Core.h"
 #include "glm/glm.hpp"
+#include <memory>
 
 enum class CameraMode {
 	FREE,
@@ -37,6 +38,7 @@ public:
 	glm::mat4 GetViewMatrix();
 	glm::mat4 GetInverseViewMatrix();
 	glm::vec3 GetRightVector();
+	glm::vec3 GetForewardVector();
 	inline glm::vec3 GetRotation() { return this->rotation; }
 	inline glm::vec3 GetPosition() { return this->position; }
 
@@ -49,6 +51,5 @@ public:
 private:
 	void CalculateViewMatrix();
 	void InitializeDefaults();
-public:
-	static Camera primary;
+
 };

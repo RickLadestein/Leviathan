@@ -4,6 +4,7 @@
 #include "Leviathan/Graphics/Shader.h"
 #include "Leviathan/Graphics/Texture.h"
 #include "glad/glad.h"
+#include "Leviathan/Util/Math.h"
 
 Drawable::Drawable()
 {
@@ -103,34 +104,46 @@ void Drawable::RotateRadians(glm::vec3 rot)
 
 void Drawable::Draw()
 {
+	this->Draw(std::make_shared<Camera>());
+}
+
+void Drawable::Draw(std::weak_ptr<Camera> cam)
+{
 	if (!this->vertexbuffer.buffers_ready) {
 		std::cout << "Could not load model because buffers were not initialised" << std::endl;
 		return;
 	}
 	std::shared_ptr<ShaderProgram> shader = ShaderProgram::GetShader(this->shader).lock();
 	std::shared_ptr<Texture> texture = Texture::GetTexture(this->texture).lock();
+	std::shared_ptr<Camera> camera = cam.lock();
 
 	if (texture) {
 		texture->bind();
 	}
-	if (shader) {
+
+	if (shader && camera) {
 		shader->bind();
 
-		shader->setUniform("projection", glm::mat4());
-		shader->setUniform("view", glm::mat4());
-		shader->setUniform("model", glm::mat4());
+		shader->setUniform("projection", camera->GetProjectionMatrix());
+		shader->setUniform("view", camera->GetViewMatrix());
+		shader->setUniform("model", this->GetModelMatrix());
 
 		this->vertexbuffer.Bind();
 
 		glDrawArrays(GL_TRIANGLES, 0, this->vertexbuffer.element_count);
-		glUseProgram(0);
+		shader->unbind();
 		texture->unbind();
 		this->vertexbuffer.Unbind();
 		return;
 
 	}
 	else {
-		std::cout << "Could not load block because shader did not exist" << std::endl;
+		if (!shader) {
+			std::cout << "Could not render because shader did not exist" << std::endl;
+		}
+		if (!camera) {
+			std::cout << "Could not render because camera did not exist" << std::endl;
+		}
 	}
 }
 
@@ -141,8 +154,8 @@ void Drawable::DrawInstanced()
 glm::mat4 Drawable::GetModelMatrix()
 {
 	if (this->model_matrix_changed) {
-		glm::quat quaternion(this->rotation);
-		this->model_matrix = glm::mat4();
+		glm::quat quaternion = EulerAnglesToQuaternion(this->rotation);
+		this->model_matrix = glm::mat4(1.0f);
 		this->model_matrix = glm::translate(this->model_matrix, this->position);
 		this->model_matrix = glm::scale(this->model_matrix, this->scale);
 		this->model_matrix *= glm::toMat4(quaternion);

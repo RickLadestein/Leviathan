@@ -32,6 +32,8 @@ void Camera::InitializeDefaults()
 	this->rotation = glm::vec3(0.0f);
 	this->update_needed = true;
 	this->mode = CameraMode::FPS;
+
+	this->SetViewSettings(45, 1920, 1080, 0.001f, 1000.0f);
 }
 
 
@@ -87,6 +89,11 @@ glm::vec3 Camera::GetRightVector()
 {
 	this->CalculateViewMatrix();
 	return this->camera_right;
+}
+
+glm::vec3 Camera::GetForewardVector()
+{
+	return this->camera_target - this->position;
 }
 
 void Camera::Translate(glm::vec3 translation)

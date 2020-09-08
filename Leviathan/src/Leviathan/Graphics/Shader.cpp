@@ -18,6 +18,7 @@ ShaderProgram::ShaderProgram(VertexShader& v_shader, FragmentShader& f_shader)
 	this->id = glCreateProgram();
 	glAttachShader(this->id, v_shader.handle);
 	glAttachShader(this->id, f_shader.handle);
+	
 	glLinkProgram(this->id);
 	if (!this->GetInfoLog().empty()) {
 		this->rtg = false;
@@ -55,6 +56,14 @@ void ShaderProgram::bind()
 	if (current_bound_program != this->id && this->id != 0) {
 		glUseProgram(this->id);
 		current_bound_program = this->id;
+	}
+}
+
+void ShaderProgram::unbind()
+{
+	if (current_bound_program != this->id) {
+		glUseProgram(0);
+		current_bound_program = 0;
 	}
 }
 
@@ -173,7 +182,7 @@ std::string ShaderProgram::GetInfoLog()
 	char infoLog[512];
 	std::stringstream ss;
 	glGetProgramiv(this->id, GL_LINK_STATUS, &success);
-	if (!success) {
+	if (success == GL_FALSE) {
 		glGetProgramInfoLog(this->id, 512, NULL, infoLog);
 		std::stringstream ss;
 		ss << "ERROR::PROGRAM::LINKING_FAILED: \n";

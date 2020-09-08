@@ -1,5 +1,5 @@
 #pragma once
-#include "Leviathan/Core.h"
+#include "Leviathan/Graphics/Camera.h"
 #include <string>
 #include <glm/glm.hpp>
 #include "Leviathan/Graphics/VertexBuffer.h"
@@ -45,6 +45,7 @@ public:
 
 
 	void Draw();
+	void Draw(std::weak_ptr<Camera> cam);
 	void DrawInstanced();
 	glm::mat4 GetModelMatrix();
 
