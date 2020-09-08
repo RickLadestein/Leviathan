@@ -4,6 +4,4 @@ class GenericMesh : Drawable {
 public:
 	GenericMesh();
 	~GenericMesh();
-
-
 };

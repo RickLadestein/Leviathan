@@ -4,7 +4,7 @@
 #include <vector>
 #include "Leviathan/Data/Structures.h"
 #include <memory>
-class LEVIATHAN_API Mesh {
+class Mesh {
 public:
 	std::string name;
 	std::vector<Primitive> data;

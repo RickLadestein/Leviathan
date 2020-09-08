@@ -40,7 +40,7 @@ struct WindowData {
 	EventCallbackFn EventCallback;
 };
 
-class LEVIATHAN_API Window {
+class Window {
 public:
 	Window(int width, int height, std::string title, WindowMode mode);
 	~Window();

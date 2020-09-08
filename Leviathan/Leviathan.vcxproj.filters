@@ -40,10 +40,16 @@
     <ClInclude Include="src\Leviathan\Data\Structures.h">
       <Filter>Leviathan\Data</Filter>
     </ClInclude>
+    <ClInclude Include="src\Leviathan\Graphics\Camera.h">
+      <Filter>Leviathan\Graphics</Filter>
+    </ClInclude>
     <ClInclude Include="src\Leviathan\Graphics\Drawable.h">
       <Filter>Leviathan\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Leviathan\Graphics\GenericMesh.h">
+      <Filter>Leviathan\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Leviathan\Graphics\Mesh.h">
       <Filter>Leviathan\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Leviathan\Graphics\Shader.h">
@@ -64,14 +70,8 @@
     <ClInclude Include="src\Leviathan\Util\FileManager.h">
       <Filter>Leviathan\Util</Filter>
     </ClInclude>
-    <ClInclude Include="src\Leviathan\Graphics\Camera.h">
-      <Filter>Leviathan\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="src\Leviathan\Util\Math.h">
       <Filter>Leviathan\Util</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Leviathan\Graphics\Mesh.h">
-      <Filter>Leviathan\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -87,7 +87,13 @@
     <ClCompile Include="src\Leviathan\Data\Image.cpp">
       <Filter>Leviathan\Data</Filter>
     </ClCompile>
+    <ClCompile Include="src\Leviathan\Graphics\Camera.cpp">
+      <Filter>Leviathan\Graphics</Filter>
+    </ClCompile>
     <ClCompile Include="src\Leviathan\Graphics\Drawable.cpp">
+      <Filter>Leviathan\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Leviathan\Graphics\Mesh.cpp">
       <Filter>Leviathan\Graphics</Filter>
     </ClCompile>
     <ClCompile Include="src\Leviathan\Graphics\Shader.cpp">
@@ -107,12 +113,6 @@
     </ClCompile>
     <ClCompile Include="src\Leviathan\Util\FileManager.cpp">
       <Filter>Leviathan\Util</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Leviathan\Graphics\Camera.cpp">
-      <Filter>Leviathan\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Leviathan\Graphics\Mesh.cpp">
-      <Filter>Leviathan\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

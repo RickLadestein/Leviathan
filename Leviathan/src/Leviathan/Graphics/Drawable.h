@@ -7,10 +7,7 @@
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>
 
-template struct LEVIATHAN_API glm::vec<3, float, glm::packed_highp>;
-template struct LEVIATHAN_API glm::vec<4, float, glm::packed_highp>;
-template struct LEVIATHAN_API glm::mat<4, 4, glm::f32, glm::packed_highp>;
-class LEVIATHAN_API Drawable {
+class Drawable {
 protected:
 	const char* shader;
 	const char* texture;

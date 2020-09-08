@@ -30,7 +30,7 @@ enum class EventCategory {
 	WindowEvent
 };
 
-class LEVIATHAN_API  Event {
+class  Event {
 public:
 	inline const EventType GetType() { return this->type; }
 	inline const EventCategory GetCategory() { return this->category; }
@@ -42,7 +42,7 @@ protected:
 };
 
 #pragma region Window_Events
-class LEVIATHAN_API  RefreshEvent : public Event {
+class  RefreshEvent : public Event {
 public:
 	RefreshEvent(double frametime);
 	~RefreshEvent() = default;
@@ -52,7 +52,7 @@ private:
 	double frametime;
 };
 
-class LEVIATHAN_API  ResizeEvent : public Event {
+class  ResizeEvent : public Event {
 public:
 	ResizeEvent(int size_x, int size_y);
 	~ResizeEvent() = default;
@@ -62,7 +62,7 @@ private:
 	int size_x, size_y;
 };
 
-class LEVIATHAN_API  MoveEvent : public Event {
+class  MoveEvent : public Event {
 public:
 	MoveEvent(int x, int y);
 	~MoveEvent() = default;
@@ -72,7 +72,7 @@ private:
 	int x, y;
 };
 
-class LEVIATHAN_API  FocusEvent : public Event {
+class  FocusEvent : public Event {
 public:
 	FocusEvent(int hasfocus);
 	~FocusEvent() = default;
@@ -84,7 +84,7 @@ private:
 #pragma endregion
 
 #pragma region Mouse_Events
-class LEVIATHAN_API  MouseMoveEvent : public Event {
+class  MouseMoveEvent : public Event {
 public:
 	MouseMoveEvent(double x_pos, double y_pos, double x_delta, double y_delta);
 	~MouseMoveEvent() = default;
@@ -97,7 +97,7 @@ private:
 	friend class Mouse;
 };
 
-class LEVIATHAN_API  MousePressEvent : public Event {
+class  MousePressEvent : public Event {
 public:
 	MousePressEvent(int button);
 	~MousePressEvent() = default;
@@ -108,7 +108,7 @@ private:
 	friend class Mouse;
 };
 
-class LEVIATHAN_API  MouseReleaseEvent : public Event {
+class  MouseReleaseEvent : public Event {
 public:
 	MouseReleaseEvent(int button);
 	~MouseReleaseEvent() = default;
@@ -119,7 +119,7 @@ private:
 	friend class Mouse;
 };
 
-class LEVIATHAN_API  MouseWheelEvent : public Event {
+class  MouseWheelEvent : public Event {
 public:
 	MouseWheelEvent(double x, double y);
 	~MouseWheelEvent() = default;
@@ -132,7 +132,7 @@ private:
 #pragma endregion
 
 #pragma region Keyboard_Event
-class LEVIATHAN_API  KeyPressEvent : public Event {
+class  KeyPressEvent : public Event {
 public:
 	KeyPressEvent(int key);
 	~KeyPressEvent() = default;
@@ -143,7 +143,7 @@ private:
 friend class Keyboard;
 };
 
-class LEVIATHAN_API  KeyReleaseEvent : public Event {
+class  KeyReleaseEvent : public Event {
 	friend class Keyboard;
 public:
 	KeyReleaseEvent(int key);
@@ -154,7 +154,7 @@ protected:
 	int key;
 };
 
-class LEVIATHAN_API  KeyRepeatEvent : public Event {
+class  KeyRepeatEvent : public Event {
 	friend class Keyboard;
 public:
 	KeyRepeatEvent(int key);
@@ -165,7 +165,7 @@ protected:
 	int key;
 };
 
-class LEVIATHAN_API  KeyTypeEvent : public Event {
+class  KeyTypeEvent : public Event {
 	
 public:
 	KeyTypeEvent(int key);

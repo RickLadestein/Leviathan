@@ -6,33 +6,33 @@
 #include <memory>
 #include <string>
 
-enum class LEVIATHAN_API TextureWrapSetting{
+enum class TextureWrapSetting{
 	REPEAT = GL_REPEAT,
 	MIRRORED_REPEAT = GL_MIRRORED_REPEAT,
 	EDGE_CLAMP = GL_CLAMP_TO_EDGE,
 	BORDER_CLAMP = GL_CLAMP_TO_BORDER
 };
 
-enum class LEVIATHAN_API MinMagSetting {
+enum class MinMagSetting {
 	NEAREST = GL_NEAREST,
 	LINEAR = GL_LINEAR
 };
 
-enum class LEVIATHAN_API MipmapMinMagSetting {
+enum class MipmapMinMagSetting {
 	NEAREST_MIPMAP_NEAREST = GL_NEAREST_MIPMAP_NEAREST,
 	LINEAR_MIPMAP_NEAREST = GL_LINEAR_MIPMAP_NEAREST,
 	NEAREST_MIPMAP_LINEAR = GL_NEAREST_MIPMAP_LINEAR,
 	LINEAR_MIPMAP_LINEAR = GL_LINEAR_MIPMAP_LINEAR
 };
 
-enum class LEVIATHAN_API TextureType {
+enum class TextureType {
 	NONE = 0x0,
 	TEXTURE_1D = GL_TEXTURE_1D,
 	TEXTURE_2D = GL_TEXTURE_2D,
 	TEXTURE_CUBEMAP = GL_TEXTURE_CUBE_MAP
 };
 
-class LEVIATHAN_API Texture {
+class Texture {
 public:
 	Texture() = default;
 	~Texture() = default;
@@ -58,22 +58,22 @@ protected:
 	GLuint handle = 0;
 };
 
-class LEVIATHAN_API Texture1D : public Texture {
+class Texture1D : public Texture {
 public:
 	inline Texture1D(std::string folder_id, std::string texture_file, bool mipmap = false) { throw new std::exception("Not implemented yet"); };
 };
 
-class LEVIATHAN_API Texture2D : public Texture {
+class Texture2D : public Texture {
 public:
 	Texture2D(std::string folder_id, std::string texture_file, bool mipmap = false);
 };
 
-class LEVIATHAN_API Texture3D : public Texture {
+class Texture3D : public Texture {
 public:
 	inline Texture3D(std::string folder_id, std::vector<std::string> tex_files, bool mipmap = false) { throw new std::exception("Not implemented yet"); };
 };
 
-class LEVIATHAN_API TextureCubemap : public Texture {
+class TextureCubemap : public Texture {
 public:
 	inline TextureCubemap(std::string folder_id, std::string n, std::string e, std::string s, std::string w, bool mipmap = false) { throw new std::exception("Not implemented yet"); };
 };

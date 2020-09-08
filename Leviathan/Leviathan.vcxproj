@@ -43,39 +43,27 @@
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_x86|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_x86|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_x64|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_x64|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
-    <PlatformToolset>v142</PlatformToolset>
-  </PropertyGroup>
-  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug_x64|Win32'">
-    <PlatformToolset>v142</PlatformToolset>
-  </PropertyGroup>
-  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release_x64|Win32'">
-    <PlatformToolset>v142</PlatformToolset>
-  </PropertyGroup>
-  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug_x86|x64'">
-    <PlatformToolset>v142</PlatformToolset>
-  </PropertyGroup>
-  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release_x86|x64'">
     <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -95,38 +83,34 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_x86|Win32'">
-    <LinkIncremental>true</LinkIncremental>
     <OutDir>..\bin\Leviathan\Debug_x86\</OutDir>
     <IntDir>..\bin-int\Leviathan\Debug_x86\</IntDir>
     <TargetName>Leviathan</TargetName>
-    <TargetExt>.dll</TargetExt>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_x86|Win32'">
-    <LinkIncremental>false</LinkIncremental>
     <OutDir>..\bin\Leviathan\Release_x86\</OutDir>
     <IntDir>..\bin-int\Leviathan\Release_x86\</IntDir>
     <TargetName>Leviathan</TargetName>
-    <TargetExt>.dll</TargetExt>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_x64|x64'">
-    <LinkIncremental>true</LinkIncremental>
     <OutDir>..\bin\Leviathan\Debug_x64\</OutDir>
     <IntDir>..\bin-int\Leviathan\Debug_x64\</IntDir>
     <TargetName>Leviathan</TargetName>
-    <TargetExt>.dll</TargetExt>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_x64|x64'">
-    <LinkIncremental>false</LinkIncremental>
     <OutDir>..\bin\Leviathan\Release_x64\</OutDir>
     <IntDir>..\bin-int\Leviathan\Release_x64\</IntDir>
     <TargetName>Leviathan</TargetName>
-    <TargetExt>.dll</TargetExt>
+    <TargetExt>.lib</TargetExt>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_x86|Win32'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>LV_PLATFORM_WINDOWS;LV_BUILD_DLL;_WINDLL;TINYOBJLOADER_IMPLEMENTATION;GLFW_INCLUDE_NONE;LV_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LV_PLATFORM_WINDOWS;STB_IMAGE_IMPLEMENTATION;TINYOBJLOADER_IMPLEMENTATION;GLFW_INCLUDE_NONE;LV_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>external\include;external\Glad\include;external\Glfw\include;external\Tinyobj\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -135,19 +119,17 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
       <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>external\libs\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ImportLibrary>..\bin\Leviathan\Debug_x86\Leviathan.lib</ImportLibrary>
-    </Link>
-    <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Leviathan\Debug_x86\Leviathan.dll\ (xcopy /Q /E /Y /I ..\bin\Leviathan\Debug_x86\Leviathan.dll $(SolutionDir)\bin\Sandbox\Debug_x86 &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Leviathan\Debug_x86\Leviathan.dll $(SolutionDir)\bin\Sandbox\Debug_x86 &gt; nul)</Command>
-    </PostBuildEvent>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_x86|Win32'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>LV_PLATFORM_WINDOWS;LV_BUILD_DLL;_WINDLL;TINYOBJLOADER_IMPLEMENTATION;GLFW_INCLUDE_NONE;LV_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LV_PLATFORM_WINDOWS;STB_IMAGE_IMPLEMENTATION;TINYOBJLOADER_IMPLEMENTATION;GLFW_INCLUDE_NONE;LV_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>external\include;external\Glad\include;external\Glfw\include;external\Tinyobj\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -160,19 +142,17 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
       <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>external\libs\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ImportLibrary>..\bin\Leviathan\Release_x86\Leviathan.lib</ImportLibrary>
-    </Link>
-    <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Leviathan\Release_x86\Leviathan.dll\ (xcopy /Q /E /Y /I ..\bin\Leviathan\Release_x86\Leviathan.dll $(SolutionDir)\bin\Sandbox\Release_x86 &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Leviathan\Release_x86\Leviathan.dll $(SolutionDir)\bin\Sandbox\Release_x86 &gt; nul)</Command>
-    </PostBuildEvent>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_x64|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>LV_PLATFORM_WINDOWS;LV_BUILD_DLL;_WINDLL;TINYOBJLOADER_IMPLEMENTATION;GLFW_INCLUDE_NONE;LV_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LV_PLATFORM_WINDOWS;STB_IMAGE_IMPLEMENTATION;TINYOBJLOADER_IMPLEMENTATION;GLFW_INCLUDE_NONE;LV_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>external\include;external\Glad\include;external\Glfw\include;external\Tinyobj\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -181,19 +161,17 @@
     <Link>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+    <Lib>
       <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>external\libs\x86_64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ImportLibrary>..\bin\Leviathan\Debug_x64\Leviathan.lib</ImportLibrary>
-    </Link>
-    <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Leviathan\Debug_x64\Leviathan.dll\ (xcopy /Q /E /Y /I ..\bin\Leviathan\Debug_x64\Leviathan.dll $(SolutionDir)\bin\Sandbox\Debug_x64 &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Leviathan\Debug_x64\Leviathan.dll $(SolutionDir)\bin\Sandbox\Debug_x64 &gt; nul)</Command>
-    </PostBuildEvent>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_x64|x64'">
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>LV_PLATFORM_WINDOWS;LV_BUILD_DLL;_WINDLL;TINYOBJLOADER_IMPLEMENTATION;GLFW_INCLUDE_NONE;LV_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LV_PLATFORM_WINDOWS;STB_IMAGE_IMPLEMENTATION;TINYOBJLOADER_IMPLEMENTATION;GLFW_INCLUDE_NONE;LV_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>external\include;external\Glad\include;external\Glfw\include;external\Tinyobj\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -206,18 +184,11 @@
       <SubSystem>Windows</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+    <Lib>
       <AdditionalDependencies>opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalLibraryDirectories>external\libs\x86_64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <ImportLibrary>..\bin\Leviathan\Release_x64\Leviathan.lib</ImportLibrary>
-    </Link>
-    <PostBuildEvent>
-      <Command>IF EXIST ..\bin\Leviathan\Release_x64\Leviathan.dll\ (xcopy /Q /E /Y /I ..\bin\Leviathan\Release_x64\Leviathan.dll $(SolutionDir)\bin\Sandbox\Release_x64 &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Leviathan\Release_x64\Leviathan.dll $(SolutionDir)\bin\Sandbox\Release_x64 &gt; nul)</Command>
-    </PostBuildEvent>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_x64|Win32'">
-    <ClCompile>
-      <PreprocessorDefinitions>_GLFW_WIN32</PreprocessorDefinitions>
-    </ClCompile>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Leviathan.h" />

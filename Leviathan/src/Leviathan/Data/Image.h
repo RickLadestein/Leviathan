@@ -4,7 +4,7 @@
 #include <memory>
 #include <string>
 namespace leviathan {
-	class LEVIATHAN_API Image {
+	class Image {
 	public:
 		Image(int width, int height, int channels, unsigned char* data);
 		~Image();

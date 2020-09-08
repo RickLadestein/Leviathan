@@ -16,6 +16,7 @@ outputdir = "%{prj.name}/%{cfg.buildcfg}"
 IncludeDir = {}
 IncludeDir["Glfw"] = "Leviathan/external/Glfw/include"
 IncludeDir["Glad"] = "Leviathan/external/Glad/include"
+IncludeDir["Leviathan"] = "Leviathan/src"
 
 
 group "Dependencies"
@@ -25,7 +26,7 @@ group ""
 
 project "Leviathan"
 	location "Leviathan"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"
 	systemversion "latest"
@@ -52,15 +53,9 @@ project "Leviathan"
 	defines
 	{
 		"LV_PLATFORM_WINDOWS",
-		"LV_BUILD_DLL",
-		"_WINDLL",
+		"STB_IMAGE_IMPLEMENTATION",
 		"TINYOBJLOADER_IMPLEMENTATION",
 		"GLFW_INCLUDE_NONE"
-	}
-	
-	postbuildcommands
-	{
-		("{COPY} %{cfg.buildtarget.relpath} %{wks.location}/bin/Sandbox/%{cfg.buildcfg}")
 	}
 	
 	

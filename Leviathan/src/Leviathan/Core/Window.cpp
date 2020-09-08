@@ -118,6 +118,9 @@ void Window::Refresh()
 
 void Window::SetWindowIcon(std::shared_ptr<leviathan::Image> im)
 {
+	if (im == nullptr) {
+		return;
+	}
 	if (this->image.pixels) {
 		delete[] this->image.pixels;
 	}

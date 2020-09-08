@@ -5,13 +5,13 @@
 #include <vector>
 #include "glad/glad.h"
 
-struct LEVIATHAN_API Buffer {
+struct Buffer {
 	GLuint vbo_id = 0;
 	GLuint size = 0;
 	GLuint components = 0;
 };
 
-enum class LEVIATHAN_API VertexBufferLayout {
+enum class VertexBufferLayout {
 	PNT_SERIAL,
 	PNT_INTERLEAVED,
 
@@ -19,7 +19,7 @@ enum class LEVIATHAN_API VertexBufferLayout {
 
 
 
-class LEVIATHAN_API VertexBuffer {
+class VertexBuffer {
 public:
 	//Construct a normal vbo
 	VertexBuffer(std::vector<Primitive>& primitives);

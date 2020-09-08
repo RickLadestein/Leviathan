@@ -2,15 +2,12 @@
 #include "Leviathan/Core.h"
 #include "glm/glm.hpp"
 
-template LEVIATHAN_API struct glm::vec<3, float, glm::packed_highp>;
-template LEVIATHAN_API struct glm::mat<4, 4, glm::f32, glm::packed_highp>;
-
-enum class LEVIATHAN_API CameraMode {
+enum class CameraMode {
 	FREE,
 	FPS
 };
 
-class LEVIATHAN_API Camera {
+class Camera {
 private:
 	glm::vec3 position;
 	glm::vec3 rotation;

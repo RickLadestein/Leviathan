@@ -6,13 +6,13 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
-enum class LEVIATHAN_API ShaderType{
+enum class ShaderType{
 	VERTEX,
 	GEOMETRY,
 	FRAGMENT
 };
 
-class LEVIATHAN_API Shader {
+class Shader {
 public:
 	inline GLuint getHandle() { return handle; }
 	std::string GetInfoLog(GLuint handle, ShaderType type);
@@ -20,7 +20,7 @@ protected:
 	GLuint handle;
 };
 
-class LEVIATHAN_API VertexShader : public Shader {
+class VertexShader : public Shader {
 public:
 	VertexShader(std::string folder_id, std::string file);
 	~VertexShader();
@@ -29,7 +29,7 @@ private:
 	friend class ShaderProgram;
 };
 
-class LEVIATHAN_API FragmentShader : public Shader {
+class FragmentShader : public Shader {
 	FragmentShader(std::string folder_id, std::string file);
 	~FragmentShader();
 private:
@@ -37,7 +37,7 @@ private:
 	friend class ShaderProgram;
 };
 
-class LEVIATHAN_API GeometryShader : public Shader {
+class GeometryShader : public Shader {
 	GeometryShader(std::string folder_id, std::string file);
 	~GeometryShader();
 private:
@@ -45,7 +45,7 @@ private:
 	friend class ShaderProgram;
 };
 
-class LEVIATHAN_API ShaderProgram {
+class ShaderProgram {
 public:
 	ShaderProgram(VertexShader& v_shader, FragmentShader& f_shader);
 	ShaderProgram(VertexShader& v_shader, GeometryShader& g_shader, FragmentShader& f_shader);

@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 
-class LEVIATHAN_API FileManager {
+class FileManager {
 public:
 	static bool RegisterDirectory(std::string folder_id, std::string path, bool overwrite = true);
 	static bool UnregisterDirectory(std::string folder_id);
