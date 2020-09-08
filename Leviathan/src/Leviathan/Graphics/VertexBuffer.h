@@ -38,6 +38,10 @@ public:
 	void BufferData(std::vector<Primitive>& primitives);
 	void BufferData(std::vector<GLint> data, size_t components = 1);
 	void BufferData(std::vector<GLfloat> data, size_t components = 1);
+
+	void BufferData(std::vector<glm::vec2> data);
+	void BufferData(std::vector<glm::vec3> data);
+	void BufferData(std::vector<glm::vec4> data);
 	
 	void DestroyBuffers();
 
@@ -45,7 +49,7 @@ public:
 	bool instance_buffer = false;
 	GLuint element_count;
 private:
-	
+	void BufferGeneralData(void* data, size_t buffer_size, size_t type_size, size_t components);
 
 	//TODO change to custom list
 	std::vector<Buffer> buffers;

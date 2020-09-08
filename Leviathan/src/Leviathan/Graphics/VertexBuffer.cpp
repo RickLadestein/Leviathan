@@ -78,7 +78,7 @@ void VertexBuffer::BufferData(std::vector<Primitive>& primitives)
 	}
 	else {
 		//Buffer does not match existing element size;
-		std::cout << "Could not load int buffer: buffer did not match existing buffer element count" << std::endl;
+		std::cout << "Could not load primitive buffer: buffer did not match existing buffer element count" << std::endl;
 		return;
 	}
 	
@@ -86,57 +86,54 @@ void VertexBuffer::BufferData(std::vector<Primitive>& primitives)
 
 void VertexBuffer::BufferData(std::vector<GLint> data, size_t components)
 {
-	if (this->buffers.size() == 0) {
-		//This buffer is the first buffer created
-		glGenVertexArrays(1, &this->vao);
-		this->element_count = data.size() / components;
-	}
-
-	if (this->element_count == (data.size() / components)) {
-		Buffer primary = Buffer();
-		primary.size = data.size();
-		primary.components = components;
-
-		glGenBuffers(1, &primary.vbo_id);
-		glBindBuffer(GL_ARRAY_BUFFER, primary.vbo_id);
-		glBufferData(GL_ARRAY_BUFFER, (data.size() * sizeof(int)), data.data(), GL_STATIC_DRAW);
-		this->buffers.push_back(primary);
-
-		glBindVertexArray(this->vao);
-		glBindBuffer(GL_ARRAY_BUFFER, primary.vbo_id);
-
-		glVertexAttribPointer(this->current_vao_attrib, components, GL_INT, GL_FALSE, (components * sizeof(GLint)), 0);
-		glEnableVertexAttribArray(this->current_vao_attrib);
-
-		glBindVertexArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		this->buffers_ready = true;
-		this->current_vao_attrib += 1;
-	}
-	else {
-		//Buffer does not match existing element size;
-		std::cout << "Could not load int buffer: buffer did not match existing buffer element count" << std::endl;
-		return;
-	}
-	
+	BufferGeneralData(data.data(), data.size(), sizeof(GLint), 1);
 }
 
 void VertexBuffer::BufferData(std::vector<GLfloat> data, size_t components)
 {
+	BufferGeneralData(data.data(), data.size(), sizeof(GLfloat), 1);
+}
+
+void VertexBuffer::BufferData(std::vector<glm::vec2> data)
+{
+	BufferGeneralData(data.data(), data.size(), sizeof(glm::vec2), 2);
+}
+
+void VertexBuffer::BufferData(std::vector<glm::vec3> data)
+{
+	BufferGeneralData(data.data(), data.size(), sizeof(glm::vec3), 3);
+}
+
+void VertexBuffer::BufferData(std::vector<glm::vec4> data)
+{
+	BufferGeneralData(data.data(), data.size(), sizeof(glm::vec4), 4);
+}
+
+/**
+ * Buffers general data to a VBO
+ *
+ * @param void* data: data array that is supposed to be buffered
+ * @param size_t buffer_size: size of the data array
+ * @param size_t type_size: size of the underlying type
+ * @param size_t components: number of components (Vec2 = 2, Vec3 = 3, Vec4 = 4 components)
+ * @return void
+ */
+void VertexBuffer::BufferGeneralData(void* data, size_t buffer_size, size_t type_size, size_t components)
+{
 	if (this->buffers.size() == 0) {
 		//This buffer is the first buffer created
 		glGenVertexArrays(1, &this->vao);
-		this->element_count = data.size() / components;
+		this->element_count = buffer_size / components;
 	}
 
-	if (this->element_count == (data.size() / components)) {
+	if (this->element_count == (buffer_size / components)) {
 		Buffer primary = Buffer();
-		primary.size = data.size();
+		primary.size = buffer_size;
 		primary.components = components;
 
 		glGenBuffers(1, &primary.vbo_id);
 		glBindBuffer(GL_ARRAY_BUFFER, primary.vbo_id);
-		glBufferData(GL_ARRAY_BUFFER, (data.size() * sizeof(int)), data.data(), GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, (buffer_size * type_size), data, GL_STATIC_DRAW);
 		this->buffers.push_back(primary);
 
 		glBindVertexArray(this->vao);
@@ -152,7 +149,7 @@ void VertexBuffer::BufferData(std::vector<GLfloat> data, size_t components)
 	}
 	else {
 		//Buffer does not match existing element size;
-		std::cout << "Could not load float buffer: buffer did not match existing buffer element count" << std::endl;
+		std::cout << "Could not load buffer: buffer did not match existing buffer element count" << std::endl;
 		return;
 	}
 }
@@ -176,3 +173,4 @@ void VertexBuffer::DestroyBuffers()
 	this->buffers_ready = false;
 
 }
+

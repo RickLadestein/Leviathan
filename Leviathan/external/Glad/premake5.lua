@@ -2,7 +2,8 @@ project "Glad"
 	kind "StaticLib"
 	language "C"
 	staticruntime "On"
-	
+	systemversion "latest"
+	toolset "msc-v142"
 	targetdir ("bin/%{cfg.architecture}")
 	objdir ("bin-int/%{cfg.architecture}")
 	

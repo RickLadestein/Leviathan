@@ -56,4 +56,6 @@ private:
 	glm::mat4 model_matrix;
 
 	void CheckRotations();
+
+	inline void test() {}
 };

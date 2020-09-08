@@ -39,6 +39,7 @@
     <IgnoreWarnCompileDuplicatedFilename>true</IgnoreWarnCompileDuplicatedFilename>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Leviathan</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_x86|Win32'" Label="Configuration">
@@ -63,6 +64,18 @@
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug_x64|Win32'">
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release_x64|Win32'">
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug_x86|x64'">
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Release_x86|x64'">
     <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -201,35 +214,45 @@
       <Command>IF EXIST ..\bin\Leviathan\Release_x64\Leviathan.dll\ (xcopy /Q /E /Y /I ..\bin\Leviathan\Release_x64\Leviathan.dll $(SolutionDir)\bin\Sandbox\Release_x64 &gt; nul) ELSE (xcopy /Q /Y /I ..\bin\Leviathan\Release_x64\Leviathan.dll $(SolutionDir)\bin\Sandbox\Release_x64 &gt; nul)</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_x64|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>_GLFW_WIN32</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Leviathan.h" />
-    <ClInclude Include="src\Leviathan\Core\Application.h" />
     <ClInclude Include="src\Leviathan\Core.h" />
+    <ClInclude Include="src\Leviathan\Core\Application.h" />
+    <ClInclude Include="src\Leviathan\Core\Event.h" />
+    <ClInclude Include="src\Leviathan\Core\Window.h" />
     <ClInclude Include="src\Leviathan\Data\Image.h" />
     <ClInclude Include="src\Leviathan\Data\Structures.h" />
-    <ClInclude Include="src\Leviathan\Core\Event.h" />
+    <ClInclude Include="src\Leviathan\Graphics\Camera.h" />
     <ClInclude Include="src\Leviathan\Graphics\Drawable.h" />
     <ClInclude Include="src\Leviathan\Graphics\GenericMesh.h" />
+    <ClInclude Include="src\Leviathan\Graphics\Mesh.h" />
     <ClInclude Include="src\Leviathan\Graphics\Shader.h" />
     <ClInclude Include="src\Leviathan\Graphics\Texture.h" />
     <ClInclude Include="src\Leviathan\Graphics\VertexBuffer.h" />
     <ClInclude Include="src\Leviathan\Input\Keyboard.h" />
     <ClInclude Include="src\Leviathan\Input\Mouse.h" />
     <ClInclude Include="src\Leviathan\Util\FileManager.h" />
-    <ClInclude Include="src\Leviathan\Core\Window.h" />
+    <ClInclude Include="src\Leviathan\Util\Math.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Leviathan\Core\Application.cpp" />
-    <ClCompile Include="src\Leviathan\Data\Image.cpp" />
     <ClCompile Include="src\Leviathan\Core\Event.cpp" />
+    <ClCompile Include="src\Leviathan\Core\Window.cpp" />
+    <ClCompile Include="src\Leviathan\Data\Image.cpp" />
+    <ClCompile Include="src\Leviathan\Graphics\Camera.cpp" />
     <ClCompile Include="src\Leviathan\Graphics\Drawable.cpp" />
+    <ClCompile Include="src\Leviathan\Graphics\Mesh.cpp" />
     <ClCompile Include="src\Leviathan\Graphics\Shader.cpp" />
     <ClCompile Include="src\Leviathan\Graphics\Texture.cpp" />
     <ClCompile Include="src\Leviathan\Graphics\VertexBuffer.cpp" />
     <ClCompile Include="src\Leviathan\Input\Keyboard.cpp" />
     <ClCompile Include="src\Leviathan\Input\Mouse.cpp" />
     <ClCompile Include="src\Leviathan\Util\FileManager.cpp" />
-    <ClCompile Include="src\Leviathan\Core\Window.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="external\Glad\Glad.vcxproj">

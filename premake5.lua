@@ -28,6 +28,8 @@ project "Leviathan"
 	kind "SharedLib"
 	language "C++"
 	cppdialect "C++17"
+	systemversion "latest"
+	toolset "msc-v142"
 	
 	targetdir ("bin/" .. outputdir .. "/")
 	objdir ("bin-int/" .. outputdir .. "/")

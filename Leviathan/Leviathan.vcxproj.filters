@@ -4,6 +4,9 @@
     <Filter Include="Leviathan">
       <UniqueIdentifier>{E16A6934-4DD5-1DAB-9613-CF5002BDFBFF}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Leviathan\Core">
+      <UniqueIdentifier>{D9832DB1-C551-21B7-AEE5-91DD9A52FD1B}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Leviathan\Data">
       <UniqueIdentifier>{EAD42DB1-D6A2-21B7-BF36-92DDABA3FD1B}</UniqueIdentifier>
     </Filter>
@@ -21,6 +24,15 @@
     <ClInclude Include="src\Leviathan.h" />
     <ClInclude Include="src\Leviathan\Core.h">
       <Filter>Leviathan</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Leviathan\Core\Application.h">
+      <Filter>Leviathan\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Leviathan\Core\Event.h">
+      <Filter>Leviathan\Core</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Leviathan\Core\Window.h">
+      <Filter>Leviathan\Core</Filter>
     </ClInclude>
     <ClInclude Include="src\Leviathan\Data\Image.h">
       <Filter>Leviathan\Data</Filter>
@@ -52,17 +64,26 @@
     <ClInclude Include="src\Leviathan\Util\FileManager.h">
       <Filter>Leviathan\Util</Filter>
     </ClInclude>
-    <ClInclude Include="src\Leviathan\Core\Application.h">
-      <Filter>Leviathan</Filter>
+    <ClInclude Include="src\Leviathan\Graphics\Camera.h">
+      <Filter>Leviathan\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\Leviathan\Core\Event.h">
-      <Filter>Leviathan</Filter>
+    <ClInclude Include="src\Leviathan\Util\Math.h">
+      <Filter>Leviathan\Util</Filter>
     </ClInclude>
-    <ClInclude Include="src\Leviathan\Core\Window.h">
-      <Filter>Leviathan</Filter>
+    <ClInclude Include="src\Leviathan\Graphics\Mesh.h">
+      <Filter>Leviathan\Graphics</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="src\Leviathan\Core\Application.cpp">
+      <Filter>Leviathan\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Leviathan\Core\Event.cpp">
+      <Filter>Leviathan\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Leviathan\Core\Window.cpp">
+      <Filter>Leviathan\Core</Filter>
+    </ClCompile>
     <ClCompile Include="src\Leviathan\Data\Image.cpp">
       <Filter>Leviathan\Data</Filter>
     </ClCompile>
@@ -87,14 +108,11 @@
     <ClCompile Include="src\Leviathan\Util\FileManager.cpp">
       <Filter>Leviathan\Util</Filter>
     </ClCompile>
-    <ClCompile Include="src\Leviathan\Core\Application.cpp">
-      <Filter>Leviathan</Filter>
+    <ClCompile Include="src\Leviathan\Graphics\Camera.cpp">
+      <Filter>Leviathan\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="src\Leviathan\Core\Event.cpp">
-      <Filter>Leviathan</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Leviathan\Core\Window.cpp">
-      <Filter>Leviathan</Filter>
+    <ClCompile Include="src\Leviathan\Graphics\Mesh.cpp">
+      <Filter>Leviathan\Graphics</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <cstddef>
 #include <filesystem>
+#include "tiny_obj_loader.h"
 
 using leviathan::Image;
 
@@ -171,4 +172,69 @@ bool FileManager::WriteDataToFile(std::string folder_id, std::string filename, c
 		return true;
 	}
 	return false;
+}
+
+bool FileManager::ImportObjFile(std::string folder_id, std::string filename, std::vector<Primitive>& result)
+{
+	result.clear();
+	std::string inputfile = CombinePath(folder_id, filename);
+	std::string basedir = GetDirectory(folder_id);
+	tinyobj::attrib_t attrib;
+	std::vector<tinyobj::shape_t> shapes;
+	std::vector<tinyobj::material_t> materials;
+	std::vector<VertexData> components;
+
+	std::string warn;
+	std::string err;
+
+	bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, inputfile.c_str(), basedir.c_str() , true, true);
+	if (!warn.empty()) {
+		std::cout << warn << std::endl;
+	}
+	if (!err.empty()) {
+		std::cout << err << std::endl;
+	}
+
+	if (!ret) {
+		return false;
+	}
+	try {
+		for (size_t s = 0; s < shapes.size(); s++) {
+			// Loop over faces(polygon)
+			size_t index_offset = 0;
+			for (size_t f = 0; f < shapes[s].mesh.num_face_vertices.size(); f++) {
+				int fv = shapes[s].mesh.num_face_vertices[f];
+
+				// Loop over vertices in the face.
+				for (size_t v = 0; v < (size_t)fv; v++) {
+					// access to vertex
+					tinyobj::index_t idx = shapes[s].mesh.indices[index_offset + v];
+					tinyobj::real_t vx = attrib.vertices[3 * idx.vertex_index + 0];
+					tinyobj::real_t vy = attrib.vertices[3 * idx.vertex_index + 1];
+					tinyobj::real_t vz = attrib.vertices[3 * idx.vertex_index + 2];
+					tinyobj::real_t nx = attrib.normals[3 * idx.normal_index + 0];
+					tinyobj::real_t ny = attrib.normals[3 * idx.normal_index + 1];
+					tinyobj::real_t nz = attrib.normals[3 * idx.normal_index + 2];
+					tinyobj::real_t tx = attrib.texcoords[2 * idx.texcoord_index + 0];
+					tinyobj::real_t ty = attrib.texcoords[2 * idx.texcoord_index + 1];
+
+					glm::vec3 vertex(vx, vy, vz);
+					glm::vec3 normal(nx, nx, vz);
+					glm::vec3 texture(tx, ty, 0.0f);
+					components.push_back({
+						vertex,
+						normal,
+						texture });
+				}
+				index_offset += fv;
+			}
+		}
+		for (size_t i = 0; i < components.size(); i += 3) {
+			result.push_back({ components[i], components[i + 1], components[i + 2] });
+		}
+	}
+	catch (std::exception e) {
+		throw e;
+	}
+	return true;
 }

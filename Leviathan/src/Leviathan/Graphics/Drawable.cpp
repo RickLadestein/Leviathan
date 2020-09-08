@@ -1,7 +1,5 @@
 #include "Drawable.h"
 #include <iostream>
-
-
 #include <memory>
 #include "Leviathan/Graphics/Shader.h"
 #include "Leviathan/Graphics/Texture.h"
