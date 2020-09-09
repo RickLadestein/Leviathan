@@ -84,6 +84,8 @@ bool Window::Open()
 	//Set the window aspect ratio
 	this->SetWindowCallbacks();
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
+	glEnable(GL_DEPTH_TEST);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 	this->ResetGlView();
 
 	glfwSetWindowUserPointer(this->w_handle, &this->w_data);
@@ -105,7 +107,7 @@ void Window::ResetGlView()
 
 void Window::Refresh()
 {
-	glClear(GL_COLOR_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	double current_time = glfwGetTime();
 	RefreshEvent ev(current_time - this->last_refresh_time);
 	w_data.EventCallback(&ev);

@@ -1,11 +1,8 @@
 #include <Leviathan.h>
 #include <functional>
-//#include "Leviathan/Util/FileManager.h"
 #include <iostream>
 #include <string>
 #include <sstream>
-//#include "Leviathan/Data/Image.h"
-//#include "Leviathan/Graphics/Shader.h"
 #include <math.h>
 #include <memory>
 
@@ -95,7 +92,7 @@ public:
 				 camera->RotateX((float)dy);
 
 				 glm::vec3 cam_angle = camera->GetRotation();
-				 std::cout << cam_angle.x << " | " << cam_angle.y << " | " << cam_angle.z << std::endl;
+				 //std::cout << cam_angle.x << " | " << cam_angle.y << " | " << cam_angle.z << std::endl;
 			 }
 		 }
 		 
@@ -147,6 +144,7 @@ public:
 				 move = move * glm::vec3(0.25f, 0.25f, 0.25f);
 				 primary->Translate(move);
 				 glm::vec3 campos = primary->GetPosition();
+				 std::cout << campos.x << " | " << campos.y << " | " << campos.z << std::endl;
 			 }
 			 
 		 }

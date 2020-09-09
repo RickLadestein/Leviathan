@@ -182,7 +182,7 @@ void Camera::CalculateViewMatrix()
 
 		this->camera_up = glm::vec3(0.0f, 1.0f, 0.0f);
 		this->camera_direction = glm::normalize(this->position - this->camera_target);
-		this->camera_right = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), this->camera_direction));
+		this->camera_right = glm::normalize(glm::cross(this->camera_up, this->camera_direction));
 		this->camera_up = glm::normalize(glm::cross(this->camera_direction, this->camera_right));
 
 		this->view_matrix = glm::lookAt(this->position, this->camera_target, this->camera_up);
