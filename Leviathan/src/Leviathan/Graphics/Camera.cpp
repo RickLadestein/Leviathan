@@ -3,6 +3,9 @@
 #include "glm/gtc/quaternion.hpp"
 #include "glm/gtx/quaternion.hpp"
 #include "Leviathan/Util/Math.h"
+
+std::shared_ptr<Camera> primary;
+
 Camera::Camera()
 {
 	this->InitializeDefaults();
@@ -28,7 +31,7 @@ void Camera::InitializeDefaults()
 	this->inverse_view_matrix = glm::mat4(1.0f);
 	this->view_matrix = glm::mat4(1.0f);
 	this->projection_matrix = glm::mat4(1.0f);
-	this->position = glm::vec3(0.0f);
+	this->position = glm::vec3(0.0f, 0.0f, -1.0f);
 	this->rotation = glm::vec3(0.0f);
 	this->update_needed = true;
 	this->mode = CameraMode::FPS;
@@ -96,9 +99,20 @@ glm::vec3 Camera::GetForewardVector()
 	return this->camera_target - this->position;
 }
 
+glm::vec3 Camera::GetUpVector()
+{
+	if (this->mode == CameraMode::FPS) {
+		return glm::vec3(0.0f, 1.0f, 0.0f);
+	}
+	else {
+		return this->camera_up;
+	}
+}
+
 void Camera::Translate(glm::vec3 translation)
 {
 	this->position += translation;
+	this->update_needed = true;
 }
 
 void Camera::Rotate(glm::vec3 rotation)
@@ -106,6 +120,7 @@ void Camera::Rotate(glm::vec3 rotation)
 	this->RotateX(rotation.x);
 	this->RotateY(rotation.y);
 	this->RotateZ(rotation.z);
+	
 }
 
 void Camera::RotateX(float degrees)
@@ -147,21 +162,30 @@ void Camera::RotateZ(float degrees)
 	this->update_needed = true;
 }
 
+std::shared_ptr<Camera> Camera::GetPrimary()
+{
+	if (primary == nullptr) {
+		primary = std::make_shared<Camera>();
+	}
+	return primary;
+}
+
 void Camera::CalculateViewMatrix()
 {
 	if (this->update_needed) {
-		glm::quat quaternion = EulerAnglesToQuaternion(this->rotation);
-		glm::vec3 target_vector = quaternion * glm::vec3(0.0f, 0.0f, 1.0f);
-		this->camera_target = target_vector + this->position;
+		glm::quat QuatAroundX = glm::quat(glm::vec3(0.0f, 0.0f, 0.0f));
+		glm::quat QuatAroundY = glm::quat(glm::vec3(0.0f, glm::radians(this->rotation.y), 0.0f));
+		glm::quat QuatAroundZ = glm::quat(glm::vec3(0.0f, 0.0f, glm::radians(-this->rotation.x)));
+		glm::quat finalOrientation = QuatAroundX * QuatAroundY * QuatAroundZ;
+		glm::vec3 point(1.0f, 0.0f, 0.0f);
+		this->camera_target = (finalOrientation * point) + this->position;
 
 		this->camera_up = glm::vec3(0.0f, 1.0f, 0.0f);
-		glm::vec3 camera_direction = glm::normalize(this->position - this->camera_target);
-		this->camera_right = glm::normalize(glm::cross(this->camera_up, camera_direction));
-		this->camera_up = glm::normalize(glm::cross(camera_direction, this->camera_right));
+		this->camera_direction = glm::normalize(this->position - this->camera_target);
+		this->camera_right = glm::normalize(glm::cross(glm::vec3(0.0f, 1.0f, 0.0f), this->camera_direction));
+		this->camera_up = glm::normalize(glm::cross(this->camera_direction, this->camera_right));
 
 		this->view_matrix = glm::lookAt(this->position, this->camera_target, this->camera_up);
-		this->inverse_view_matrix = glm::inverse(view_matrix);
-		this->update_needed = false;
 	}
 	return;
 }

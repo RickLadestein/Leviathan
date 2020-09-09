@@ -23,6 +23,7 @@ private:
 	glm::vec3 camera_target;
 	glm::vec3 camera_up;
 	glm::vec3 camera_right;
+	glm::vec3 camera_direction;
 
 	bool update_needed;
 	CameraMode mode;
@@ -39,6 +40,7 @@ public:
 	glm::mat4 GetInverseViewMatrix();
 	glm::vec3 GetRightVector();
 	glm::vec3 GetForewardVector();
+	glm::vec3 GetUpVector();
 	inline glm::vec3 GetRotation() { return this->rotation; }
 	inline glm::vec3 GetPosition() { return this->position; }
 
@@ -48,8 +50,9 @@ public:
 	void RotateX(float degrees);
 	void RotateY(float degrees);
 	void RotateZ(float degrees);
+
+	static std::shared_ptr<Camera> GetPrimary();
 private:
 	void CalculateViewMatrix();
 	void InitializeDefaults();
-
 };

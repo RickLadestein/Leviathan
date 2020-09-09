@@ -83,7 +83,7 @@ bool Window::Open()
 
 	//Set the window aspect ratio
 	this->SetWindowCallbacks();
-	glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
+	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	this->ResetGlView();
 
 	glfwSetWindowUserPointer(this->w_handle, &this->w_data);
@@ -105,15 +105,13 @@ void Window::ResetGlView()
 
 void Window::Refresh()
 {
-	
 	glClear(GL_COLOR_BUFFER_BIT);
-	glfwSwapBuffers(this->w_handle);
-	glfwPollEvents();
-
 	double current_time = glfwGetTime();
 	RefreshEvent ev(current_time - this->last_refresh_time);
 	w_data.EventCallback(&ev);
 	this->last_refresh_time = current_time;
+	glfwSwapBuffers(this->w_handle);
+	glfwPollEvents();
 }
 
 void Window::SetWindowIcon(std::shared_ptr<leviathan::Image> im)
@@ -121,6 +119,7 @@ void Window::SetWindowIcon(std::shared_ptr<leviathan::Image> im)
 	if (im == nullptr) {
 		return;
 	}
+	//get rid of the old image
 	if (this->image.pixels) {
 		delete[] this->image.pixels;
 	}
@@ -188,6 +187,12 @@ void Window::SetRawMouseInput(bool val)
 
 void Window::SetCursorMode(MouseMode mode)
 {
+	double time = glfwGetTime();
+	if (time - this->w_data.mouse->last_mode_update < 0.25) {
+		return;
+	}
+	this->w_data.mouse->last_mode_update = time;
+
 	switch (mode) {
 	case MouseMode::VISIBLE:
 		glfwSetInputMode(this->w_handle, GLFW_CURSOR, GLFW_CURSOR_NORMAL);

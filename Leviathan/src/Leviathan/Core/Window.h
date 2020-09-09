@@ -54,14 +54,17 @@ public:
 	void SetCursorMode(MouseMode mode);
 	void SetSize(int width, int height);
 	void SetTitle(std::string title);
+	inline void SetClearColor(float r, float g, float b, float a) { glClearColor(r, g, b, a); }
 	void ResetGlView();
 	void Refresh();
+
 	void SetWindowIcon(std::shared_ptr<leviathan::Image> im);
 	void SetWindowIcon(unsigned char* data, int width, int height, int components);
 
 	inline bool GetWindowShouldCloseFlag() { return this->w_data.should_close; };
 	inline std::weak_ptr<Keyboard> GetKeyboard() { return this->w_data.keyboard; }
 	inline std::weak_ptr<Mouse> GetMouse() { return this->w_data.mouse; }
+	inline MouseMode GetCursorMode() { return this->w_data.mouse->mousemode; }
 private:
 	void SetWindowCallbacks();
 	void OnEvent(Event* event);

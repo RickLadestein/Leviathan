@@ -1,9 +1,20 @@
 #include "Application.h"
+#include "Leviathan/Graphics/Camera.h"
 #include <iostream>
 #include <thread>
 Application::Application()
 {
-	this->window = std::make_shared<Window>(1920, 1080, "Test", WindowMode::WINDOWED);
+	Camera::GetPrimary();
+	this->window = std::make_shared<Window>(500, 500, "Test", WindowMode::WINDOWED);
+	this->window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
+	this->window->SetRawMouseInput(true);
+	this->window->Open();
+}
+
+Application::Application(int width, int height, std::string title, WindowMode mode)
+{
+	Camera::GetPrimary();
+	this->window = std::make_shared<Window>(width, height, title, mode);
 	this->window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
 	this->window->Open();
 }
@@ -19,4 +30,20 @@ void Application::Run()
 void Application::Stop()
 {
 	this->window->Close();
+}
+
+std::weak_ptr<Keyboard> Application::GetKeyboard()
+{
+	if (this->window) {
+		return this->window->GetKeyboard();
+	}
+	return std::weak_ptr<Keyboard>();
+}
+
+std::weak_ptr<Mouse> Application::GetMouse()
+{
+	if (this->window) {
+		return this->window->GetMouse();
+	}
+	return std::weak_ptr<Mouse>();
 }

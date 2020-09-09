@@ -154,11 +154,21 @@ void Drawable::DrawInstanced()
 glm::mat4 Drawable::GetModelMatrix()
 {
 	if (this->model_matrix_changed) {
-		glm::quat quaternion = EulerAnglesToQuaternion(this->rotation);
+		/*glm::quat quaternion = EulerAnglesToQuaternion(this->rotation);
 		this->model_matrix = glm::mat4(1.0f);
 		this->model_matrix = glm::translate(this->model_matrix, this->position);
 		this->model_matrix = glm::scale(this->model_matrix, this->scale);
 		this->model_matrix *= glm::toMat4(quaternion);
+		this->model_matrix_changed = false;*/
+
+		this->model_matrix = glm::mat4(1.0f);
+		this->model_matrix = glm::translate(this->model_matrix, this->position);
+		//this->model_matrix = glm::translate(this->model_matrix, glm::vec3(1.0f, 0.5f, 1.0f));
+		this->model_matrix = glm::scale(this->model_matrix, this->scale);
+
+		this->model_matrix = glm::rotate(this->model_matrix, this->rotation.x, glm::vec3(1.0f, 0.0f, 0.0f));
+		this->model_matrix = glm::rotate(this->model_matrix, this->rotation.y, glm::vec3(0.0f, 1.0f, 0.0f));
+		this->model_matrix = glm::rotate(this->model_matrix, this->rotation.z, glm::vec3(0.0f, 0.0f, 1.0f));
 		this->model_matrix_changed = false;
 	}
 	return this->model_matrix;

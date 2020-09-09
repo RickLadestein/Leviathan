@@ -6,6 +6,7 @@ Mouse::Mouse()
 	this->pos_y = 0;
 	this->x_delta = 0;
 	this->y_delta = 0;
+	this->last_mode_update = 0;
 	mouse_btns = new int[MAX_MOUSE_PRESS];
 	for (int i = 0; i < MAX_MOUSE_PRESS; i++) {
 		mouse_btns[i] = -1;

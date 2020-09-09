@@ -175,7 +175,9 @@ std::string KeyTypeEvent::GetString()
 
 KeyRepeatEvent::KeyRepeatEvent(int key)
 {
+	this->type = EventType::KeyRepeatEvent;
 	this->key = key;
+	this->category = EventCategory::KeyboardEvent;
 }
 
 std::string KeyRepeatEvent::GetString()

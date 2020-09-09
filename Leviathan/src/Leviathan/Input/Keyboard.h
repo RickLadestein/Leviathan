@@ -14,6 +14,7 @@ public:
 
 	inline void SetKeyboardMode(KeyboardMode mode) { this->mode = mode; };
 	inline bool IsKeyPressed(int key) { return CheckIfKeyIsPresent(key); };
+	void GetPressedKeys(std::vector<int>* keys);
 	inline const KeyboardMode GetKeyboardMode() { return this->mode; };
 	void onKeyEvent(Event* ev);
 private:

@@ -20,6 +20,7 @@ void Keyboard::AddKey(int key)
 		for (int i = 0; i < MAX_KEY_PRESSED; i++) {
 			if (keys[i] == GLFW_KEY_UNKNOWN) {
 				keys[i] = key;
+				return;
 			}
 		}
 	}
@@ -44,6 +45,16 @@ bool Keyboard::CheckIfKeyIsPresent(int key)
 		}
 	}
 	return false;
+}
+
+void Keyboard::GetPressedKeys(std::vector<int>* keys)
+{
+	if (keys != nullptr) {
+		for (int i = 0; i < MAX_KEY_PRESSED; i++) {
+			if(this->keys[i] != GLFW_KEY_UNKNOWN)
+				keys->push_back(this->keys[i]);
+		}
+	}
 }
 
 void Keyboard::onKeyEvent(Event* ev)

@@ -20,10 +20,12 @@ public:
 
 	void GetMousePosition(double* x, double* y);
 	void onEvent(Event* event);
+	inline MouseMode GetMouseMode() { return this->mousemode; }
 private:
 	double pos_x, pos_y;
 	double x_delta, y_delta;
 	int* mouse_btns;
+	double last_mode_update;
 	MouseInputMode mouseinputmode;
 	MouseMode mousemode;
 	bool CheckIfBtnIsPressed(int btn);
