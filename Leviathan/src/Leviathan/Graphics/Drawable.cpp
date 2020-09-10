@@ -4,6 +4,7 @@
 #include "Leviathan/Graphics/Shader.h"
 #include "Leviathan/Graphics/Texture.h"
 #include "glad/glad.h"
+
 #include "Leviathan/Util/Math.h"
 
 Drawable::Drawable()
@@ -100,55 +101,6 @@ void Drawable::RotateRadians(glm::vec3 rot)
 	this->rotation += glm::vec3(rot_deg_x, rot_deg_y, rot_deg_z);
 	this->CheckRotations();
 	this->model_matrix_changed = true;
-}
-
-void Drawable::Draw()
-{
-	this->Draw(std::make_shared<Camera>());
-}
-
-void Drawable::Draw(std::weak_ptr<Camera> cam)
-{
-	if (!this->vertexbuffer.buffers_ready) {
-		std::cout << "Could not load model because buffers were not initialised" << std::endl;
-		return;
-	}
-	std::shared_ptr<ShaderProgram> shader = ShaderProgram::GetShader(this->shader).lock();
-	std::shared_ptr<Texture> texture = Texture::GetTexture(this->texture).lock();
-	std::shared_ptr<Camera> camera = cam.lock();
-
-	if (texture) {
-		texture->bind();
-	}
-
-	if (shader && camera) {
-		shader->bind();
-
-		shader->setUniform("projection", camera->GetProjectionMatrix());
-		shader->setUniform("view", camera->GetViewMatrix());
-		shader->setUniform("model", this->GetModelMatrix());
-
-		this->vertexbuffer.Bind();
-
-		glDrawArrays(GL_TRIANGLES, 0, this->vertexbuffer.element_count);
-		shader->unbind();
-		texture->unbind();
-		this->vertexbuffer.Unbind();
-		return;
-
-	}
-	else {
-		if (!shader) {
-			std::cout << "Could not render because shader did not exist" << std::endl;
-		}
-		if (!camera) {
-			std::cout << "Could not render because camera did not exist" << std::endl;
-		}
-	}
-}
-
-void Drawable::DrawInstanced()
-{
 }
 
 glm::mat4 Drawable::GetModelMatrix()

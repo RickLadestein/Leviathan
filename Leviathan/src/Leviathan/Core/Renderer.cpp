@@ -1,20 +1,95 @@
 #include "Renderer.h"
+#include "Leviathan/Graphics/Shader.h"
+#include "Leviathan/Graphics/Texture.h"
+#include <iostream>
+
+#ifdef LEVIATHAN_DEBUG
+	#define DEBUG() (__debugbreak()) 
+#else
+	#define DEBUG() (0)
+#endif
+
 bool FacecullingEnabled = false;
 bool BlendingEnabled = false;
-void Renderer::Render(Drawable entity, std::weak_ptr<Camera> cam)
+void Renderer::Render(Drawable& entity, std::weak_ptr<Camera> cam)
 {
+	if (!entity.vertexbuffer.buffers_ready) {
+		std::cout << "Could not load model because buffers were not initialised" << std::endl;
+		return;
+	}
+	std::shared_ptr<ShaderProgram> shader = ShaderProgram::GetShader(entity.shader).lock();
+	std::shared_ptr<Texture> texture = Texture::GetTexture(entity.texture).lock();
+	std::shared_ptr<Camera> camera = cam.lock();
+
+	
+
+	if (shader && camera) {
+		if (texture) {
+			texture->bind();
+		}
+
+		shader->bind();
+
+		shader->setUniform("projection", camera->GetProjectionMatrix());
+		shader->setUniform("view", camera->GetViewMatrix());
+		shader->setUniform("model", entity.GetModelMatrix());
+
+		entity.vertexbuffer.Bind();
+
+		glDrawArrays(GL_TRIANGLES, 0, entity.vertexbuffer.element_count);
+		shader->unbind();
+		texture->unbind();
+		entity.vertexbuffer.Unbind();
+		return;
+
+	}
+	else {
+		if (!shader) {
+			std::cout << "Could not render because shader did not exist" << std::endl;
+		}
+		if (!camera) {
+			std::cout << "Could not render because camera did not exist" << std::endl;
+		}
+		DEBUG();
+	}
 }
 
-void Renderer::Render(std::vector<Drawable> entities, std::weak_ptr<Camera> cam)
+void Renderer::Render(std::vector<Drawable>& entities, std::weak_ptr<Camera> cam)
 {
+	auto it = entities.begin();
+	while (it != entities.end()) {
+		Render(*it, cam);
+		it++;
+	}
 }
 
-void Renderer::Render(Drawable entity, std::weak_ptr<Camera> cam, void* fbo)
+void Renderer::Render(Drawable& entity, std::weak_ptr<Camera> cam, std::weak_ptr<FrameBuffer> fbo)
 {
+	std::shared_ptr<FrameBuffer> buff = fbo.lock();
+	if (buff) {
+		buff->Bind();
+		Render(entity, cam);
+		buff->Unbind();
+	}
+	else {
+		std::cout << "Could not render entity: framebuffer was not initialized" << std::endl;
+		__debugbreak();
+		DEBUG();
+	}
 }
 
-void Renderer::Render(std::vector<Drawable> entity, std::weak_ptr<Camera> cam, void* fbo)
+void Renderer::Render(std::vector<Drawable>& entities, std::weak_ptr<Camera> cam, std::weak_ptr<FrameBuffer> fbo)
 {
+	std::shared_ptr<FrameBuffer> buff = fbo.lock();
+	if (buff) {
+		buff->Bind();
+		Render(entities, cam);
+		buff->Unbind();
+	}
+	else {
+		std::cout << "Could not render entities: framebuffer was not initialized" << std::endl;
+		DEBUG();
+	}
 }
 
 #pragma region Culling

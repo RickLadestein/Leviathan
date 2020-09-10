@@ -115,6 +115,12 @@ void Camera::Translate(glm::vec3 translation)
 	this->update_needed = true;
 }
 
+void Camera::SetPosition(glm::vec3 pos)
+{
+	this->position = position;
+	this->update_needed = true;
+}
+
 void Camera::Rotate(glm::vec3 rotation)
 {
 	this->RotateX(rotation.x);

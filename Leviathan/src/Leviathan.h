@@ -1,5 +1,7 @@
 #pragma once
 //Core components
+#define LEVIATHAN_DEBUG
+
 #include "Leviathan/Core.h"
 #include "Leviathan/Core/Event.h"
 #include "Leviathan/Core/Application.h"
@@ -17,6 +19,7 @@
 #include "Leviathan/Graphics/Buffers/VertexBuffer.h"
 #include "Leviathan/Graphics/Buffers/StencilBuffer.h"
 #include "Leviathan/Graphics/Buffers/DepthBuffer.h"
+#include "Leviathan/Graphics/Buffers/FrameBuffer.h"
 #include "Leviathan/Graphics/Camera.h"
 #include "Leviathan/Graphics/Mesh.h"
 

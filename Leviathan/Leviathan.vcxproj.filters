@@ -85,6 +85,7 @@
     <ClInclude Include="src\Leviathan\Graphics\Buffers\VertexBuffer.h">
       <Filter>Leviathan\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\Leviathan\Graphics\Buffers\FrameBuffer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Leviathan\Core\Application.cpp">
@@ -133,5 +134,6 @@
     <ClCompile Include="src\Leviathan\Graphics\Buffers\VertexBuffer.cpp">
       <Filter>Leviathan\Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="src\Leviathan\Graphics\Buffers\FrameBuffer.cpp" />
   </ItemGroup>
 </Project>

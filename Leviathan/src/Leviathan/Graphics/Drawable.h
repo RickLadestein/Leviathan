@@ -8,9 +8,10 @@
 #include <glm/gtx/quaternion.hpp>
 
 class Drawable {
+	friend class Renderer;
 protected:
-	const char* shader;
-	const char* texture;
+	std::string shader;
+	std::string texture;
 
 	glm::vec3 rotation;
 	glm::vec3 scale;
@@ -23,8 +24,8 @@ protected:
 	Drawable(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
 	Drawable(std::string shader, std::string texture, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
 public:
-	inline void SetShader(std::string s_name) { this->shader = s_name.c_str(); }
-	inline void SetTexture(std::string texture) { this->texture = texture.c_str(); }
+	inline void SetShader(std::string s_name) { this->shader = s_name; }
+	inline void SetTexture(std::string texture) { this->texture = texture; }
 
 	inline glm::vec3 getPosition() { return this->position; }
 	inline glm::vec3 getRotation() { return this->rotation; }
@@ -43,10 +44,6 @@ public:
 	void RotateRadians(float x, float y, float z);
 	void RotateRadians(glm::vec3 rot);
 
-
-	void Draw();
-	void Draw(std::weak_ptr<Camera> cam);
-	void DrawInstanced();
 	glm::mat4 GetModelMatrix();
 
 private:

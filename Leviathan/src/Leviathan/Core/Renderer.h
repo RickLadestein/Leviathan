@@ -1,6 +1,7 @@
 #pragma once
 #include "Leviathan/Graphics/Drawable.h"
 #include "Leviathan/Graphics/Camera.h"
+#include "Leviathan/Graphics/Buffers/FrameBuffer.h"
 #include <memory>
 #include <vector>
 #include "glad/glad.h"
@@ -34,11 +35,11 @@ enum class BlendMode {
 
 class Renderer {
 public:
-	static void Render(Drawable entity, std::weak_ptr<Camera> cam);
-	static void Render(std::vector<Drawable> entities, std::weak_ptr<Camera> cam);
+	static void Render(Drawable& entity, std::weak_ptr<Camera> cam);
+	static void Render(std::vector<Drawable>& entities, std::weak_ptr<Camera> cam);
 
-	static void Render(Drawable entity, std::weak_ptr<Camera> cam, void* fbo);
-	static void Render(std::vector<Drawable> entity, std::weak_ptr<Camera> cam, void* fbo);
+	static void Render(Drawable& entity, std::weak_ptr<Camera> cam, std::weak_ptr<FrameBuffer> fbo);
+	static void Render(std::vector<Drawable>& entities, std::weak_ptr<Camera> cam, std::weak_ptr<FrameBuffer> fbo);
 
 	//Face culling
 	static void SetFaceCulling(bool enabled);

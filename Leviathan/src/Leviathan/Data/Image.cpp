@@ -32,7 +32,7 @@ namespace leviathan {
 			total_path += file;
 
 			int width, height, channels;
-			unsigned char* data = stbi_load(total_path.c_str(), &width, &height, &channels, 4);
+			unsigned char* data = stbi_load(total_path.c_str(), &width, &height, &channels, 0);
 			if (data) {
 				return std::make_shared<Image>(width, height, channels, data);
 			}

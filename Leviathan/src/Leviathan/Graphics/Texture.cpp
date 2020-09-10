@@ -12,6 +12,10 @@ Texture2D::Texture2D(std::string folder_id, std::string texture_file, bool mipma
 	if (image) {
 		glGenTextures(1, &this->handle);
 		glBindTexture(GL_TEXTURE_2D, this->handle);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
 		int nrChannels = image->GetChannelCount();
 		int width, height;
@@ -28,6 +32,21 @@ Texture2D::Texture2D(std::string folder_id, std::string texture_file, bool mipma
 			glGenerateMipmap(GL_TEXTURE_2D);
 		}
 	}
+	this->rtg = true;
+}
+
+Texture2D::Texture2D(int width, int height)
+{
+	this->handle = 0;
+	this->type = TextureType::TEXTURE_2D;
+	this->hasMipmap = false;
+	glGenTextures(1, &this->handle);
+	glBindTexture(GL_TEXTURE_2D, this->handle);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
 	this->rtg = true;
 }
 
@@ -107,6 +126,23 @@ bool Texture::AddTexture(std::string texture_id, std::string folder_id, std::str
 	}
 	catch (std::exception e) {
 		std::shared_ptr<Texture> tex = std::make_shared<Texture2D>(folder_id, texture_file, mipmap);
+		if (tex->rtg) {
+			textures[texture_id] = tex;
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Texture::AddTexture(std::string texture_id, int width, int height)
+{
+	try {
+		if (textures.at(texture_id)) {
+			return false;
+		}
+	}
+	catch (std::exception e) {
+		std::shared_ptr<Texture> tex = std::make_shared<Texture2D>(width, height);
 		if (tex->rtg) {
 			textures[texture_id] = tex;
 			return true;

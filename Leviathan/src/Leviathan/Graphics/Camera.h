@@ -45,6 +45,7 @@ public:
 	inline glm::vec3 GetPosition() { return this->position; }
 
 	void Translate(glm::vec3 translation);
+	void SetPosition(glm::vec3 pos);
 	void Rotate(glm::vec3 rotation);
 
 	void RotateX(float degrees);

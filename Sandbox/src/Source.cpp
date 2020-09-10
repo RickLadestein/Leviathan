@@ -8,14 +8,14 @@
 
 class WorldObject: public Drawable {
 public:
-	WorldObject() {
+	WorldObject(std::string mesh_name) {
 		this->shader = "default";
 		this->texture = "default";
-		Initialize();
+		Initialize(mesh_name);
 	}
 
-	void Initialize() {
-		std::shared_ptr<Mesh> mesh = Mesh::GetMesh("awp").lock();
+	void Initialize(std::string mesh_name) {
+		std::shared_ptr<Mesh> mesh = Mesh::GetMesh(mesh_name).lock();
 		if (mesh) {
 			this->vertexbuffer.BufferData(mesh->data);
 		}
@@ -36,18 +36,23 @@ public:
 		FileManager::RegisterDirectory("images", "C:\\Users\\rladestein\\source\\repos\\Leviathan\\Sandbox\\resources\\images");
 
 		Mesh::AddMesh("awp", "models", "AWP_Dragon_Lore.obj");
+		Mesh::AddMesh("overlay", "models", "crosshair.obj");
 		ShaderProgram::AddShader("default", "shaders", "default.frag", "default.vert");
+		ShaderProgram::AddShader("crosshair", "shaders", "crosshair.frag", "crosshair.vert");
 		Texture::AddTexture("default", "textures", "awp_color.png", false);
 		
+		DepthBuffer::Enable();
+		DepthBuffer::SetDepthFunction(DepthFunc::LESS);
 
 		std::shared_ptr<leviathan::Image> im = leviathan::Image::Load("default", "logo.png");
 		std::shared_ptr<Window> window = this->GetWindow().lock();
 		window->SetWindowIcon(im);
+		window->SetVSync(true);
 
 
 		cam = Camera::GetPrimary();
-		wo = new WorldObject();
-		wo->setPosition(glm::vec3(0.0f, 0.0f, 10.0f));
+		wo = new WorldObject("awp");
+		wo->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 		timestamp = 0.0;
 	}
 	~Game() = default;
@@ -69,9 +74,13 @@ public:
 		 double fps = round(1.0 / frame_delta);
 
 		 std::shared_ptr<Window> window = this->GetWindow().lock();
+		 std::shared_ptr<Camera> camera = this->cam.lock();
+		 glm::vec3 position = camera->GetPosition();
+		 glm::vec3 rotation = camera->GetRotation();
 		 if (window) {
 			 std::stringstream ss;
-			 ss << "fps " << fps;
+			ss << "\t Pos[X:" << position.x << "| Y:" << position.y << "| Z:" << position.z <<"]\t"
+				 << "\t Rot[X:" << rotation.x << "| Y:" << rotation.y << "| Z:" << rotation.z << "]";
 			 window->SetTitle(ss.str());
 		 }
 		 this->timestamp = time;
@@ -154,7 +163,7 @@ public:
 		 if (event->GetType() == EventType::RefreshEvent) {
 			 CheckFps();
 			 CheckKeyboardKeys();
-			 wo->Draw(cam);
+			 Renderer::Render(*wo, cam);
 		 }
 	 }
 };

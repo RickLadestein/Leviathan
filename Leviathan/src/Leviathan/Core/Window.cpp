@@ -25,7 +25,7 @@ Window::Window(int width, int height, std::string title, WindowMode mode)
 	this->w_data.title = title;
 	this->w_data.keyboard = std::make_shared<Keyboard>();
 	this->w_data.mouse = std::make_shared<Mouse>();
-	this->w_data.v_sync = false;
+	this->w_data.v_sync = true;
 	this->image.pixels = nullptr;
 }
 
@@ -53,7 +53,7 @@ bool Window::Open()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
-	glfwWindowHint(GLFW_DOUBLEBUFFER, GL_FALSE);
+	glfwWindowHint(GLFW_DOUBLEBUFFER, GL_TRUE);
 
 	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
 	const GLFWvidmode* vidmode = glfwGetVideoMode(monitor);
@@ -101,15 +101,6 @@ bool Window::Open()
 	//Set the window aspect ratio
 	this->SetWindowCallbacks();
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
-	glEnable(GL_DEPTH_TEST);
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-	DepthBuffer::Enable();
-	DepthBuffer::SetDepthFunction(DepthFunc::LESS);
-
-	StencilBuffer::Enable();
 	this->ResetGlView();
 
 	glfwSetWindowUserPointer(this->w_handle, &this->w_data);

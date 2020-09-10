@@ -33,6 +33,7 @@ enum class TextureType {
 };
 
 class Texture {
+	friend class FrameBuffer;
 public:
 	Texture() = default;
 	~Texture() = default;
@@ -47,6 +48,7 @@ public:
 	void SetMipMapMinMagSetting(MipmapMinMagSetting min, MipmapMinMagSetting mag);
 
 	static bool AddTexture(std::string texture_id, std::string folder_id, std::string texture_file, bool mipmap);
+	static bool AddTexture(std::string texture_id, int width, int height);
 	static std::weak_ptr<Texture> GetTexture(std::string id);
 	static bool DeleteTexture(std::string id);
 protected:
@@ -66,6 +68,7 @@ public:
 class Texture2D : public Texture {
 public:
 	Texture2D(std::string folder_id, std::string texture_file, bool mipmap = false);
+	Texture2D(int width, int height);
 };
 
 class Texture3D : public Texture {
