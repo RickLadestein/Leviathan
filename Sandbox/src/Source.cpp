@@ -144,7 +144,7 @@ public:
 				 move = move * glm::vec3(0.25f, 0.25f, 0.25f);
 				 primary->Translate(move);
 				 glm::vec3 campos = primary->GetPosition();
-				 std::cout << campos.x << " | " << campos.y << " | " << campos.z << std::endl;
+				 //std::cout << campos.x << " | " << campos.y << " | " << campos.z << std::endl;
 			 }
 			 
 		 }

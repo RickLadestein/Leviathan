@@ -66,6 +66,9 @@
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug_x64|Win32'">
+    <PlatformToolset>v142</PlatformToolset>
+  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
@@ -198,6 +201,8 @@
     <ClInclude Include="src\Leviathan\Core\Window.h" />
     <ClInclude Include="src\Leviathan\Data\Image.h" />
     <ClInclude Include="src\Leviathan\Data\Structures.h" />
+    <ClInclude Include="src\Leviathan\Graphics\Buffers\DepthBuffer.h" />
+    <ClInclude Include="src\Leviathan\Graphics\Buffers\StencilBuffer.h" />
     <ClInclude Include="src\Leviathan\Graphics\Camera.h" />
     <ClInclude Include="src\Leviathan\Graphics\Drawable.h" />
     <ClInclude Include="src\Leviathan\Graphics\GenericMesh.h" />
@@ -215,6 +220,8 @@
     <ClCompile Include="src\Leviathan\Core\Event.cpp" />
     <ClCompile Include="src\Leviathan\Core\Window.cpp" />
     <ClCompile Include="src\Leviathan\Data\Image.cpp" />
+    <ClCompile Include="src\Leviathan\Graphics\Buffers\DepthBuffer.cpp" />
+    <ClCompile Include="src\Leviathan\Graphics\Buffers\StencilBuffer.cpp" />
     <ClCompile Include="src\Leviathan\Graphics\Camera.cpp" />
     <ClCompile Include="src\Leviathan\Graphics\Drawable.cpp" />
     <ClCompile Include="src\Leviathan\Graphics\Mesh.cpp" />

@@ -14,7 +14,6 @@ struct Buffer {
 enum class VertexBufferLayout {
 	PNT_SERIAL,
 	PNT_INTERLEAVED,
-
 };
 
 

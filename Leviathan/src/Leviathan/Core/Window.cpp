@@ -1,8 +1,17 @@
 #include "Window.h"
 #include <iostream>
 #include <sstream>
+#include "Leviathan/Graphics/Buffers/DepthBuffer.h"
+#include "Leviathan/Graphics/Buffers/StencilBuffer.h"
 void GLAPIENTRY OnGlError(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
 
+/**
+ * @brief Creates a new instance of window
+ * @param width Window width
+ * @param height Window height
+ * @param title Window Title
+ * @param mode Window mode (Fullscreen, Windowed, Windowed_Fullscreen)
+*/
 Window::Window(int width, int height, std::string title, WindowMode mode)
 {
 	this->w_data.width = width;
@@ -17,15 +26,23 @@ Window::Window(int width, int height, std::string title, WindowMode mode)
 	this->w_data.title = title;
 	this->w_data.keyboard = std::make_shared<Keyboard>();
 	this->w_data.mouse = std::make_shared<Mouse>();
+	this->w_data.v_sync = false;
 	this->image.pixels = nullptr;
 }
 
+/**
+ * @brief Deletes the window and all it's resources
+*/
 Window::~Window()
 {
-	if(this->image.pixels)
-		delete[] this->image.pixels;
+	this->Close();
 }
 
+
+/**
+ * @brief Opens the window with specified parameters at startup
+ * @return Window open succes
+*/
 bool Window::Open()
 {
 	if (glfwInit() != GLFW_TRUE) {
@@ -37,7 +54,7 @@ bool Window::Open()
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
-	glfwWindowHint(GLFW_DOUBLEBUFFER, GL_TRUE);
+	glfwWindowHint(GLFW_DOUBLEBUFFER, GL_FALSE);
 
 	GLFWmonitor* monitor = glfwGetPrimaryMonitor();
 	const GLFWvidmode* vidmode = glfwGetVideoMode(monitor);
@@ -86,7 +103,14 @@ bool Window::Open()
 	this->SetWindowCallbacks();
 	glClearColor(0.5f, 0.5f, 0.5f, 1.0f);
 	glEnable(GL_DEPTH_TEST);
+
+	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+	DepthBuffer::Enable();
+	DepthBuffer::SetDepthFunction(DepthFunc::LESS);
+
+	StencilBuffer::Enable();
 	this->ResetGlView();
 
 	glfwSetWindowUserPointer(this->w_handle, &this->w_data);
@@ -95,14 +119,25 @@ bool Window::Open()
 	return true;
 }
 
+/**
+ * @brief Indicates to the window that the window should close. 
+		  All resources that the window manages are released and Window safe to be freed from memory afterwards
+*/
 void Window::Close()
 {
 	this->w_data.should_close = true;
-	glfwSetWindowShouldClose(this->w_handle, GLFW_TRUE);
-	glfwDestroyWindow(this->w_handle);
+	if(this->w_handle) {
+		glfwSetWindowShouldClose(this->w_handle, GLFW_TRUE);
+		glfwDestroyWindow(this->w_handle);
+	}
+	if (this->image.pixels)
+		delete[] this->image.pixels;
 	//Delete unmanaged resources
 }
 
+/**
+ * @brief Resets the OpenGL draw window to the window's own width and height
+*/
 void Window::ResetGlView()
 {
 	glViewport(0, 0, this->w_data.width, this->w_data.height);
@@ -110,15 +145,26 @@ void Window::ResetGlView()
 
 void Window::Refresh()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	this->Clear(true);
 	double current_time = glfwGetTime();
 	RefreshEvent ev(current_time - this->last_refresh_time);
 	w_data.EventCallback(&ev);
 	this->last_refresh_time = current_time;
-	glfwSwapBuffers(this->w_handle);
+
+	if (this->w_data.v_sync) {
+		glfwSwapBuffers(this->w_handle);
+	}
+	else {
+		glFlush();
+	}
+	
 	glfwPollEvents();
 }
 
+/**
+ * @brief Sets the window icon to Leviathan API imported image
+ * @param im Imported image to be used as icon
+*/
 void Window::SetWindowIcon(std::shared_ptr<leviathan::Image> im)
 {
 	if (im == nullptr) {
@@ -142,6 +188,13 @@ void Window::SetWindowIcon(std::shared_ptr<leviathan::Image> im)
 	glfwSetWindowIcon(this->w_handle, 1, &this->image);
 }
 
+/**
+ * @brief Sets the window icon to custom imported window icon specifications
+ * @param data Pixel data of the icon
+ * @param width Icon width
+ * @param height Icon height
+ * @param components Icon color components (RGB, RGBA)
+*/
 void Window::SetWindowIcon(unsigned char* data, int width, int height, int components)
 {
 	if (this->image.pixels) {
@@ -158,11 +211,56 @@ void Window::SetWindowIcon(unsigned char* data, int width, int height, int compo
 	glfwSetWindowIcon(this->w_handle, 1, &this->image);
 }
 
+/**
+ * @brief Changes the application render strategy to enable or disable Vsync
+ * @param enable Enable or Disable Vsync
+*/
+void Window::SetVSync(bool enable)
+{
+	this->w_data.v_sync = enable;
+	if (enable)
+		glfwWindowHint(GLFW_DOUBLEBUFFER, GL_FALSE);
+	else
+		glfwWindowHint(GLFW_DOUBLEBUFFER, GL_TRUE);
+}
+
+/**
+ * @brief Clears the screen buffer or all enabled buffers if specified in argument
+ * @param all_buffers Clear all buffers argument
+*/
+void Window::Clear(bool all_buffers)
+{
+	if (all_buffers) {
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
+		return;
+	}
+	else {
+		glClear(GL_COLOR_BUFFER_BIT);
+		if (DepthBuffer::IsEnabled()) {
+			glClear(GL_DEPTH_BUFFER_BIT);
+		}
+		if (StencilBuffer::IsEnabled()) {
+			glClear(GL_STENCIL_BUFFER_BIT);
+		}
+		return;
+	}
+	
+}
+
+/**
+ * @brief Sets the Event listener function to be called whenever an event is generated in the window
+ * @param event Event function to be executed
+*/
 void Window::SetEventCallback(std::function<void(Event* e)> event)
 {
 	this->w_data.EventCallback = event;
 }
 
+/**
+ * @brief Sets the cursorposition in the window
+ * @param x X-coordinate inside window
+ * @param y Y-coordinate inside window
+*/
 void Window::SetCursorPos(unsigned int x, unsigned int y)
 {
 	int pos_x = x, pos_y = y;
@@ -176,6 +274,10 @@ void Window::SetCursorPos(unsigned int x, unsigned int y)
 	glfwSetCursorPos(this->w_handle, pos_x, pos_y);
 }
 
+/**
+ * @brief Bypass the windows mouse input to raw input from mouse
+ * @param val Enables or Disables raw mouse input
+*/
 void Window::SetRawMouseInput(bool val)
 {
 	if (glfwRawMouseMotionSupported()) {
@@ -190,6 +292,10 @@ void Window::SetRawMouseInput(bool val)
 	}
 }
 
+/**
+ * @brief Sets the cursor visibility and behaviour
+ * @param mode Behaviour that the cursor should have
+*/
 void Window::SetCursorMode(MouseMode mode)
 {
 	double time = glfwGetTime();
@@ -212,11 +318,20 @@ void Window::SetCursorMode(MouseMode mode)
 	this->w_data.mouse->mousemode = mode;
 }
 
+/**
+ * @brief Sets the window size
+ * @param width Width of window
+ * @param height Height of window
+*/
 void Window::SetSize(int width, int height)
 {
 	glfwSetWindowSize(this->w_handle, width, height);
 }
 
+/**
+ * @brief Sets the window title
+ * @param title Title of window
+*/
 void Window::SetTitle(std::string title)
 {
 	glfwSetWindowTitle(this->w_handle, title.c_str());

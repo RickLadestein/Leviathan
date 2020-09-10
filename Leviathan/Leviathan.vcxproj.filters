@@ -13,6 +13,9 @@
     <Filter Include="Leviathan\Graphics">
       <UniqueIdentifier>{4100DE42-2DE4-9E98-9644-99EB8247891A}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Leviathan\Graphics\Buffers">
+      <UniqueIdentifier>{BD706B25-A980-17F6-123A-7C14FE68068F}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Leviathan\Input">
       <UniqueIdentifier>{A0FF49D7-0C8B-B79B-159C-3A9081A6139C}</UniqueIdentifier>
     </Filter>
@@ -39,6 +42,12 @@
     </ClInclude>
     <ClInclude Include="src\Leviathan\Data\Structures.h">
       <Filter>Leviathan\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Leviathan\Graphics\Buffers\DepthBuffer.h">
+      <Filter>Leviathan\Graphics\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Leviathan\Graphics\Buffers\StencilBuffer.h">
+      <Filter>Leviathan\Graphics\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="src\Leviathan\Graphics\Camera.h">
       <Filter>Leviathan\Graphics</Filter>
@@ -86,6 +95,12 @@
     </ClCompile>
     <ClCompile Include="src\Leviathan\Data\Image.cpp">
       <Filter>Leviathan\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Leviathan\Graphics\Buffers\DepthBuffer.cpp">
+      <Filter>Leviathan\Graphics\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Leviathan\Graphics\Buffers\StencilBuffer.cpp">
+      <Filter>Leviathan\Graphics\Buffers</Filter>
     </ClCompile>
     <ClCompile Include="src\Leviathan\Graphics\Camera.cpp">
       <Filter>Leviathan\Graphics</Filter>

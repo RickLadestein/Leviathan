@@ -31,6 +31,7 @@ struct WindowData {
 	std::string title;
 	bool should_close;
 	bool focused;
+	bool v_sync;
 
 	std::shared_ptr<Keyboard> keyboard;
 	std::shared_ptr<Mouse> mouse;
@@ -60,6 +61,8 @@ public:
 
 	void SetWindowIcon(std::shared_ptr<leviathan::Image> im);
 	void SetWindowIcon(unsigned char* data, int width, int height, int components);
+	void SetVSync(bool enable);
+	void Clear(bool all_buffers);
 
 	inline bool GetWindowShouldCloseFlag() { return this->w_data.should_close; };
 	inline std::weak_ptr<Keyboard> GetKeyboard() { return this->w_data.keyboard; }
