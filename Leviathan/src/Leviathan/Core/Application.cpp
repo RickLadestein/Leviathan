@@ -6,7 +6,7 @@ Application::Application()
 {
 	Camera::GetPrimary();
 	this->window = std::make_shared<Window>(500, 500, "Test", WindowMode::WINDOWED);
-	this->window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
+	this->window->SetEventCallback(util::Delegate<EventCallbackFn>(this, &Application::OnEvent));
 	this->window->SetRawMouseInput(true);
 	this->window->Open();
 }
@@ -15,7 +15,7 @@ Application::Application(int width, int height, std::string title, WindowMode mo
 {
 	Camera::GetPrimary();
 	this->window = std::make_shared<Window>(width, height, title, mode);
-	this->window->SetEventCallback(std::bind(&Application::OnEvent, this, std::placeholders::_1));
+	this->window->SetEventCallback(util::Delegate<EventCallbackFn>(this, &Application::OnEvent));
 	this->window->Open();
 }
 

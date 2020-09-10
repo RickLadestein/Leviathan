@@ -1,11 +1,11 @@
 #pragma once
-#include "Leviathan/Core.h"
 #include "Event.h"
 #include <functional>
 #include <string>
 #include "Leviathan/Input/Keyboard.h"
 #include "Leviathan/Input/Mouse.h"
 #include "Leviathan/Data/Image.h"
+#include "Leviathan/Util/Delegate/MultiDelegate.h"
 #include <memory>
 #include <string>
 
@@ -13,7 +13,10 @@
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
-using EventCallbackFn = std::function<void(Event* e)>;
+typedef void EventCallbackFn(Event* ev);
+
+using util::MultiDelegate;
+using util::Delegate;
 
 enum class WindowMode {
 	WINDOWED,
@@ -37,8 +40,7 @@ struct WindowData {
 	std::shared_ptr<Mouse> mouse;
 
 	WindowMode mode;
-	EventCallbackFn WindowCallback;
-	EventCallbackFn EventCallback;
+	MultiDelegate<EventCallbackFn> EventHandler;
 };
 
 class Window {
@@ -49,7 +51,7 @@ public:
 	bool Open();
 	void Close();
 
-	void SetEventCallback(std::function<void(Event* e)>);
+	void SetEventCallback(Delegate<EventCallbackFn>& func);
 	void SetCursorPos(unsigned int x, unsigned int y);
 	void SetRawMouseInput(bool val);
 	void SetCursorMode(MouseMode mode);

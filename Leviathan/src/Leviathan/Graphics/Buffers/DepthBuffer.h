@@ -19,6 +19,6 @@ public:
 	static void Enable();
 	static void Disable();
 	static bool IsEnabled();
-
+	static void Reset();
 
 };

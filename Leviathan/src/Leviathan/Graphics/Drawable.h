@@ -2,7 +2,7 @@
 #include "Leviathan/Graphics/Camera.h"
 #include <string>
 #include <glm/glm.hpp>
-#include "Leviathan/Graphics/VertexBuffer.h"
+#include "Leviathan/Graphics/Buffers/VertexBuffer.h"
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/quaternion.hpp>

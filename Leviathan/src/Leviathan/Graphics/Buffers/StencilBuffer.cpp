@@ -37,6 +37,10 @@ void StencilBuffer::SetStencilWritePerm(bool write)
 	return;
 }
 
+/**
+ * @brief Gets the stencil buffer enabled bool
+ * @return Is stencil buffer enabled boolean
+*/
 bool StencilBuffer::IsEnabled()
 {
 	return StencilBufferEnabled;
@@ -57,5 +61,12 @@ void StencilBuffer::Enable() {
 void StencilBuffer::Disable() {
 	StencilBufferEnabled = false;
 	glDisable(GL_DEPTH_TEST);
+}
+
+void StencilBuffer::Reset()
+{
+	SetStencilOperation(StencilOp::KEEP, StencilOp::KEEP, StencilOp::KEEP);
+	SetStencilFunc(StencilFunc::ALWAYS, 1, 0xFF);
+	SetStencilWritePerm(true);
 }
 

@@ -16,7 +16,6 @@ Window::Window(int width, int height, std::string title, WindowMode mode)
 {
 	this->w_data.width = width;
 	this->w_data.height = height;
-	this->w_data.WindowCallback = std::bind(&Window::OnEvent, this, std::placeholders::_1);
 	this->w_data.should_close = false;
 	this->last_refresh_time = 0;
 	this->w_data.pos_x = 0;
@@ -148,7 +147,7 @@ void Window::Refresh()
 	this->Clear(true);
 	double current_time = glfwGetTime();
 	RefreshEvent ev(current_time - this->last_refresh_time);
-	w_data.EventCallback(&ev);
+	w_data.EventHandler.Broadcast(&ev);
 	this->last_refresh_time = current_time;
 
 	if (this->w_data.v_sync) {
@@ -249,11 +248,12 @@ void Window::Clear(bool all_buffers)
 
 /**
  * @brief Sets the Event listener function to be called whenever an event is generated in the window
- * @param event Event function to be executed
+ * @param event Event delegate to be executed
 */
-void Window::SetEventCallback(std::function<void(Event* e)> event)
+
+void Window::SetEventCallback(Delegate<EventCallbackFn>& func)
 {
-	this->w_data.EventCallback = event;
+	this->w_data.EventHandler += func;
 }
 
 /**
@@ -345,8 +345,7 @@ void Window::SetWindowCallbacks()
 			w_data->width = width;
 			w_data->height = height;
 			ResizeEvent ev(width, height);
-			w_data->WindowCallback(&ev);
-			w_data->EventCallback(&ev);
+			w_data->EventHandler.Broadcast(&ev);
 		});
 
 	glfwSetWindowPosCallback(w_handle, [](GLFWwindow* w_handle, int x, int y)
@@ -355,15 +354,13 @@ void Window::SetWindowCallbacks()
 			w_data->pos_x = x;
 			w_data->pos_y = y;
 			MoveEvent ev(x, y);
-			w_data->WindowCallback(&ev);
-			w_data->EventCallback(&ev);
+			w_data->EventHandler.Broadcast(&ev);
 		});
 	glfwSetWindowFocusCallback(w_handle, [](GLFWwindow* w_handle, int focused)
 		{
 			WindowData* w_data = (WindowData*)glfwGetWindowUserPointer(w_handle);
 			FocusEvent ev(focused);
-			w_data->WindowCallback(&ev);
-			w_data->EventCallback(&ev);
+			w_data->EventHandler.Broadcast(&ev);
 		});
 	glfwSetWindowCloseCallback(w_handle, [](GLFWwindow* w_handle) 
 		{
@@ -378,20 +375,20 @@ void Window::SetWindowCallbacks()
 				{
 					KeyPressEvent ev(key);
 					w_data->keyboard->onKeyEvent(&ev);
-					w_data->EventCallback(&ev);
+					w_data->EventHandler.Broadcast(&ev);
 					break;
 				}
 				case GLFW_RELEASE:
 				{
 					KeyReleaseEvent ev(key);
 					w_data->keyboard->onKeyEvent(&ev);
-					w_data->EventCallback(&ev);
+					w_data->EventHandler.Broadcast(&ev);
 					break;
 				}
 				case GLFW_REPEAT:
 				{
 					KeyRepeatEvent ev(key);
-					w_data->EventCallback(&ev);
+					w_data->EventHandler.Broadcast(&ev);
 				}
 				break;
 			}
@@ -401,7 +398,7 @@ void Window::SetWindowCallbacks()
 			WindowData* w_data = (WindowData*)glfwGetWindowUserPointer(w_handle);
 			KeyTypeEvent ev(unicode_key);
 			if (w_data->keyboard->GetKeyboardMode() == KeyboardMode::TYPING) {
-				w_data->EventCallback(&ev);
+				w_data->EventHandler.Broadcast(&ev);
 			}
 		});
 
@@ -413,14 +410,14 @@ void Window::SetWindowCallbacks()
 			{
 				MousePressEvent ev(btn);
 				w_data->mouse->onEvent(&ev);
-				w_data->EventCallback(&ev);
+				w_data->EventHandler.Broadcast(&ev);
 			}
 				break;
 			case GLFW_RELEASE:
 			{
 				MouseReleaseEvent ev(btn);
 				w_data->mouse->onEvent(&ev);
-				w_data->EventCallback(&ev);
+				w_data->EventHandler.Broadcast(&ev);
 			}
 				break;
 			}
@@ -434,13 +431,13 @@ void Window::SetWindowCallbacks()
 			d_y = m_y - pos_y;
 			MouseMoveEvent ev(pos_x, pos_y, d_x, d_y);
 			w_data->mouse->onEvent(&ev);
-			w_data->EventCallback(&ev);
+			w_data->EventHandler.Broadcast(&ev);
 		});
 	glfwSetScrollCallback(w_handle, [](GLFWwindow* w_handle, double x_scroll, double y_scroll) 
 		{
 			WindowData* w_data = (WindowData*)glfwGetWindowUserPointer(w_handle);
 			MouseWheelEvent ev(x_scroll, y_scroll);
-			w_data->EventCallback(&ev);
+			w_data->EventHandler.Broadcast(&ev);
 		});
 }
 

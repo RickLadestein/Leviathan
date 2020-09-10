@@ -33,6 +33,7 @@ public:
 	static bool IsEnabled();
 	static void Enable();
 	static void Disable();
+	static void Reset();
 
 
 };

@@ -198,6 +198,7 @@
     <ClInclude Include="src\Leviathan\Core.h" />
     <ClInclude Include="src\Leviathan\Core\Application.h" />
     <ClInclude Include="src\Leviathan\Core\Event.h" />
+    <ClInclude Include="src\Leviathan\Core\Renderer.h" />
     <ClInclude Include="src\Leviathan\Core\Window.h" />
     <ClInclude Include="src\Leviathan\Data\Image.h" />
     <ClInclude Include="src\Leviathan\Data\Structures.h" />
@@ -209,15 +210,18 @@
     <ClInclude Include="src\Leviathan\Graphics\Mesh.h" />
     <ClInclude Include="src\Leviathan\Graphics\Shader.h" />
     <ClInclude Include="src\Leviathan\Graphics\Texture.h" />
-    <ClInclude Include="src\Leviathan\Graphics\VertexBuffer.h" />
+    <ClInclude Include="src\Leviathan\Graphics\Buffers\VertexBuffer.h" />
     <ClInclude Include="src\Leviathan\Input\Keyboard.h" />
     <ClInclude Include="src\Leviathan\Input\Mouse.h" />
+    <ClInclude Include="src\Leviathan\Util\Delegate\Delegate.h" />
+    <ClInclude Include="src\Leviathan\Util\Delegate\MultiDelegate.h" />
     <ClInclude Include="src\Leviathan\Util\FileManager.h" />
     <ClInclude Include="src\Leviathan\Util\Math.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Leviathan\Core\Application.cpp" />
     <ClCompile Include="src\Leviathan\Core\Event.cpp" />
+    <ClCompile Include="src\Leviathan\Core\Renderer.cpp" />
     <ClCompile Include="src\Leviathan\Core\Window.cpp" />
     <ClCompile Include="src\Leviathan\Data\Image.cpp" />
     <ClCompile Include="src\Leviathan\Graphics\Buffers\DepthBuffer.cpp" />
@@ -227,7 +231,7 @@
     <ClCompile Include="src\Leviathan\Graphics\Mesh.cpp" />
     <ClCompile Include="src\Leviathan\Graphics\Shader.cpp" />
     <ClCompile Include="src\Leviathan\Graphics\Texture.cpp" />
-    <ClCompile Include="src\Leviathan\Graphics\VertexBuffer.cpp" />
+    <ClCompile Include="src\Leviathan\Graphics\Buffers\VertexBuffer.cpp" />
     <ClCompile Include="src\Leviathan\Input\Keyboard.cpp" />
     <ClCompile Include="src\Leviathan\Input\Mouse.cpp" />
     <ClCompile Include="src\Leviathan\Util\FileManager.cpp" />

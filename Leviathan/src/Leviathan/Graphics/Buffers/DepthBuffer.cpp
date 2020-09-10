@@ -28,7 +28,19 @@ void DepthBuffer::Disable()
 	glDisable(GL_DEPTH_TEST);
 }
 
+/**
+ * @brief Gets the depth buffer enabled bool
+ * @return Is depth buffer enabled boolean
+*/
 bool DepthBuffer::IsEnabled()
 {
 	return DepthBufferEnabled;
+}
+
+/**
+ * @brief Resets the depth buffer parameters to OpenGL defaults
+*/
+void DepthBuffer::Reset()
+{
+	SetDepthFunction(DepthFunc::ALWAYS);
 }
