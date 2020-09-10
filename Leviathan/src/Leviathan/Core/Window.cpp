@@ -1,6 +1,7 @@
 #include "Window.h"
 #include <iostream>
-
+#include <sstream>
+void GLAPIENTRY OnGlError(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
 
 Window::Window(int width, int height, std::string title, WindowMode mode)
 {
@@ -89,6 +90,8 @@ bool Window::Open()
 	this->ResetGlView();
 
 	glfwSetWindowUserPointer(this->w_handle, &this->w_data);
+	glEnable(GL_DEBUG_OUTPUT);
+	glDebugMessageCallback(OnGlError, 0);
 	return true;
 }
 
@@ -349,4 +352,17 @@ void Window::OnEvent(Event* event)
 	}
 		break;
 	}
+}
+
+void APIENTRY OnGlError(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam)
+{
+	std::stringstream ss;
+	ss << "GL debug message received \n"
+		<< "source: " << source << "\n"
+		<< "type: " << type << "\n"
+		<< "severity: " << severity << "\n"
+		<< message;
+	std::cout << ss.str() << std::endl;
+	if(severity == GL_DEBUG_SEVERITY_HIGH || severity == GL_DEBUG_SEVERITY_MEDIUM)
+		__debugbreak();
 }
