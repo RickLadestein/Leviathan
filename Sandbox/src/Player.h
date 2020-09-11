@@ -6,8 +6,6 @@
 #define MAX_HORIZONTAL_PLAYER_VELOCITY 50
 #define MAX_VERTICAL_PLAYER_VELOCITY 100
 
-class Player;
-
 enum class PlayerStateIdentifier {
 	NONE,
 	FLYING,
@@ -18,67 +16,43 @@ enum class PlayerStateIdentifier {
 
 class PlayerState {
 public:
-	PlayerState() { this->player = nullptr; this->identifier = PlayerStateIdentifier::NONE; this->horizontal_movement_speed = 1.0; this->vertical_movement_speed = 1.0f; };
+	PlayerState() { this->identifier = PlayerStateIdentifier::NONE; this->horizontal_movement_speed = 100.0f; this->vertical_movement_speed = 100.0f; };
+	inline glm::vec3 GetMovementModifiers() { return glm::vec3(horizontal_movement_speed, vertical_movement_speed, horizontal_movement_speed); }
 	PlayerStateIdentifier GetPlayerState() { return this->identifier; }
-	virtual void MoveForeward(float frametime) { return; }
-	virtual void MoveBackward(float frametime) { return; }
-	virtual void MoveLeft(float frametime) { return; }
-	virtual void MoveRight(float frametime) { return; }
-	virtual void MoveUp(float frametime) { return; }
-	virtual void MoveDown(float frametime) { return; }
-
+	float horizontal_movement_speed;
+	float vertical_movement_speed;
 
 protected:
-	inline void Move(glm::vec3 move) { if (player) { player->Translate(move); } }
-	double horizontal_movement_speed;
-	double vertical_movement_speed;
 	PlayerStateIdentifier identifier;
-	Player* player;
 };
 
 
 class FlyingState : public PlayerState {
 public:
-	FlyingState(Player* p) { this->player = p; this->identifier = PlayerStateIdentifier::FLYING; }
-	void MoveForeward(float frametime);
-	void MoveBackward(float frametime);
-	void MoveLeft(float frametime);
-	void MoveRight(float frametime);
-	void MoveUp(float frametime);
-	void MoveDown(float frametime);
+	FlyingState() { 
+		this->identifier = PlayerStateIdentifier::FLYING;
+	}
 };
 
 class FallingState : public PlayerState {
 public:
-	FallingState(Player* p) { this->player = p; this->identifier = PlayerStateIdentifier::FALLING; }
-	void MoveForeward(float frametime);
-	void MoveBackward(float frametime);
-	void MoveLeft(float frametime);
-	void MoveRight(float frametime);
-	void MoveUp(float frametime);
-	void MoveDown(float frametime);
+	FallingState() { 
+		this->identifier = PlayerStateIdentifier::FALLING; 
+	}
 };
 
 class WalkingState : public PlayerState {
 public:
-	WalkingState(Player* p) { this->player = p; this->identifier = PlayerStateIdentifier::WALKING; }
-	void MoveForeward(float frametime);
-	void MoveBackward(float frametime);
-	void MoveLeft(float frametime);
-	void MoveRight(float frametime);
-	void MoveUp(float frametime);
-	void MoveDown(float frametime);
+	WalkingState() { 
+		this->identifier = PlayerStateIdentifier::WALKING; 
+	}
 };
 
 class SwimmingState : public PlayerState {
 public:
-	SwimmingState(Player* p) { this->player = p; this->identifier = PlayerStateIdentifier::SWIMMING; }
-	void MoveForeward(float frametime);
-	void MoveBackward(float frametime);
-	void MoveLeft(float frametime);
-	void MoveRight(float frametime);
-	void MoveUp(float frametime);
-	void MoveDown(float frametime);
+	SwimmingState() { 
+		this->identifier = PlayerStateIdentifier::SWIMMING; 
+	}
 };
 
 class Player {
@@ -102,5 +76,16 @@ public:
 	void Translate(glm::vec3& move);
 	void Rotate(glm::vec3& rotation);
 	void AddVelocity(glm::vec3& velocity);
+	std::weak_ptr<Camera> GetCamera();
+	inline glm::vec3 GetPosition() { return this->position; }
+
+
+	void MoveForeward(float frametime);
+	void MoveBackward(float frametime);
+	void MoveLeft(float frametime);
+	void MoveRight(float frametime);
+	void MoveUp(float frametime);
+	void MoveDown(float frametime);
+
 
 };

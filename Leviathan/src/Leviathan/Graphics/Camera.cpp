@@ -117,7 +117,7 @@ void Camera::Translate(glm::vec3 translation)
 
 void Camera::SetPosition(glm::vec3 pos)
 {
-	this->position = position;
+	this->position = pos;
 	this->update_needed = true;
 }
 
@@ -126,6 +126,7 @@ void Camera::Rotate(glm::vec3 rotation)
 	this->RotateX(rotation.x);
 	this->RotateY(rotation.y);
 	this->RotateZ(rotation.z);
+	this->CalculateViewMatrix();
 	
 }
 
@@ -178,7 +179,7 @@ std::shared_ptr<Camera> Camera::GetPrimary()
 
 void Camera::CalculateViewMatrix()
 {
-	if (this->update_needed) {
+	
 		glm::quat QuatAroundX = glm::quat(glm::vec3(0.0f, 0.0f, 0.0f));
 		glm::quat QuatAroundY = glm::quat(glm::vec3(0.0f, glm::radians(this->rotation.y), 0.0f));
 		glm::quat QuatAroundZ = glm::quat(glm::vec3(0.0f, 0.0f, glm::radians(-this->rotation.x)));
@@ -191,6 +192,7 @@ void Camera::CalculateViewMatrix()
 		this->camera_right = glm::normalize(glm::cross(this->camera_up, this->camera_direction));
 		this->camera_up = glm::normalize(glm::cross(this->camera_direction, this->camera_right));
 
+	if (this->update_needed) {
 		this->view_matrix = glm::lookAt(this->position, this->camera_target, this->camera_up);
 	}
 	return;

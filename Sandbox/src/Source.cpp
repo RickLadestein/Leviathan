@@ -5,6 +5,7 @@
 #include <sstream>
 #include <math.h>
 #include <memory>
+#include "Player.h"
 
 class WorldObject: public Drawable {
 public:
@@ -25,7 +26,9 @@ public:
 class Game : public Application {
 public:
 	WorldObject* wo;
-	std::weak_ptr<Camera> cam;
+	float last_frametime;
+	//std::weak_ptr<Camera> cam;
+	std::shared_ptr<Player> player;
 
 	double timestamp;
 	Game() : Application{1080, 720, "Minecraft", WindowMode::WINDOWED} {
@@ -49,8 +52,9 @@ public:
 		window->SetWindowIcon(im);
 		window->SetVSync(true);
 
-
-		cam = Camera::GetPrimary();
+		this->last_frametime = 0.0;
+		//cam = Camera::GetPrimary();
+		this->player = std::make_shared<Player>();
 		wo = new WorldObject("awp");
 		wo->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 		timestamp = 0.0;
@@ -73,8 +77,9 @@ public:
 		 double frame_delta = time - timestamp;
 		 double fps = round(1.0 / frame_delta);
 
+		 this->last_frametime = float(frame_delta);
 		 std::shared_ptr<Window> window = this->GetWindow().lock();
-		 std::shared_ptr<Camera> camera = this->cam.lock();
+		 std::shared_ptr<Camera> camera = this->player->GetCamera().lock();
 		 glm::vec3 position = camera->GetPosition();
 		 glm::vec3 rotation = camera->GetRotation();
 		 if (window) {
@@ -92,13 +97,14 @@ public:
 			 if (mouse->GetMouseMode() != MouseMode::CENTERED) {
 				 return;
 			 }
-			 std::shared_ptr<Camera> camera = cam.lock();
+			 std::shared_ptr<Camera> camera = player->GetCamera().lock();
 			 if (camera) {
 				 MouseMoveEvent* event = (MouseMoveEvent*)ev;
 				 double dx, dy;
 				 event->GetDelta(&dx, &dy);
-				 camera->RotateY((float)-dx);
-				 camera->RotateX((float)dy);
+				 this->player->Rotate(glm::vec3((float)dy, (float)-dx, 0.0f));
+				 //camera->RotateY((float)-dx);
+				 //camera->RotateX((float)dy);
 
 				 glm::vec3 cam_angle = camera->GetRotation();
 				 //std::cout << cam_angle.x << " | " << cam_angle.y << " | " << cam_angle.z << std::endl;
@@ -117,22 +123,22 @@ public:
 			 for (int i = 0; i < pressed_keys.size(); i++) {
 				 switch (pressed_keys[i]) {
 				 case GLFW_KEY_W:
-					 move = primary->GetForewardVector();
+					 player->MoveForeward(this->last_frametime);
 					 break;
 				 case GLFW_KEY_S:
-					 move = glm::vec3(-1.0f) * primary->GetForewardVector();
+					 player->MoveBackward(this->last_frametime);
 					 break;
 				 case GLFW_KEY_A:
-					 move = glm::vec3(-1.0f) * primary->GetRightVector();
+					 player->MoveLeft(this->last_frametime);
 					 break;
 				 case GLFW_KEY_D:
-					 move = primary->GetRightVector();
+					 player->MoveRight(this->last_frametime);
 					 break;
 				 case GLFW_KEY_SPACE:
-					 move = primary->GetUpVector();
+					 player->MoveUp(this->last_frametime);
 					 break;
 				 case GLFW_KEY_LEFT_SHIFT:
-					 move = glm::vec3(-1.0f) * primary->GetUpVector();
+					 player->MoveDown(this->last_frametime);
 					 break;
 				 case GLFW_KEY_E:
 				 {
@@ -150,9 +156,10 @@ public:
 				 default:
 					 continue;
 				 }
-				 move = move * glm::vec3(0.25f, 0.25f, 0.25f);
-				 primary->Translate(move);
-				 glm::vec3 campos = primary->GetPosition();
+				 //move = move * glm::vec3(0.25f, 0.25f, 0.25f);
+				 //primary->Translate(move);
+				 //player->Translate(move);
+				 glm::vec3 campos = player->GetPosition();
 				 //std::cout << campos.x << " | " << campos.y << " | " << campos.z << std::endl;
 			 }
 			 
@@ -163,7 +170,7 @@ public:
 		 if (event->GetType() == EventType::RefreshEvent) {
 			 CheckFps();
 			 CheckKeyboardKeys();
-			 Renderer::Render(*wo, cam);
+			 Renderer::Render(*wo, player->GetCamera());
 		 }
 	 }
 };
