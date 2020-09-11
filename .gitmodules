@@ -4,3 +4,6 @@
 [submodule "Leviathan/external/Glfw"]
 	path = Leviathan/external/Glfw
 	url = https://github.com/RickLadestein/glfw.git
+[submodule "Leviathan/external/Reactphysics"]
+	path = Leviathan/external/Reactphysics
+	url = https://github.com/DanielChappuis/reactphysics3d.git
