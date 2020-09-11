@@ -16,12 +16,15 @@ outputdir = "%{prj.name}/%{cfg.buildcfg}"
 IncludeDir = {}
 IncludeDir["Glfw"] = "Leviathan/external/Glfw/include"
 IncludeDir["Glad"] = "Leviathan/external/Glad/include"
+IncludeDir["Reactphysics"] = "Leviathan/external/Reactphysics/include"
 IncludeDir["Leviathan"] = "Leviathan/src"
+
 
 
 group "Dependencies"
 	include "Leviathan/external/Glad"
 	include "Leviathan/external/Glfw"
+	include "Leviathan/external/Reactphysics"
 group ""
 
 project "Leviathan"
@@ -46,6 +49,7 @@ project "Leviathan"
 		"%{prj.name}/external/include",
 		"%{prj.name}/external/Glad/include",
 		"%{prj.name}/external/Glfw/include",
+		"%{prj.name}/external/Reactphysics/include",
 		"%{prj.name}/external/Tinyobj",
 		"%{prj.name}/src"
 	}
@@ -65,7 +69,8 @@ project "Leviathan"
 		{
 			"opengl32.lib",
 			"Glad",
-			"Glfw"
+			"Glfw",
+			"Reactphysics"
 		}
 		
 		
@@ -75,7 +80,8 @@ project "Leviathan"
 		{
 			"opengl32.lib",
 			"Glad",
-			"Glfw"
+			"Glfw",
+			"Reactphysics"
 		}
 	
 	
@@ -114,7 +120,8 @@ project "Sandbox"
 		"Leviathan/src",
 		"Leviathan/external/include",
 		"Leviathan/external/Glad/include",
-		"Leviathan/external/Glfw/include"
+		"Leviathan/external/Glfw/include",
+		"Leviathan/external/Reactphysics/include",
 	}
 	
 	defines

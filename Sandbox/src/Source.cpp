@@ -6,6 +6,7 @@
 #include <math.h>
 #include <memory>
 #include "Player.h"
+#include "reactphysics3d/engine/Entity.h"
 
 class WorldObject: public Drawable {
 public:
