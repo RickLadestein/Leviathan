@@ -86,6 +86,7 @@
       <Filter>Leviathan\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="src\Leviathan\Graphics\Buffers\FrameBuffer.h" />
+    <ClInclude Include="src\Leviathan\Data\Timestep.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Leviathan\Core\Application.cpp">

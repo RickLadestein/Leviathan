@@ -2,6 +2,7 @@
 #include "Leviathan.h"
 #include "glm/glm.hpp"
 #include <memory>
+#include <Leviathan.h>
 
 #define MAX_HORIZONTAL_PLAYER_VELOCITY 50
 #define MAX_VERTICAL_PLAYER_VELOCITY 100
@@ -76,8 +77,10 @@ public:
 	void Translate(glm::vec3& move);
 	void Rotate(glm::vec3& rotation);
 	void AddVelocity(glm::vec3& velocity);
+	void AddVelocity(glm::vec3& velocity, float frametime);
 	std::weak_ptr<Camera> GetCamera();
 	inline glm::vec3 GetPosition() { return this->position; }
+	inline glm::vec3 GetVelocity() { return this->velocity; }
 
 
 	void MoveForeward(float frametime);
@@ -86,6 +89,8 @@ public:
 	void MoveRight(float frametime);
 	void MoveUp(float frametime);
 	void MoveDown(float frametime);
+
+	void Update(float frametime);
 
 
 };

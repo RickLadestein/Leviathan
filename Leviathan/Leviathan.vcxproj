@@ -202,6 +202,7 @@
     <ClInclude Include="src\Leviathan\Core\Window.h" />
     <ClInclude Include="src\Leviathan\Data\Image.h" />
     <ClInclude Include="src\Leviathan\Data\Structures.h" />
+    <ClInclude Include="src\Leviathan\Data\Timestep.h" />
     <ClInclude Include="src\Leviathan\Graphics\Buffers\DepthBuffer.h" />
     <ClInclude Include="src\Leviathan\Graphics\Buffers\FrameBuffer.h" />
     <ClInclude Include="src\Leviathan\Graphics\Buffers\StencilBuffer.h" />

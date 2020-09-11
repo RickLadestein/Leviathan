@@ -10,6 +10,7 @@
 
 //Data components
 #include "Leviathan/Data/Image.h"
+#include "Leviathan/Data/Timestep.h"
 #include "Leviathan/Data/Structures.h"
 
 //Graphics components

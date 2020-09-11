@@ -26,7 +26,8 @@ public:
 class Game : public Application {
 public:
 	WorldObject* wo;
-	float last_frametime;
+	Timestep last_frametime;
+	//float last_frametime;
 	//std::weak_ptr<Camera> cam;
 	std::shared_ptr<Player> player;
 
@@ -77,15 +78,17 @@ public:
 		 double frame_delta = time - timestamp;
 		 double fps = round(1.0 / frame_delta);
 
-		 this->last_frametime = float(frame_delta);
+		 this->last_frametime.SetTimestep(frame_delta);
 		 std::shared_ptr<Window> window = this->GetWindow().lock();
 		 std::shared_ptr<Camera> camera = this->player->GetCamera().lock();
 		 glm::vec3 position = camera->GetPosition();
 		 glm::vec3 rotation = camera->GetRotation();
+		 glm::vec3 velocity = player->GetVelocity(); 
 		 if (window) {
 			 std::stringstream ss;
 			ss << "\t Pos[X:" << position.x << "| Y:" << position.y << "| Z:" << position.z <<"]\t"
-				 << "\t Rot[X:" << rotation.x << "| Y:" << rotation.y << "| Z:" << rotation.z << "]";
+				 << "\t Rot[X:" << rotation.x << "| Y:" << rotation.y << "| Z:" << rotation.z << "]"
+				<< "\t Vel[X:" << velocity.x << "| Y:" << velocity.y << "| Z:" << velocity.z << "]";
 			 window->SetTitle(ss.str());
 		 }
 		 this->timestamp = time;
@@ -103,11 +106,7 @@ public:
 				 double dx, dy;
 				 event->GetDelta(&dx, &dy);
 				 this->player->Rotate(glm::vec3((float)dy, (float)-dx, 0.0f));
-				 //camera->RotateY((float)-dx);
-				 //camera->RotateX((float)dy);
-
 				 glm::vec3 cam_angle = camera->GetRotation();
-				 //std::cout << cam_angle.x << " | " << cam_angle.y << " | " << cam_angle.z << std::endl;
 			 }
 		 }
 		 
@@ -118,8 +117,6 @@ public:
 		 if (keyboard) {
 			 std::vector<int> pressed_keys;
 			 keyboard->GetPressedKeys(&pressed_keys);
-			 glm::vec3 move(0.0f);
-			 std::shared_ptr<Camera> primary = Camera::GetPrimary();
 			 for (int i = 0; i < pressed_keys.size(); i++) {
 				 switch (pressed_keys[i]) {
 				 case GLFW_KEY_W:
@@ -134,6 +131,8 @@ public:
 				 case GLFW_KEY_D:
 					 player->MoveRight(this->last_frametime);
 					 break;
+				 case GLFW_KEY_UP:
+					 player->AddVelocity(glm::vec3(0.0f, 1.0f, 0.0f));
 				 case GLFW_KEY_SPACE:
 					 player->MoveUp(this->last_frametime);
 					 break;
@@ -156,11 +155,6 @@ public:
 				 default:
 					 continue;
 				 }
-				 //move = move * glm::vec3(0.25f, 0.25f, 0.25f);
-				 //primary->Translate(move);
-				 //player->Translate(move);
-				 glm::vec3 campos = player->GetPosition();
-				 //std::cout << campos.x << " | " << campos.y << " | " << campos.z << std::endl;
 			 }
 			 
 		 }
@@ -171,6 +165,8 @@ public:
 			 CheckFps();
 			 CheckKeyboardKeys();
 			 Renderer::Render(*wo, player->GetCamera());
+
+			 player->Update(this->last_frametime);
 		 }
 	 }
 };
