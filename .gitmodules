@@ -1,0 +1,3 @@
+[submodule "Leviathan/external/Tinyobj"]
+	path = Leviathan/external/Tinyobj
+	url = https://github.com/tinyobjloader/tinyobjloader.git
