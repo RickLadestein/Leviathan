@@ -66,9 +66,6 @@
     <CharacterSet>Unicode</CharacterSet>
     <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
-  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='Debug_x64|Win32'">
-    <PlatformToolset>v142</PlatformToolset>
-  </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
   </ImportGroup>
@@ -114,7 +111,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>LV_PLATFORM_WINDOWS;STB_IMAGE_IMPLEMENTATION;TINYOBJLOADER_IMPLEMENTATION;GLFW_INCLUDE_NONE;LV_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>external\include;external\Glad\include;external\Glfw\include;external\Tinyobj\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>external\include;external\Glad\include;external\Glfw\include;external\Tinyobj;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -133,7 +130,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>LV_PLATFORM_WINDOWS;STB_IMAGE_IMPLEMENTATION;TINYOBJLOADER_IMPLEMENTATION;GLFW_INCLUDE_NONE;LV_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>external\include;external\Glad\include;external\Glfw\include;external\Tinyobj\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>external\include;external\Glad\include;external\Glfw\include;external\Tinyobj;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -156,7 +153,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>LV_PLATFORM_WINDOWS;STB_IMAGE_IMPLEMENTATION;TINYOBJLOADER_IMPLEMENTATION;GLFW_INCLUDE_NONE;LV_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>external\include;external\Glad\include;external\Glfw\include;external\Tinyobj\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>external\include;external\Glad\include;external\Glfw\include;external\Tinyobj;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -175,7 +172,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>LV_PLATFORM_WINDOWS;STB_IMAGE_IMPLEMENTATION;TINYOBJLOADER_IMPLEMENTATION;GLFW_INCLUDE_NONE;LV_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>external\include;external\Glad\include;external\Glfw\include;external\Tinyobj\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>external\include;external\Glad\include;external\Glfw\include;external\Tinyobj;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -206,13 +203,13 @@
     <ClInclude Include="src\Leviathan\Graphics\Buffers\DepthBuffer.h" />
     <ClInclude Include="src\Leviathan\Graphics\Buffers\FrameBuffer.h" />
     <ClInclude Include="src\Leviathan\Graphics\Buffers\StencilBuffer.h" />
+    <ClInclude Include="src\Leviathan\Graphics\Buffers\VertexBuffer.h" />
     <ClInclude Include="src\Leviathan\Graphics\Camera.h" />
     <ClInclude Include="src\Leviathan\Graphics\Drawable.h" />
     <ClInclude Include="src\Leviathan\Graphics\GenericMesh.h" />
     <ClInclude Include="src\Leviathan\Graphics\Mesh.h" />
     <ClInclude Include="src\Leviathan\Graphics\Shader.h" />
     <ClInclude Include="src\Leviathan\Graphics\Texture.h" />
-    <ClInclude Include="src\Leviathan\Graphics\Buffers\VertexBuffer.h" />
     <ClInclude Include="src\Leviathan\Input\Keyboard.h" />
     <ClInclude Include="src\Leviathan\Input\Mouse.h" />
     <ClInclude Include="src\Leviathan\Util\Delegate\Delegate.h" />
@@ -229,12 +226,12 @@
     <ClCompile Include="src\Leviathan\Graphics\Buffers\DepthBuffer.cpp" />
     <ClCompile Include="src\Leviathan\Graphics\Buffers\FrameBuffer.cpp" />
     <ClCompile Include="src\Leviathan\Graphics\Buffers\StencilBuffer.cpp" />
+    <ClCompile Include="src\Leviathan\Graphics\Buffers\VertexBuffer.cpp" />
     <ClCompile Include="src\Leviathan\Graphics\Camera.cpp" />
     <ClCompile Include="src\Leviathan\Graphics\Drawable.cpp" />
     <ClCompile Include="src\Leviathan\Graphics\Mesh.cpp" />
     <ClCompile Include="src\Leviathan\Graphics\Shader.cpp" />
     <ClCompile Include="src\Leviathan\Graphics\Texture.cpp" />
-    <ClCompile Include="src\Leviathan\Graphics\Buffers\VertexBuffer.cpp" />
     <ClCompile Include="src\Leviathan\Input\Keyboard.cpp" />
     <ClCompile Include="src\Leviathan\Input\Mouse.cpp" />
     <ClCompile Include="src\Leviathan\Util\FileManager.cpp" />

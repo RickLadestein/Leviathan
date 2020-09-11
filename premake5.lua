@@ -46,7 +46,7 @@ project "Leviathan"
 		"%{prj.name}/external/include",
 		"%{prj.name}/external/Glad/include",
 		"%{prj.name}/external/Glfw/include",
-		"%{prj.name}/external/Tinyobj/include",
+		"%{prj.name}/external/Tinyobj",
 		"%{prj.name}/src"
 	}
 	

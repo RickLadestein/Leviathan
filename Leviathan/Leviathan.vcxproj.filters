@@ -22,6 +22,9 @@
     <Filter Include="Leviathan\Util">
       <UniqueIdentifier>{CE7637B1-BA44-2BB7-A3D8-9BDD8F45071C}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Leviathan\Util\Delegate">
+      <UniqueIdentifier>{7837D7A4-E46E-1F3C-ED78-835F592F4635}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Leviathan.h" />
@@ -34,6 +37,9 @@
     <ClInclude Include="src\Leviathan\Core\Event.h">
       <Filter>Leviathan\Core</Filter>
     </ClInclude>
+    <ClInclude Include="src\Leviathan\Core\Renderer.h">
+      <Filter>Leviathan\Core</Filter>
+    </ClInclude>
     <ClInclude Include="src\Leviathan\Core\Window.h">
       <Filter>Leviathan\Core</Filter>
     </ClInclude>
@@ -43,10 +49,19 @@
     <ClInclude Include="src\Leviathan\Data\Structures.h">
       <Filter>Leviathan\Data</Filter>
     </ClInclude>
+    <ClInclude Include="src\Leviathan\Data\Timestep.h">
+      <Filter>Leviathan\Data</Filter>
+    </ClInclude>
     <ClInclude Include="src\Leviathan\Graphics\Buffers\DepthBuffer.h">
       <Filter>Leviathan\Graphics\Buffers</Filter>
     </ClInclude>
+    <ClInclude Include="src\Leviathan\Graphics\Buffers\FrameBuffer.h">
+      <Filter>Leviathan\Graphics\Buffers</Filter>
+    </ClInclude>
     <ClInclude Include="src\Leviathan\Graphics\Buffers\StencilBuffer.h">
+      <Filter>Leviathan\Graphics\Buffers</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Leviathan\Graphics\Buffers\VertexBuffer.h">
       <Filter>Leviathan\Graphics\Buffers</Filter>
     </ClInclude>
     <ClInclude Include="src\Leviathan\Graphics\Camera.h">
@@ -73,26 +88,27 @@
     <ClInclude Include="src\Leviathan\Input\Mouse.h">
       <Filter>Leviathan\Input</Filter>
     </ClInclude>
+    <ClInclude Include="src\Leviathan\Util\Delegate\Delegate.h">
+      <Filter>Leviathan\Util\Delegate</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Leviathan\Util\Delegate\MultiDelegate.h">
+      <Filter>Leviathan\Util\Delegate</Filter>
+    </ClInclude>
     <ClInclude Include="src\Leviathan\Util\FileManager.h">
       <Filter>Leviathan\Util</Filter>
     </ClInclude>
     <ClInclude Include="src\Leviathan\Util\Math.h">
       <Filter>Leviathan\Util</Filter>
     </ClInclude>
-    <ClInclude Include="src\Leviathan\Util\Delegate\Delegate.h" />
-    <ClInclude Include="src\Leviathan\Util\Delegate\MultiDelegate.h" />
-    <ClInclude Include="src\Leviathan\Core\Renderer.h" />
-    <ClInclude Include="src\Leviathan\Graphics\Buffers\VertexBuffer.h">
-      <Filter>Leviathan\Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="src\Leviathan\Graphics\Buffers\FrameBuffer.h" />
-    <ClInclude Include="src\Leviathan\Data\Timestep.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Leviathan\Core\Application.cpp">
       <Filter>Leviathan\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Leviathan\Core\Event.cpp">
+      <Filter>Leviathan\Core</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Leviathan\Core\Renderer.cpp">
       <Filter>Leviathan\Core</Filter>
     </ClCompile>
     <ClCompile Include="src\Leviathan\Core\Window.cpp">
@@ -104,7 +120,13 @@
     <ClCompile Include="src\Leviathan\Graphics\Buffers\DepthBuffer.cpp">
       <Filter>Leviathan\Graphics\Buffers</Filter>
     </ClCompile>
+    <ClCompile Include="src\Leviathan\Graphics\Buffers\FrameBuffer.cpp">
+      <Filter>Leviathan\Graphics\Buffers</Filter>
+    </ClCompile>
     <ClCompile Include="src\Leviathan\Graphics\Buffers\StencilBuffer.cpp">
+      <Filter>Leviathan\Graphics\Buffers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Leviathan\Graphics\Buffers\VertexBuffer.cpp">
       <Filter>Leviathan\Graphics\Buffers</Filter>
     </ClCompile>
     <ClCompile Include="src\Leviathan\Graphics\Camera.cpp">
@@ -131,10 +153,5 @@
     <ClCompile Include="src\Leviathan\Util\FileManager.cpp">
       <Filter>Leviathan\Util</Filter>
     </ClCompile>
-    <ClCompile Include="src\Leviathan\Core\Renderer.cpp" />
-    <ClCompile Include="src\Leviathan\Graphics\Buffers\VertexBuffer.cpp">
-      <Filter>Leviathan\Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Leviathan\Graphics\Buffers\FrameBuffer.cpp" />
   </ItemGroup>
 </Project>
