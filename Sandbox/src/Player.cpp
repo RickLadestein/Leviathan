@@ -122,12 +122,12 @@ void Player::Update(float frametime)
 {
 	float length = glm::length(this->velocity);
 
-	if (length < 0.01f && length > 0.0f) {
+	if (length < FLOOR_SLIPPERYNESS && length > 0.0f) {
 		this->velocity = glm::vec3(0.0f);
 	}
 	if (this->velocity != glm::vec3(0.0f)) {
 		this->Translate(this->velocity * frametime);
-		glm::vec3 drag = glm::normalize(-this->velocity) * (glm::length(this->velocity) / 1.2f) * frametime;
+		glm::vec3 drag = glm::normalize(-this->velocity) * (glm::length(this->velocity) / 1.05f) * frametime;
 		this->velocity += drag;
 	}
 }

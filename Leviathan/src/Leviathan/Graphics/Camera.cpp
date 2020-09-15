@@ -96,6 +96,8 @@ glm::vec3 Camera::GetRightVector()
 
 glm::vec3 Camera::GetForewardVector()
 {
+	if(this->update_needed)
+		this->CalculateViewMatrix();
 	return this->camera_target - this->position;
 }
 

@@ -6,7 +6,6 @@
 #include <math.h>
 #include <memory>
 #include "Player.h"
-#include "reactphysics3d/engine/Entity.h"
 
 class WorldObject: public Drawable {
 public:
@@ -117,8 +116,9 @@ public:
 		 std::shared_ptr<Keyboard> keyboard = this->GetKeyboard().lock();
 		 if (keyboard) {
 			 std::vector<int> pressed_keys;
+
 			 keyboard->GetPressedKeys(&pressed_keys);
-			 for (int i = 0; i < pressed_keys.size(); i++) {
+			 for (size_t i = 0; i < pressed_keys.size(); i++) {
 				 switch (pressed_keys[i]) {
 				 case GLFW_KEY_W:
 					 player->MoveForeward(this->last_frametime);
@@ -134,6 +134,7 @@ public:
 					 break;
 				 case GLFW_KEY_UP:
 					 player->AddVelocity(glm::vec3(0.0f, 1.0f, 0.0f));
+					 break;
 				 case GLFW_KEY_SPACE:
 					 player->MoveUp(this->last_frametime);
 					 break;

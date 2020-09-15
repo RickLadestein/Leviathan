@@ -6,6 +6,7 @@
 
 #define MAX_HORIZONTAL_PLAYER_VELOCITY 50
 #define MAX_VERTICAL_PLAYER_VELOCITY 100
+#define FLOOR_SLIPPERYNESS 1.0f // E < floor is more slippery | E > floor is less slippery
 
 enum class PlayerStateIdentifier {
 	NONE,
