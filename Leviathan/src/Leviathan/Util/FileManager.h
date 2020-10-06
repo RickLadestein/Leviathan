@@ -1,7 +1,7 @@
 #pragma once
-#include "Leviathan/Core.h"
 #include "Leviathan/Data/Image.h"
 #include "Leviathan/Data/Structures.h"
+
 #include <string>
 #include <vector>
 

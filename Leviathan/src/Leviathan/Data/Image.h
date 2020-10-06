@@ -1,6 +1,6 @@
 #pragma once
-#include "Leviathan/Core.h"
 #include "Leviathan/Util/FileManager.h"
+
 #include <memory>
 #include <string>
 namespace leviathan {

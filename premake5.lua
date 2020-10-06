@@ -17,6 +17,7 @@ IncludeDir = {}
 IncludeDir["Glfw"] = "Leviathan/external/Glfw/include"
 IncludeDir["Glad"] = "Leviathan/external/Glad/include"
 IncludeDir["Leviathan"] = "Leviathan/src"
+IncludeDir["Boost"] = "C:/Program Files/boost/boost_1_74_0"
 
 
 
@@ -48,7 +49,8 @@ project "Leviathan"
 		"%{prj.name}/external/Glad/include",
 		"%{prj.name}/external/Glfw/include",
 		"%{prj.name}/external/Tinyobj",
-		"%{prj.name}/src"
+		"%{prj.name}/src",
+		"C:/Program Files/boost/boost_1_74_0"
 	}
 	
 	defines
@@ -115,7 +117,8 @@ project "Sandbox"
 		"Leviathan/src",
 		"Leviathan/external/include",
 		"Leviathan/external/Glad/include",
-		"Leviathan/external/Glfw/include"
+		"Leviathan/external/Glfw/include",
+		"C:/Program Files/boost/boost_1_74_0"
 	}
 	
 	defines

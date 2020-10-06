@@ -6,6 +6,15 @@
 #include <math.h>
 #include <memory>
 #include "Player.h"
+#include "boost/container_hash/hash.hpp"
+
+using namespace Leviathan::Graphics;
+using namespace Leviathan::Graphics::Buffers;
+using namespace Leviathan::Input;
+using namespace Leviathan;
+using namespace Leviathan::Events;
+
+using Leviathan::Window;
 
 class WorldObject: public Drawable {
 public:
@@ -27,8 +36,6 @@ class Game : public Application {
 public:
 	WorldObject* wo;
 	Timestep last_frametime;
-	//float last_frametime;
-	//std::weak_ptr<Camera> cam;
 	std::shared_ptr<Player> player;
 
 	double timestamp;
@@ -49,7 +56,7 @@ public:
 		DepthBuffer::SetDepthFunction(DepthFunc::LESS);
 
 		std::shared_ptr<leviathan::Image> im = leviathan::Image::Load("default", "logo.png");
-		std::shared_ptr<Window> window = this->GetWindow().lock();
+		std::shared_ptr<Leviathan::Window> window = this->GetWindow().lock();
 		window->SetWindowIcon(im);
 		window->SetVSync(true);
 
@@ -63,6 +70,7 @@ public:
 	~Game() = default;
 
 	 void OnEvent(Event* event) override {
+		 std::string ss = event->ToString();
 		 switch (event->GetCategory()) {
 		 case EventCategory::WindowEvent:
 			 this->OnWindowEvent(event);
@@ -79,7 +87,7 @@ public:
 		 double fps = round(1.0 / frame_delta);
 
 		 this->last_frametime.SetTimestep(frame_delta);
-		 std::shared_ptr<Window> window = this->GetWindow().lock();
+		 std::shared_ptr<Leviathan::Window> window = this->GetWindow().lock();
 		 std::shared_ptr<Camera> camera = this->player->GetCamera().lock();
 		 glm::vec3 position = camera->GetPosition();
 		 glm::vec3 rotation = camera->GetRotation();
@@ -143,7 +151,7 @@ public:
 					 break;
 				 case GLFW_KEY_E:
 				 {
-					 std::shared_ptr<Window> window = this->GetWindow().lock();
+					 std::shared_ptr<Leviathan::Window> window = this->GetWindow().lock();
 					 if (window) {
 						 if (window->GetCursorMode() == MouseMode::VISIBLE) {
 							 window->SetCursorMode(MouseMode::CENTERED);
@@ -167,14 +175,14 @@ public:
 			 CheckFps();
 			 CheckKeyboardKeys();
 			 Renderer::Render(*wo, player->GetCamera());
-
 			 player->Update(this->last_frametime);
 		 }
 	 }
 };
 int main() {
-	std::shared_ptr<Game> app = std::make_shared<Game>();
+	std::unique_ptr<Game> app = std::make_unique<Game>();
 	app->Run();
 	app.reset();
+
 	return 1;
 }

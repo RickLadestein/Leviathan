@@ -1,5 +1,7 @@
 #pragma once
-class Timestep {
+#include "Object.h"
+
+class Timestep : public Object {
 public:
     Timestep(float step = 0.0f) : s_time(step) {}
 

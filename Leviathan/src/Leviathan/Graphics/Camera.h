@@ -1,6 +1,6 @@
 #pragma once
-#include "Leviathan/Core.h"
 #include "glm/glm.hpp"
+
 #include <memory>
 
 enum class CameraMode {

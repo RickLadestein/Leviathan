@@ -1,81 +1,79 @@
 #pragma once
 #include "Event.h"
-#include <functional>
-#include <string>
 #include "Leviathan/Input/Keyboard.h"
 #include "Leviathan/Input/Mouse.h"
 #include "Leviathan/Data/Image.h"
 #include "Leviathan/Util/Delegate/MultiDelegate.h"
+#include "Leviathan/Data/Object.h"
+
 #include <memory>
 #include <string>
-
-
+#include <functional>
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
 
-typedef void EventCallbackFn(Event* ev);
+namespace Leviathan {
+	typedef void EventCallbackFn(Leviathan::Events::Event* ev);
+	
+	enum class WindowMode {
+		WINDOWED,
+		FULLSCREEN,
+		WINDOWED_FULLSCREEN
+	};
 
-using util::MultiDelegate;
-using util::Delegate;
+	struct WindowData {
+		friend class Window;
 
-enum class WindowMode {
-	WINDOWED,
-	FULLSCREEN,
-	WINDOWED_FULLSCREEN
-};
+		int width;
+		int height;
+		int pos_x;
+		int pos_y;
+		std::string title;
+		bool should_close;
+		bool focused;
+		bool v_sync;
 
-struct WindowData {
-	friend class Window;
+		std::shared_ptr<Leviathan::Input::Keyboard> keyboard;
+		std::shared_ptr<Leviathan::Input::Mouse> mouse;
 
-	int width;
-	int height;
-	int pos_x;
-	int pos_y;
-	std::string title;
-	bool should_close;
-	bool focused;
-	bool v_sync;
+		WindowMode mode;
+		MultiDelegate<EventCallbackFn> EventHandler;
+	};
 
-	std::shared_ptr<Keyboard> keyboard;
-	std::shared_ptr<Mouse> mouse;
+	class Window : public Object {
+	public:
+		Window(int width, int height, std::string title, WindowMode mode);
+		inline ~Window() { this->Close(); }
 
-	WindowMode mode;
-	MultiDelegate<EventCallbackFn> EventHandler;
-};
+		bool Open();
+		void Close();
 
-class Window {
-public:
-	Window(int width, int height, std::string title, WindowMode mode);
-	~Window();
+		void SetEventCallback(Delegate<EventCallbackFn>& func);
+		void SetCursorPos(unsigned int x, unsigned int y);
+		void SetRawMouseInput(bool val);
+		void SetCursorMode(Leviathan::Input::MouseMode mode);
+		void SetSize(int width, int height);
+		void SetTitle(std::string title);
+		inline void SetClearColor(float r, float g, float b, float a) { glClearColor(r, g, b, a); }
+		void ResetGlView();
+		void Refresh();
 
-	bool Open();
-	void Close();
+		void SetWindowIcon(std::shared_ptr<leviathan::Image> im);
+		void SetWindowIcon(unsigned char* data, int width, int height, int components);
+		void SetVSync(bool enable);
+		void Clear(bool all_buffers);
 
-	void SetEventCallback(Delegate<EventCallbackFn>& func);
-	void SetCursorPos(unsigned int x, unsigned int y);
-	void SetRawMouseInput(bool val);
-	void SetCursorMode(MouseMode mode);
-	void SetSize(int width, int height);
-	void SetTitle(std::string title);
-	inline void SetClearColor(float r, float g, float b, float a) { glClearColor(r, g, b, a); }
-	void ResetGlView();
-	void Refresh();
-
-	void SetWindowIcon(std::shared_ptr<leviathan::Image> im);
-	void SetWindowIcon(unsigned char* data, int width, int height, int components);
-	void SetVSync(bool enable);
-	void Clear(bool all_buffers);
-
-	inline bool GetWindowShouldCloseFlag() { return this->w_data.should_close; };
-	inline std::weak_ptr<Keyboard> GetKeyboard() { return this->w_data.keyboard; }
-	inline std::weak_ptr<Mouse> GetMouse() { return this->w_data.mouse; }
-	inline MouseMode GetCursorMode() { return this->w_data.mouse->mousemode; }
-private:
-	void SetWindowCallbacks();
-	void OnEvent(Event* event);
-	WindowData w_data;
-	GLFWimage image;
-	GLFWwindow* w_handle;
-	double last_refresh_time;
-};
+		inline bool GetWindowShouldCloseFlag() { return this->w_data.should_close; };
+		inline std::weak_ptr<Leviathan::Input::Keyboard> GetKeyboard() { return this->w_data.keyboard; }
+		inline std::weak_ptr<Leviathan::Input::Mouse> GetMouse() { return this->w_data.mouse; }
+		inline Leviathan::Input::MouseMode GetCursorMode() { return this->w_data.mouse->GetMouseMode(); }
+	private:
+		void SetWindowCallbacks();
+		void OnEvent(Leviathan::Events::Event* event);
+		WindowData w_data;
+		GLFWimage image;
+		GLFWwindow* w_handle;
+		double last_refresh_time;
+	};
+}
 

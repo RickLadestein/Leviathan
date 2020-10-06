@@ -1,4 +1,6 @@
 #include "FileManager.h"
+#include "tiny_obj_loader.h"
+
 #include <unordered_map>
 #include <iostream>
 #include <fstream>
@@ -6,7 +8,7 @@
 #include <stdexcept>
 #include <cstddef>
 #include <filesystem>
-#include "tiny_obj_loader.h"
+
 
 using leviathan::Image;
 

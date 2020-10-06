@@ -1,6 +1,7 @@
 #include "Renderer.h"
 #include "Leviathan/Graphics/Shader.h"
 #include "Leviathan/Graphics/Texture.h"
+
 #include <iostream>
 
 #ifdef LEVIATHAN_DEBUG
@@ -9,144 +10,150 @@
 	#define DEBUG() (0)
 #endif
 
-bool FacecullingEnabled = false;
-bool BlendingEnabled = false;
-void Renderer::Render(Drawable& entity, std::weak_ptr<Camera> cam)
-{
-	if (!entity.vertexbuffer.buffers_ready) {
-		std::cout << "Could not load model because buffers were not initialised" << std::endl;
-		return;
-	}
-	std::shared_ptr<ShaderProgram> shader = ShaderProgram::GetShader(entity.shader).lock();
-	std::shared_ptr<Texture> texture = Texture::GetTexture(entity.texture).lock();
-	std::shared_ptr<Camera> camera = cam.lock();
+using Leviathan::Graphics::Drawable;
+using Leviathan::Graphics::Texture;
+using Leviathan::Graphics::ShaderProgram;
+using Leviathan::Graphics::Buffers::VertexBuffer;
+using Leviathan::Graphics::Buffers::FrameBuffer;
 
-	
-
-	if (shader && camera) {
-		if (texture) {
-			texture->bind();
+namespace Leviathan {
+	bool FacecullingEnabled = false;
+	bool BlendingEnabled = false;
+	void Renderer::Render(Drawable& entity, std::weak_ptr<Camera> cam)
+	{
+		if (!entity.GetVertexBuffer()->buffers_ready) {
+			std::cout << "Could not load model because buffers were not initialised" << std::endl;
+			return;
 		}
+		std::shared_ptr<ShaderProgram> shader = ShaderProgram::GetShader(entity.GetShader()).lock();
+		std::shared_ptr<Texture> texture = Texture::GetTexture(entity.GetTexture()).lock();
+		VertexBuffer* vb = entity.GetVertexBuffer();
+		std::shared_ptr<Camera> camera = cam.lock();
 
-		shader->bind();
+		if (shader && camera) {
+			if (texture) {
+				texture->bind();
+			}
 
-		shader->setUniform("projection", camera->GetProjectionMatrix());
-		shader->setUniform("view", camera->GetViewMatrix());
-		shader->setUniform("model", entity.GetModelMatrix());
+			shader->bind();
 
-		entity.vertexbuffer.Bind();
+			shader->setUniform("projection", camera->GetProjectionMatrix());
+			shader->setUniform("view", camera->GetViewMatrix());
+			shader->setUniform("model", entity.GetModelMatrix());
+			vb->Bind();
 
-		glDrawArrays(GL_TRIANGLES, 0, entity.vertexbuffer.element_count);
-		shader->unbind();
-		texture->unbind();
-		entity.vertexbuffer.Unbind();
-		return;
+			glDrawArrays(GL_TRIANGLES, 0, vb->element_count);
+			shader->unbind();
+			texture->unbind();
+			vb->Unbind();
+			return;
 
-	}
-	else {
-		if (!shader) {
-			std::cout << "Could not render because shader did not exist" << std::endl;
 		}
-		if (!camera) {
-			std::cout << "Could not render because camera did not exist" << std::endl;
+		else {
+			if (!shader) {
+				std::cout << "Could not render because shader did not exist" << std::endl;
+			}
+			if (!camera) {
+				std::cout << "Could not render because camera did not exist" << std::endl;
+			}
+			DEBUG();
 		}
-		DEBUG();
 	}
-}
 
-void Renderer::Render(std::vector<Drawable>& entities, std::weak_ptr<Camera> cam)
-{
-	auto it = entities.begin();
-	while (it != entities.end()) {
-		Render(*it, cam);
-		it++;
+	void Renderer::Render(std::vector<Drawable>& entities, std::weak_ptr<Camera> cam)
+	{
+		auto it = entities.begin();
+		while (it != entities.end()) {
+			Render(*it, cam);
+			it++;
+		}
 	}
-}
 
-void Renderer::Render(Drawable& entity, std::weak_ptr<Camera> cam, std::weak_ptr<FrameBuffer> fbo)
-{
-	std::shared_ptr<FrameBuffer> buff = fbo.lock();
-	if (buff) {
-		buff->Bind();
-		Render(entity, cam);
-		buff->Unbind();
+	void Renderer::Render(Drawable& entity, std::weak_ptr<Camera> cam, std::weak_ptr<FrameBuffer> fbo)
+	{
+		std::shared_ptr<FrameBuffer> buff = fbo.lock();
+		if (buff) {
+			buff->Bind();
+			Render(entity, cam);
+			buff->Unbind();
+		}
+		else {
+			std::cout << "Could not render entity: framebuffer was not initialized" << std::endl;
+			__debugbreak();
+			DEBUG();
+		}
 	}
-	else {
-		std::cout << "Could not render entity: framebuffer was not initialized" << std::endl;
-		__debugbreak();
-		DEBUG();
-	}
-}
 
-void Renderer::Render(std::vector<Drawable>& entities, std::weak_ptr<Camera> cam, std::weak_ptr<FrameBuffer> fbo)
-{
-	std::shared_ptr<FrameBuffer> buff = fbo.lock();
-	if (buff) {
-		buff->Bind();
-		Render(entities, cam);
-		buff->Unbind();
+	void Renderer::Render(std::vector<Drawable>& entities, std::weak_ptr<Camera> cam, std::weak_ptr<FrameBuffer> fbo)
+	{
+		std::shared_ptr<FrameBuffer> buff = fbo.lock();
+		if (buff) {
+			buff->Bind();
+			Render(entities, cam);
+			buff->Unbind();
+		}
+		else {
+			std::cout << "Could not render entities: framebuffer was not initialized" << std::endl;
+			DEBUG();
+		}
 	}
-	else {
-		std::cout << "Could not render entities: framebuffer was not initialized" << std::endl;
-		DEBUG();
-	}
-}
 
 #pragma region Culling
-void Renderer::SetFaceCulling(bool enabled)
-{
-	if (enabled) {
-		glEnable(GL_CULL_FACE);
+	void Renderer::SetFaceCulling(bool enabled)
+	{
+		if (enabled) {
+			glEnable(GL_CULL_FACE);
+		}
+		else {
+			glDisable(GL_CULL_FACE);
+		}
+		FacecullingEnabled = enabled;
 	}
-	else {
-		glDisable(GL_CULL_FACE);
+
+	void Renderer::SetFaceCullSide(FaceCullSide side)
+	{
+		glCullFace((GLenum)side);
 	}
-	FacecullingEnabled = enabled;
-}
 
-void Renderer::SetFaceCullSide(FaceCullSide side)
-{
-	glCullFace((GLenum)side);
-}
+	void Renderer::SetFrontFaceCullingOrientation(FrontFaceOrientation orientation)
+	{
+		glFrontFace((GLenum)orientation);
+	}
 
-void Renderer::SetFrontFaceCullingOrientation(FrontFaceOrientation orientation)
-{
-	glFrontFace((GLenum)orientation);
-}
-
-bool Renderer::IsFaceCullingEnabled()
-{
-	return FacecullingEnabled;
-}
-void Renderer::ResetCulling()
-{
-	SetFaceCullSide(FaceCullSide::BACK);
-	SetFrontFaceCullingOrientation(FrontFaceOrientation::COUNTER_CLOCKWISE);
-}
+	bool Renderer::IsFaceCullingEnabled()
+	{
+		return FacecullingEnabled;
+	}
+	void Renderer::ResetCulling()
+	{
+		SetFaceCullSide(FaceCullSide::BACK);
+		SetFrontFaceCullingOrientation(FrontFaceOrientation::COUNTER_CLOCKWISE);
+	}
 #pragma endregion
 
 #pragma region Blending
-void Renderer::SetBlending(bool enabled)
-{
-	if (enabled)
-		glEnable(GL_BLEND);
-	else
-		glDisable(GL_BLEND);
-	BlendingEnabled = enabled;
-}
+	void Renderer::SetBlending(bool enabled)
+	{
+		if (enabled)
+			glEnable(GL_BLEND);
+		else
+			glDisable(GL_BLEND);
+		BlendingEnabled = enabled;
+	}
 
-void Renderer::SetBlendMode(BlendMode src_factor, BlendMode dst_factor)
-{
-	glBlendFunc((GLenum)src_factor, (GLenum)dst_factor);
-}
+	void Renderer::SetBlendMode(BlendMode src_factor, BlendMode dst_factor)
+	{
+		glBlendFunc((GLenum)src_factor, (GLenum)dst_factor);
+	}
 
-bool Renderer::IsBlendingEnabled()
-{
-	return BlendingEnabled;
-}
+	bool Renderer::IsBlendingEnabled()
+	{
+		return BlendingEnabled;
+	}
 
-void Renderer::ResetBlendMode()
-{
-	SetBlendMode(BlendMode::ONE, BlendMode::ZERO);
-}
+	void Renderer::ResetBlendMode()
+	{
+		SetBlendMode(BlendMode::ONE, BlendMode::ZERO);
+	}
 #pragma endregion
+}

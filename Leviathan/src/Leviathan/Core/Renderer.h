@@ -2,56 +2,61 @@
 #include "Leviathan/Graphics/Drawable.h"
 #include "Leviathan/Graphics/Camera.h"
 #include "Leviathan/Graphics/Buffers/FrameBuffer.h"
+#include "glad/glad.h"
+
 #include <memory>
 #include <vector>
-#include "glad/glad.h"
-enum class FaceCullSide {
-	FRONT = GL_FRONT,
-	BACK = GL_BACK,
-	FRONT_BACK = GL_FRONT_AND_BACK
-};
 
-enum class FrontFaceOrientation {
-	CLOCKWISE = GL_CW,
-	COUNTER_CLOCKWISE = GL_CCW
-};
+using namespace Leviathan::Graphics;
+namespace Leviathan {
+	enum class FaceCullSide {
+		FRONT = GL_FRONT,
+		BACK = GL_BACK,
+		FRONT_BACK = GL_FRONT_AND_BACK
+	};
 
-enum class BlendMode {
-	ZERO = GL_ZERO,
-	ONE = GL_ONE,
-	SRC_COLOR = GL_SRC_COLOR,
-	ONE_MINUS_SRC_COLOR = GL_ONE_MINUS_SRC_COLOR,
-	DST_COLOR = GL_DST_COLOR,
-	ONE_MINUS_DST_COLOR = GL_ONE_MINUS_DST_COLOR,
-	SRC_ALPHA = GL_SRC_ALPHA,
-	ONE_MINUS_SRC_ALPHA = GL_ONE_MINUS_SRC_ALPHA,
-	DST_APLHA = GL_DST_ALPHA,
-	ONE_MINUS_DST_ALPHA = GL_ONE_MINUS_DST_ALPHA,
-	CONSTANT_COLOR = GL_CONSTANT_COLOR,
-	ONE_MINUS_CONSTANT_COLOR = GL_ONE_MINUS_CONSTANT_ALPHA,
-	CONSTANT_ALPHA = GL_CONSTANT_ALPHA,
-	ONE_MINUS_CONSTANT_ALPHA = GL_ONE_MINUS_CONSTANT_ALPHA
-};
+	enum class FrontFaceOrientation {
+		CLOCKWISE = GL_CW,
+		COUNTER_CLOCKWISE = GL_CCW
+	};
 
-class Renderer {
-public:
-	static void Render(Drawable& entity, std::weak_ptr<Camera> cam);
-	static void Render(std::vector<Drawable>& entities, std::weak_ptr<Camera> cam);
+	enum class BlendMode {
+		ZERO = GL_ZERO,
+		ONE = GL_ONE,
+		SRC_COLOR = GL_SRC_COLOR,
+		ONE_MINUS_SRC_COLOR = GL_ONE_MINUS_SRC_COLOR,
+		DST_COLOR = GL_DST_COLOR,
+		ONE_MINUS_DST_COLOR = GL_ONE_MINUS_DST_COLOR,
+		SRC_ALPHA = GL_SRC_ALPHA,
+		ONE_MINUS_SRC_ALPHA = GL_ONE_MINUS_SRC_ALPHA,
+		DST_APLHA = GL_DST_ALPHA,
+		ONE_MINUS_DST_ALPHA = GL_ONE_MINUS_DST_ALPHA,
+		CONSTANT_COLOR = GL_CONSTANT_COLOR,
+		ONE_MINUS_CONSTANT_COLOR = GL_ONE_MINUS_CONSTANT_ALPHA,
+		CONSTANT_ALPHA = GL_CONSTANT_ALPHA,
+		ONE_MINUS_CONSTANT_ALPHA = GL_ONE_MINUS_CONSTANT_ALPHA
+	};
 
-	static void Render(Drawable& entity, std::weak_ptr<Camera> cam, std::weak_ptr<FrameBuffer> fbo);
-	static void Render(std::vector<Drawable>& entities, std::weak_ptr<Camera> cam, std::weak_ptr<FrameBuffer> fbo);
+	class Renderer {
+	public:
+		static void Render(Drawable& entity, std::weak_ptr<Camera> cam);
+		static void Render(std::vector<Drawable>& entities, std::weak_ptr<Camera> cam);
 
-	//Face culling
-	static void SetFaceCulling(bool enabled);
-	static void SetFaceCullSide(FaceCullSide side);
-	static void SetFrontFaceCullingOrientation(FrontFaceOrientation orientation);
-	static bool IsFaceCullingEnabled();
-	static void ResetCulling();
+		static void Render(Drawable& entity, std::weak_ptr<Camera> cam, std::weak_ptr<Leviathan::Graphics::Buffers::FrameBuffer> fbo);
+		static void Render(std::vector<Drawable>& entities, std::weak_ptr<Camera> cam, std::weak_ptr<Leviathan::Graphics::Buffers::FrameBuffer> fbo);
 
-	//Blend mode
-	static void SetBlending(bool enabled);
-	static void SetBlendMode(BlendMode src_factor, BlendMode dst_factor);
-	static bool IsBlendingEnabled();
-	static void ResetBlendMode();
+		//Face culling
+		static void SetFaceCulling(bool enabled);
+		static void SetFaceCullSide(FaceCullSide side);
+		static void SetFrontFaceCullingOrientation(FrontFaceOrientation orientation);
+		static bool IsFaceCullingEnabled();
+		static void ResetCulling();
 
-};
+		//Blend mode
+		static void SetBlending(bool enabled);
+		static void SetBlendMode(BlendMode src_factor, BlendMode dst_factor);
+		static bool IsBlendingEnabled();
+		static void ResetBlendMode();
+
+	};
+}

@@ -4,7 +4,7 @@
 
 #include <unordered_set>
 
-namespace util
+namespace Leviathan
 {
 
 	// usage: w->keyboard->OnKeyPressedCallback += util::Delegate<KeyPressFunc>(r, &Random::OnKeyPressed);

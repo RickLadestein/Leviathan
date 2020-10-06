@@ -2,7 +2,6 @@
 //Core components
 #define LEVIATHAN_DEBUG
 
-#include "Leviathan/Core.h"
 #include "Leviathan/Core/Event.h"
 #include "Leviathan/Core/Application.h"
 #include "Leviathan/Core/Window.h"
@@ -12,6 +11,8 @@
 #include "Leviathan/Data/Image.h"
 #include "Leviathan/Data/Timestep.h"
 #include "Leviathan/Data/Structures.h"
+#include "Leviathan/Data/Object.h"
+#include "Leviathan/Data/Entity.h"
 
 //Graphics components
 #include "Leviathan/Graphics/Drawable.h"

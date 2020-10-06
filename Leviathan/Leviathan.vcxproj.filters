@@ -28,9 +28,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Leviathan.h" />
-    <ClInclude Include="src\Leviathan\Core.h">
-      <Filter>Leviathan</Filter>
-    </ClInclude>
     <ClInclude Include="src\Leviathan\Core\Application.h">
       <Filter>Leviathan\Core</Filter>
     </ClInclude>
@@ -70,9 +67,6 @@
     <ClInclude Include="src\Leviathan\Graphics\Drawable.h">
       <Filter>Leviathan\Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="src\Leviathan\Graphics\GenericMesh.h">
-      <Filter>Leviathan\Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="src\Leviathan\Graphics\Mesh.h">
       <Filter>Leviathan\Graphics</Filter>
     </ClInclude>
@@ -100,6 +94,10 @@
     <ClInclude Include="src\Leviathan\Util\Math.h">
       <Filter>Leviathan\Util</Filter>
     </ClInclude>
+    <ClInclude Include="src\Leviathan\Data\Object.h">
+      <Filter>Leviathan\Data</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Leviathan\Data\Entity.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Leviathan\Core\Application.cpp">
@@ -153,5 +151,9 @@
     <ClCompile Include="src\Leviathan\Util\FileManager.cpp">
       <Filter>Leviathan\Util</Filter>
     </ClCompile>
+    <ClCompile Include="src\Leviathan\Data\Object.cpp">
+      <Filter>Leviathan\Data</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Leviathan\Data\Entity.cpp" />
   </ItemGroup>
 </Project>

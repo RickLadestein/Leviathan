@@ -8,7 +8,7 @@
 #include <type_traits>
 #include <utility>
 
-namespace util
+namespace Leviathan
 {
 
 	template <typename T> class Delegate;
@@ -345,13 +345,13 @@ namespace util
 namespace std
 {
 	template <typename Ret, typename ...Args>
-	struct hash<::util::Delegate<Ret(Args...)> >
+	struct hash<Leviathan::Delegate<Ret(Args...)> >
 	{
-		size_t operator()(::util::Delegate<Ret(Args...)> const& d) const noexcept
+		size_t operator()(Leviathan::Delegate<Ret(Args...)> const& d) const noexcept
 		{
 			auto const seed(hash<void*>()(d.obj));
 
-			return hash<typename ::util::Delegate<Ret(Args...)>::FuncPtr>()(
+			return hash<typename Leviathan::Delegate<Ret(Args...)>::FuncPtr>()(
 				d.func) + 0x9e3779b9 + (seed << 6) + (seed >> 2);
 		}
 	};
