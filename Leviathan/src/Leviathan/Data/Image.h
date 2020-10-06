@@ -3,7 +3,7 @@
 
 #include <memory>
 #include <string>
-namespace leviathan {
+namespace Leviathan {
 	class Image {
 	public:
 		Image(int width, int height, int channels, unsigned char* data);
@@ -17,8 +17,8 @@ namespace leviathan {
 		Image(const Image&) = delete;
 		Image& operator=(const Image&) = delete;
 
-		static std::shared_ptr<Image> Load(std::string folder_id, std::string file);
-		static unsigned char* Load(std::string folder_id, std::string file, int* width, int* height, int* channels);
+		static std::shared_ptr<Image> Load(std::string folder_id, std::string file, bool flip = false);
+		static unsigned char* Load(std::string folder_id, std::string file, int* width, int* height, int* channels, bool flip = false);
 	private:
 		int width, height, channels;
 		unsigned char* data;

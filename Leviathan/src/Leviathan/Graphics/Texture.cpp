@@ -10,7 +10,7 @@ namespace Leviathan::Graphics {
 		this->handle = 0;
 		this->type = TextureType::TEXTURE_2D;
 		this->hasMipmap = mipmap;
-		std::shared_ptr<leviathan::Image> image = leviathan::Image::Load(folder_id, texture_file);
+		std::shared_ptr<Leviathan::Image> image = Leviathan::Image::Load(folder_id, texture_file, true);
 		if (image) {
 			glGenTextures(1, &this->handle);
 			glBindTexture(GL_TEXTURE_2D, this->handle);
@@ -115,6 +115,7 @@ namespace Leviathan::Graphics {
 			glGenerateMipmap((GLenum)this->type);
 		glTexParameteri((GLenum)this->type, GL_TEXTURE_MIN_FILTER, (GLint)min);
 		glTexParameteri((GLenum)this->type, GL_TEXTURE_MAG_FILTER, (GLint)mag);
+		this->hasMipmap = true;
 	}
 
 

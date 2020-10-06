@@ -1,7 +1,7 @@
 #include "Image.h"
 #include "stb-master/stb_image.h"
 
-namespace leviathan {
+namespace Leviathan {
 	Image::Image(int width, int height, int channels, unsigned char* data)
 	{
 		this->width = width;
@@ -20,7 +20,7 @@ namespace leviathan {
 		*width = this->width;
 		*height = this->height;
 	}
-	std::shared_ptr<Image> Image::Load(std::string folder_id, std::string file)
+	std::shared_ptr<Image> Image::Load(std::string folder_id, std::string file, bool flip)
 	{
 		if (FileManager::CheckFileExistance(folder_id, file)) {
 			std::string result = FileManager::GetDirectory(folder_id);
@@ -32,7 +32,7 @@ namespace leviathan {
 			total_path += file;
 
 			int width, height, channels;
-			stbi_set_flip_vertically_on_load(1);
+			stbi_set_flip_vertically_on_load(flip);
 			unsigned char* data = stbi_load(total_path.c_str(), &width, &height, &channels, 0);
 			if (data) {
 				return std::make_shared<Image>(width, height, channels, data);
@@ -41,7 +41,7 @@ namespace leviathan {
 		}
 		return nullptr;
 	}
-	unsigned char* Image::Load(std::string folder_id, std::string file, int* width, int* height, int* channels)
+	unsigned char* Image::Load(std::string folder_id, std::string file, int* width, int* height, int* channels, bool flip)
 	{
 		if (FileManager::CheckFileExistance(folder_id, file)) {
 			std::string result = FileManager::GetDirectory(folder_id);
@@ -51,7 +51,7 @@ namespace leviathan {
 			std::string total_path = result;
 			total_path += "\\";
 			total_path += file;
-
+			stbi_set_flip_vertically_on_load(flip);
 			unsigned char* data = stbi_load(total_path.c_str(), width, height, channels, 4);
 			return data;
 		}

@@ -58,7 +58,7 @@ namespace Leviathan {
 		void ResetGlView();
 		void Refresh();
 
-		void SetWindowIcon(std::shared_ptr<leviathan::Image> im);
+		void SetWindowIcon(std::shared_ptr<Leviathan::Image> im);
 		void SetWindowIcon(unsigned char* data, int width, int height, int components);
 		void SetVSync(bool enable);
 		void Clear(bool all_buffers);

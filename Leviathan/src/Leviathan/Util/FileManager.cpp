@@ -10,7 +10,7 @@
 #include <filesystem>
 
 
-using leviathan::Image;
+using Leviathan::Image;
 
 std::unordered_map<std::string, std::string> dirs;
 

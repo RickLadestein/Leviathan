@@ -167,7 +167,7 @@ namespace Leviathan {
 	 * @brief Sets the window icon to Leviathan API imported image
 	 * @param im Imported image to be used as icon
 	*/
-	void Window::SetWindowIcon(std::shared_ptr<leviathan::Image> im)
+	void Window::SetWindowIcon(std::shared_ptr<Leviathan::Image> im)
 	{
 		if (im == nullptr) {
 			return;

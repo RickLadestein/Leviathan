@@ -16,7 +16,7 @@ using namespace Leviathan::Events;
 
 using Leviathan::Window;
 
-class WorldObject: public Drawable {
+class WorldObject: public Drawable, Entity {
 public:
 	WorldObject(std::string mesh_name) {
 		this->shader = "default";
@@ -55,7 +55,7 @@ public:
 		DepthBuffer::Enable();
 		DepthBuffer::SetDepthFunction(DepthFunc::LESS);
 
-		std::shared_ptr<leviathan::Image> im = leviathan::Image::Load("default", "logo.png");
+		std::shared_ptr<Leviathan::Image> im = Leviathan::Image::Load("default", "logo.png");
 		std::shared_ptr<Leviathan::Window> window = this->GetWindow().lock();
 		window->SetWindowIcon(im);
 		window->SetVSync(true);
