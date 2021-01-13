@@ -1,12 +1,11 @@
 #include "Object.h"
-#include <boost/uuid/uuid_generators.hpp>
-#include <boost/uuid/uuid_io.hpp>
 
-boost::uuids::random_generator generator;
+unsigned long current_object_id = 0;
 
 Object::Object()
 {
-	this->uuid = generator();
+	this->uuid = current_object_id + 1;
+	current_object_id += 1;
 }
 
 Object::~Object()

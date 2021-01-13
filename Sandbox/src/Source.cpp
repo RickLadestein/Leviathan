@@ -104,7 +104,7 @@ public:
 
 	 void OnMouseEvent(Event* ev) {
 		 std::shared_ptr<Mouse> mouse = this->GetMouse().lock();
-		 if (ev->GetType() == EventType::MouseMoveEvent && mouse) {
+		 if (ev->GetEventType() == EventType::MouseMove && mouse) {
 			 if (mouse->GetMouseMode() != MouseMode::CENTERED) {
 				 return;
 			 }
@@ -171,7 +171,7 @@ public:
 	 }
 
 	 void OnWindowEvent(Event* event) {
-		 if (event->GetType() == EventType::RefreshEvent) {
+		 if (event->GetEventType() == EventType::WindowRefresh) {
 			 CheckFps();
 			 CheckKeyboardKeys();
 			 Renderer::Render(*wo, player->GetCamera());

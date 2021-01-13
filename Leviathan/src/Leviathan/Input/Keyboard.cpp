@@ -55,15 +55,15 @@ namespace Leviathan::Input {
 
 	void Keyboard::onKeyEvent(Leviathan::Events::Event* ev)
 	{
-		switch (ev->GetType()) {
-		case Leviathan::Events::EventType::KeyPressEvent:
+		switch (ev->GetEventType()) {
+		case Leviathan::Events::EventType::KeyPress:
 		{
 			Leviathan::Events::KeyPressEvent* ptr = dynamic_cast<Leviathan::Events::KeyPressEvent*>(ev);
 			int key = ptr->GetKey();
 			AddKey(key);
 		}
 		break;
-		case Leviathan::Events::EventType::KeyReleaseEvent:
+		case Leviathan::Events::EventType::KeyRelease:
 		{
 			Leviathan::Events::KeyReleaseEvent* ptr = dynamic_cast<Leviathan::Events::KeyReleaseEvent*>(ev);
 			int key = ptr->GetKey();

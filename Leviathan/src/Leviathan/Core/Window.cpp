@@ -149,7 +149,8 @@ namespace Leviathan {
 	{
 		this->Clear(true);
 		double current_time = glfwGetTime();
-		Leviathan::Events::RefreshEvent ev(current_time - this->last_refresh_time);
+		float frame_delta = float(current_time - this->last_refresh_time);
+		Leviathan::Events::RefreshEvent ev(frame_delta);
 		w_data.EventHandler.Broadcast(&ev);
 		this->last_refresh_time = current_time;
 
@@ -446,21 +447,21 @@ namespace Leviathan {
 
 	void Window::OnEvent(Leviathan::Events::Event* event)
 	{
-		switch (event->GetType()) {
-		case Leviathan::Events::EventType::ResizeEvent:
+		switch (event->GetEventType()) {
+		case Leviathan::Events::EventType::WindowResize:
 		{
 			Leviathan::Events::ResizeEvent* ev1 = dynamic_cast<Leviathan::Events::ResizeEvent*> (event);
 			ev1->GetSize(&this->w_data.width, &this->w_data.height);
 			this->ResetGlView();
 		}
 		break;
-		case Leviathan::Events::EventType::MoveEvent:
+		case Leviathan::Events::EventType::WindowMove:
 		{
 			Leviathan::Events::MoveEvent* ev2 = dynamic_cast<Leviathan::Events::MoveEvent*> (event);
 			ev2->GetPos(&this->w_data.pos_x, &this->w_data.pos_y);
 		}
 		break;
-		case Leviathan::Events::EventType::FocusEvent:
+		case Leviathan::Events::EventType::WindowFocus:
 		{
 			Leviathan::Events::FocusEvent* ev3 = dynamic_cast<Leviathan::Events::FocusEvent*> (event);
 			this->w_data.focused = ev3->hasFocus();

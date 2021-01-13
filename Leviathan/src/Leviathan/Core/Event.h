@@ -1,28 +1,30 @@
 #pragma once
 #include "Leviathan/Data/Object.h"
-
+#include "Leviathan/Data/Timestep.h"
 #include <functional>
 #include <string>
+
+
 
 namespace Leviathan::Events {
 	enum class EventType {
 		None,
-		MouseMoveEvent,
-		MousePressEvent,
-		MouseReleaseEvent,
-		MouseWheelEvent,
+		MouseMove,
+		MousePress,
+		MouseRelease,
+		MouseWheel,
 
-		KeyPressEvent,
-		KeyReleaseEvent,
-		KeyRepeatEvent,
-		KeyTypeEvent,
+		KeyPress,
+		KeyRelease,
+		KeyRepeat,
+		KeyType,
 
-		RefreshEvent,
-		ResizeEvent,
-		MoveEvent,
-		CloseEvent,
-		FocusEvent,
-		LostFocusEvent
+		WindowRefresh,
+		WindowResize,
+		WindowMove,
+		WindowClose,
+		WindowFocus,
+		WindowLostFocus
 	};
 
 	enum class EventCategory {
@@ -32,55 +34,71 @@ namespace Leviathan::Events {
 		WindowEvent
 	};
 
+#define EVENT_CLASS_TYPE(type) static EventType GetStaticType() { return EventType::type; }\
+								virtual EventType GetEventType() const override { return GetStaticType(); }\
+								virtual const char* GetName() const override { return #type; }
+
+#define EVENT_CLASS_CATEGORY(category) virtual EventCategory GetCategory() const override { return EventCategory::category; }
+
 	class  Event : public Object {
 	public:
-		inline const EventType GetType() { return this->type; }
-		inline const EventCategory GetCategory() { return this->category; }
-
-		virtual inline std::string ToString() override { return "Empty event"; }
-	protected:
-		EventCategory category = EventCategory::None;
-		EventType type = EventType::None;
 		bool handled = false;
+		virtual ~Event() = default;
+
+		virtual EventType GetEventType() const = 0;
+		virtual const char* GetName() const = 0;
+		virtual EventCategory GetCategory() const = 0;
+		virtual std::string ToString() const { return GetName(); }
 	};
 
 #pragma region Window_Events
 	class  RefreshEvent : public Event {
 	public:
-		RefreshEvent(double frametime);
-		~RefreshEvent() = default;
-		inline double GetFrametime() { return frametime; }
-		std::string ToString() override;
+		RefreshEvent(float frametime) :
+			frametime(frametime) {}
+		inline Timestep* GetFrameTime() { return &frametime; }
+		
+		EVENT_CLASS_TYPE(WindowRefresh)
+		EVENT_CLASS_CATEGORY(WindowEvent)
 	private:
-		double frametime;
+		Timestep frametime;
 	};
 
 	class  ResizeEvent : public Event {
 	public:
-		ResizeEvent(int size_x, int size_y);
-		~ResizeEvent() = default;
+		ResizeEvent(int x_size, int y_size) :
+			size_x(x_size), size_y(y_size) {}
+
 		inline void GetSize(int* x, int* y) { *x = size_x; *y = size_y; }
-		std::string ToString() override;
+
+		EVENT_CLASS_TYPE(WindowResize)
+		EVENT_CLASS_CATEGORY(WindowEvent)
 	private:
 		int size_x, size_y;
 	};
 
 	class  MoveEvent : public Event {
 	public:
-		MoveEvent(int x, int y);
-		~MoveEvent() = default;
-		inline void GetPos(int* x, int* y) { *x = this->x; *y = this->y; }
-		std::string ToString() override;
+		MoveEvent(int x, int y) :
+			x_pos(x), y_pos(y) {}
+
+		inline void GetPos(int* x, int* y) { *x = this->x_pos; *y = this->y_pos; }
+
+		EVENT_CLASS_TYPE(WindowMove)
+		EVENT_CLASS_CATEGORY(WindowEvent)
 	private:
-		int x, y;
+		int x_pos, y_pos;
 	};
 
 	class  FocusEvent : public Event {
 	public:
-		FocusEvent(int hasfocus);
-		~FocusEvent() = default;
+		FocusEvent(bool focus_state) :
+			hasfocus(focus_state) {}
+
 		inline bool hasFocus() { return hasfocus; };
-		std::string ToString() override;
+
+		EVENT_CLASS_TYPE(WindowFocus)
+		EVENT_CLASS_CATEGORY(WindowEvent)
 	private:
 		bool hasfocus;
 	};
@@ -89,11 +107,14 @@ namespace Leviathan::Events {
 #pragma region Mouse_Events
 	class  MouseMoveEvent : public Event {
 	public:
-		MouseMoveEvent(double x_pos, double y_pos, double x_delta, double y_delta);
-		~MouseMoveEvent() = default;
-		std::string ToString() override;
+		MouseMoveEvent(double pos_x, double pos_y, double delta_x, double delta_y) :
+			x_pos(pos_x), y_pos(pos_y), x_delta(delta_x), y_delta(delta_y) {}
+
 		inline void GetPosition(double* x, double* y) { *x = x_pos; *y = y_pos; }
 		inline void GetDelta(double* dx, double* dy) { *dx = x_delta; *dy = y_delta; }
+
+		EVENT_CLASS_TYPE(MouseMove)
+		EVENT_CLASS_CATEGORY(MouseEvent)
 	private:
 		double x_pos, y_pos;
 		double x_delta, y_delta;
@@ -101,30 +122,39 @@ namespace Leviathan::Events {
 
 	class  MousePressEvent : public Event {
 	public:
-		MousePressEvent(int button);
-		~MousePressEvent() = default;
-		std::string ToString() override;
+		MousePressEvent(int btn) :
+			button(btn) {}
+
 		inline int GetButton() { return button; }
+
+		EVENT_CLASS_TYPE(MousePress)
+		EVENT_CLASS_CATEGORY(MouseEvent)
 	private:
 		int button;
 	};
 
 	class  MouseReleaseEvent : public Event {
 	public:
-		MouseReleaseEvent(int button);
-		~MouseReleaseEvent() = default;
-		std::string ToString() override;
+		MouseReleaseEvent(int btn) :
+			button(btn) {}
+
 		inline int GetButton() { return button; }
+
+		EVENT_CLASS_TYPE(MouseRelease)
+		EVENT_CLASS_CATEGORY(MouseEvent)
 	private:
 		int button;
 	};
 
 	class  MouseWheelEvent : public Event {
 	public:
-		MouseWheelEvent(double x, double y);
-		~MouseWheelEvent() = default;
-		std::string ToString() override;
+		MouseWheelEvent(double x, double y) :
+			x_scroll(x), y_scroll(y) {}
+
 		inline void GetScroll(double* x, double* y) { *x = x_scroll; *y = y_scroll; }
+
+		EVENT_CLASS_TYPE(MouseWheel)
+		EVENT_CLASS_CATEGORY(MouseEvent)
 	private:
 		double x_scroll, y_scroll;
 	};
@@ -133,42 +163,54 @@ namespace Leviathan::Events {
 #pragma region Keyboard_Event
 	class  KeyPressEvent : public Event {
 	public:
-		KeyPressEvent(int key);
-		~KeyPressEvent() = default;
-		std::string ToString() override;
-		inline int GetKey() { return key; }
+		KeyPressEvent(int key) :
+			press_key(key) {}
+
+		inline int GetKey() { return press_key; }
+
+		EVENT_CLASS_TYPE(KeyPress)
+		EVENT_CLASS_CATEGORY(KeyboardEvent)
 	private:
-		int key;
+		int press_key;
 	};
 
 	class  KeyReleaseEvent : public Event {
 	public:
-		KeyReleaseEvent(int key);
-		~KeyReleaseEvent() = default;
-		std::string ToString() override;
-		inline int GetKey() { return key; }
+		KeyReleaseEvent(int key) :
+			release_key(key) {}
+
+		inline int GetKey() { return release_key; }
+
+		EVENT_CLASS_TYPE(KeyRelease)
+		EVENT_CLASS_CATEGORY(KeyboardEvent)
 	protected:
-		int key;
+		int release_key;
 	};
 
 	class  KeyRepeatEvent : public Event {
 	public:
-		KeyRepeatEvent(int key);
-		~KeyRepeatEvent() = default;
-		std::string ToString() override;
-		inline int GetKey() { return key; }
+		KeyRepeatEvent(int key) :
+			repeat_key(key) {}
+
+		inline int GetKey() { return repeat_key; }
+
+		EVENT_CLASS_TYPE(KeyRepeat)
+		EVENT_CLASS_CATEGORY(KeyboardEvent)
 	protected:
-		int key;
+		int repeat_key;
 	};
 
 	class  KeyTypeEvent : public Event {
 	public:
-		KeyTypeEvent(int key);
-		~KeyTypeEvent() = default;
-		std::string ToString() override;
-		inline int GetKey() { return key; }
+		KeyTypeEvent(int key) :
+			type_key(key) {}
+
+		inline int GetKey() { return type_key; }
+
+		EVENT_CLASS_TYPE(KeyType)
+		EVENT_CLASS_CATEGORY(KeyboardEvent)
 	protected:
-		int key;
+		int type_key;
 	};
 #pragma endregion
 

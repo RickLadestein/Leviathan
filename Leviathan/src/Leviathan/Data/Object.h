@@ -1,8 +1,7 @@
 #pragma once
 #include <typeinfo>
 #include <string>
-#include <sstream>
-#include <boost/uuid/uuid.hpp>           
+#include <sstream>   
 
 
 class Object {
@@ -14,5 +13,5 @@ public:
 
 	virtual std::string ToString();
 protected:
-	boost::uuids::uuid uuid;
+	long uuid;
 };

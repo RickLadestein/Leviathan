@@ -103,9 +103,6 @@
     <ClCompile Include="src\Leviathan\Core\Application.cpp">
       <Filter>Leviathan\Core</Filter>
     </ClCompile>
-    <ClCompile Include="src\Leviathan\Core\Event.cpp">
-      <Filter>Leviathan\Core</Filter>
-    </ClCompile>
     <ClCompile Include="src\Leviathan\Core\Renderer.cpp">
       <Filter>Leviathan\Core</Filter>
     </ClCompile>
@@ -155,5 +152,8 @@
       <Filter>Leviathan\Data</Filter>
     </ClCompile>
     <ClCompile Include="src\Leviathan\Data\Entity.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>
