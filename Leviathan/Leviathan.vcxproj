@@ -196,6 +196,7 @@
     <ClInclude Include="src\Leviathan\Core\Event.h" />
     <ClInclude Include="src\Leviathan\Core\Renderer.h" />
     <ClInclude Include="src\Leviathan\Core\Window.h" />
+    <ClInclude Include="src\Leviathan\Data\Dictionary.h" />
     <ClInclude Include="src\Leviathan\Data\Entity.h" />
     <ClInclude Include="src\Leviathan\Data\Image.h" />
     <ClInclude Include="src\Leviathan\Data\Object.h" />

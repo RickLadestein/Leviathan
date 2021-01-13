@@ -98,6 +98,7 @@
       <Filter>Leviathan\Data</Filter>
     </ClInclude>
     <ClInclude Include="src\Leviathan\Data\Entity.h" />
+    <ClInclude Include="src\Leviathan\Data\Dictionary.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Leviathan\Core\Application.cpp">

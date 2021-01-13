@@ -8,24 +8,23 @@
 #include <stdexcept>
 #include <cstddef>
 #include <filesystem>
+#include "Leviathan/Data/Dictionary.h"
 
 
 using Leviathan::Image;
 
-std::unordered_map<std::string, std::string> dirs;
+Leviathan::Dictionary<std::string, std::string> dict;
 
 bool FileManager::RegisterDirectory(std::string folder_id, std::string path, bool overwrite)
 {
 	try {
-		std::string res = dirs.at(folder_id);
-		if (overwrite) {
-			dirs[folder_id] = path;
+		std::string res;
+		bool succes = dict.try_get_value(folder_id, res);
+		if (succes && overwrite || !succes) {
+			dict[folder_id] = path;
 			return true;
 		}
 		return false;
-	}
-	catch (std::out_of_range eor) {
-		dirs[folder_id] = path;
 	}
 	catch (std::exception e) {
 		std::cout << e.what() << std::endl;
@@ -36,15 +35,19 @@ bool FileManager::RegisterDirectory(std::string folder_id, std::string path, boo
 
 bool FileManager::UnregisterDirectory(std::string folder_id)
 {
+	return dict.try_erase(folder_id);
+}
+
+std::string FileManager::GetDirectory(std::string folder_id)
+{
+	std::string result = "";
 	try {
-		std::string result = dirs.at(folder_id);
-		dirs.erase(folder_id);
-		return true;
+		bool succes = dict.try_get_value(folder_id, result);
+		return result;
 	}
-	catch (std::out_of_range eor) {
-		return false;
+	catch (std::exception) {
+		return result;
 	}
-	return false;
 }
 
 std::string FileManager::GetWorkingDir()
@@ -54,16 +57,7 @@ std::string FileManager::GetWorkingDir()
 	return output;
 }
 
-std::string FileManager::GetDirectory(std::string folder_id)
-{
-	try {
-		std::string result = dirs.at(folder_id);
-		return result;
-	}
-	catch (std::exception e) {
-		return "";
-	}
-}
+
 
 bool FileManager::CheckFileExistance(std::string folder_id, std::string file)
 {

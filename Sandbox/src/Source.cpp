@@ -51,6 +51,7 @@ public:
 		ShaderProgram::AddShader("default", "shaders", "default.frag", "default.vert");
 		ShaderProgram::AddShader("crosshair", "shaders", "crosshair.frag", "crosshair.vert");
 		Texture::AddTexture("default", "textures", "awp_color.png", false);
+		Texture::AddTexture("default", "textures", "atlas.png", false);
 		
 		DepthBuffer::Enable();
 		DepthBuffer::SetDepthFunction(DepthFunc::LESS);

@@ -1,12 +1,15 @@
 #pragma once
 #include "glad/glad.h"
 #include "GLFW/glfw3.h"
-
+#include <memory>
 #include <vector>
 #include <memory>
 #include <string>
+#include <array>
 
 namespace Leviathan::Graphics {
+	
+
 	enum class TextureWrapSetting {
 		REPEAT = GL_REPEAT,
 		MIRRORED_REPEAT = GL_MIRRORED_REPEAT,
@@ -38,11 +41,8 @@ namespace Leviathan::Graphics {
 		Texture() = default;
 		~Texture() = default;
 
-		static void bind(std::weak_ptr<Texture> tex);
-		static void unbind();
-		static void BindMultiTex(std::vector<std::weak_ptr<Texture>>* textures);
-
-		void bind();
+		virtual void Bind(bool finaltarget = true);
+		virtual void Unbind(bool finaltarget = true);
 		void SetTextureWrapSetting(TextureWrapSetting s, TextureWrapSetting t);
 		void SetMinMagSetting(MinMagSetting min, MinMagSetting mag);
 		void SetMipMapMinMagSetting(MipmapMinMagSetting min, MipmapMinMagSetting mag);
@@ -56,10 +56,14 @@ namespace Leviathan::Graphics {
 
 
 		TextureType type = TextureType::NONE;
+		int textureType;
 		bool hasMipmap = false;
 		bool rtg = false;
 		GLuint handle = 0;
 	};
+
+	typedef std::shared_ptr<Texture> TextureReference;
+	typedef std::weak_ptr<Texture> WeakTextureReference;
 
 	class Texture1D : public Texture {
 	public:
@@ -81,6 +85,18 @@ namespace Leviathan::Graphics {
 	public:
 		inline TextureCubemap(std::string folder_id, std::string n, std::string e, std::string s, std::string w, bool mipmap = false) { throw new std::exception("Not implemented yet"); };
 	};
+	
+
+#define MAX_MULTITEX_TEXTURES 8
+	class MultiTexture : public Texture {
+	public:
+		std::array<WeakTextureReference, MAX_MULTITEX_TEXTURES> textures;
+
+		void Bind(bool finaltarget = true) override;
+		void Unbind(bool finaltarget = true) override;
+	};
+
+
 }
 
 

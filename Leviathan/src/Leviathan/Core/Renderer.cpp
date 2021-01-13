@@ -32,7 +32,7 @@ namespace Leviathan {
 
 		if (shader && camera) {
 			if (texture) {
-				texture->bind();
+				texture->Bind();
 			}
 
 			shader->bind();
@@ -44,7 +44,7 @@ namespace Leviathan {
 
 			glDrawArrays(GL_TRIANGLES, 0, vb->element_count);
 			shader->unbind();
-			texture->unbind();
+			texture->Unbind();
 			vb->Unbind();
 			return;
 
