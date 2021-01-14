@@ -5,6 +5,9 @@
 
 #include <string>
 #include <sstream>
+#include <vector>
+#include "Texture.h"
+#include "Shader.h"
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -13,9 +16,10 @@
 
 namespace Leviathan::Graphics {
 	class Drawable : public Object {
+		friend class Renderer;
 	protected:
-		std::string shader;
-		std::string texture;
+		WeakShaderReference shader;
+		MultiTexture textures;
 
 		glm::vec3 rotation;
 		glm::vec3 scale;
@@ -25,13 +29,14 @@ namespace Leviathan::Graphics {
 
 		Drawable();
 		Drawable(std::string shader, std::string texture);
+		Drawable(std::string shader, std::vector<std::string> textures);
 		Drawable(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
 		Drawable(std::string shader, std::string texture, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale);
 	public:
-		inline void SetShader(std::string s_name) { this->shader = s_name; }
-		inline std::string GetShader() { return this->shader; }
-		inline void SetTexture(std::string texture) { this->texture = texture; }
-		inline std::string GetTexture() { return this->texture; }
+		inline void SetShader(std::string s_name) { this->shader = ShaderProgram::GetShader(s_name); }
+		inline WeakShaderReference GetShader() { return this->shader; }
+
+		inline MultiTexture* GetTextures() { return &textures; }
 
 		inline Leviathan::Graphics::Buffers::VertexBuffer* GetVertexBuffer() { return &this->vertexbuffer; }
 

@@ -8,6 +8,7 @@
 
 
 namespace Leviathan::Graphics {
+	
 	enum class ShaderType {
 		VERTEX,
 		GEOMETRY,
@@ -61,6 +62,8 @@ namespace Leviathan::Graphics {
 		ShaderProgram(const ShaderProgram&) = delete;
 		ShaderProgram& operator=(const ShaderProgram&) = delete;
 
+		void setUniform(const char* name, const int value);
+		void setUniform(const char* name, const float value);
 		void setUniform(const char* name, const glm::vec2& value);
 		void setUniform(const char* name, const glm::vec3& value);
 		void setUniform(const char* name, const glm::vec4& value);
@@ -75,5 +78,9 @@ namespace Leviathan::Graphics {
 		std::string GetInfoLog();
 
 	};
+
+	typedef std::shared_ptr<ShaderProgram> ShaderReference;
+	typedef std::weak_ptr<ShaderProgram> WeakShaderReference;
+
 }
 

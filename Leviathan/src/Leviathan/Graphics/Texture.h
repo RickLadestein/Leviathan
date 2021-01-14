@@ -56,7 +56,7 @@ namespace Leviathan::Graphics {
 
 
 		TextureType type = TextureType::NONE;
-		int textureType;
+		int textureType = 0;
 		bool hasMipmap = false;
 		bool rtg = false;
 		GLuint handle = 0;
@@ -92,8 +92,17 @@ namespace Leviathan::Graphics {
 	public:
 		std::array<WeakTextureReference, MAX_MULTITEX_TEXTURES> textures;
 
+
+		WeakTextureReference& operator[](unsigned int index) {
+			return textures[index];
+		}
+
 		void Bind(bool finaltarget = true) override;
 		void Unbind(bool finaltarget = true) override;
+
+		void SetTexture(WeakTextureReference ref, int texture_layer);
+		void SetTexture(std::string texture_id, int texture_layer);
+		WeakTextureReference GetTexture(int texture_layer);
 	};
 
 

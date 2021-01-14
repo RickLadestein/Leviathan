@@ -19,23 +19,25 @@ using Leviathan::Graphics::Buffers::FrameBuffer;
 namespace Leviathan {
 	bool FacecullingEnabled = false;
 	bool BlendingEnabled = false;
+	const char* texes[8] = {"texture0", "texture1", "texture2" , "texture3", "texture4", "texture5", "texture6", "texture7" };
 	void Renderer::Render(Drawable& entity, std::weak_ptr<Camera> cam)
 	{
 		if (!entity.GetVertexBuffer()->buffers_ready) {
 			std::cout << "Could not load model because buffers were not initialised" << std::endl;
 			return;
 		}
-		std::shared_ptr<ShaderProgram> shader = ShaderProgram::GetShader(entity.GetShader()).lock();
-		std::shared_ptr<Texture> texture = Texture::GetTexture(entity.GetTexture()).lock();
+		std::shared_ptr<ShaderProgram> shader = entity.GetShader().lock();
 		VertexBuffer* vb = entity.GetVertexBuffer();
+		MultiTexture* mtex = entity.GetTextures();
 		std::shared_ptr<Camera> camera = cam.lock();
 
 		if (shader && camera) {
-			if (texture) {
-				texture->Bind();
-			}
-
+			mtex->Bind();
 			shader->bind();
+
+			for (int i = 0; i < MAX_MULTITEX_TEXTURES; i++) {
+				shader->setUniform(texes[i], i);
+			}
 
 			shader->setUniform("projection", camera->GetProjectionMatrix());
 			shader->setUniform("view", camera->GetViewMatrix());
@@ -44,7 +46,7 @@ namespace Leviathan {
 
 			glDrawArrays(GL_TRIANGLES, 0, vb->element_count);
 			shader->unbind();
-			texture->Unbind();
+			mtex->Unbind();
 			vb->Unbind();
 			return;
 

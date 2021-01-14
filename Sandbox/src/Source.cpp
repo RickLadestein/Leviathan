@@ -18,9 +18,8 @@ using Leviathan::Window;
 
 class WorldObject: public Drawable, Entity {
 public:
-	WorldObject(std::string mesh_name) {
-		this->shader = "default";
-		this->texture = "default";
+	WorldObject(std::string mesh_name)
+	: Drawable("default", "default"){
 		Initialize(mesh_name);
 	}
 
@@ -51,7 +50,7 @@ public:
 		ShaderProgram::AddShader("default", "shaders", "default.frag", "default.vert");
 		ShaderProgram::AddShader("crosshair", "shaders", "crosshair.frag", "crosshair.vert");
 		Texture::AddTexture("default", "textures", "awp_color.png", false);
-		Texture::AddTexture("default", "textures", "atlas.png", false);
+		Texture::AddTexture("atlas", "textures", "atlas.png", false);
 		
 		DepthBuffer::Enable();
 		DepthBuffer::SetDepthFunction(DepthFunc::LESS);
@@ -65,6 +64,13 @@ public:
 		//cam = Camera::GetPrimary();
 		this->player = std::make_shared<Player>();
 		wo = new WorldObject("awp");
+		
+		TextureReference tref = Texture::GetTexture("default").lock();
+		if (tref != nullptr) {
+			tref->SetMinMagSetting(MinMagSetting::LINEAR, MinMagSetting::LINEAR);
+		}
+
+		wo->GetTextures()->SetTexture("atlas", 1);
 		wo->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 		timestamp = 0.0;
 	}
@@ -175,7 +181,7 @@ public:
 		 if (event->GetEventType() == EventType::WindowRefresh) {
 			 CheckFps();
 			 CheckKeyboardKeys();
-			 Renderer::Render(*wo, player->GetCamera());
+			 Leviathan::Renderer::Render(*wo, player->GetCamera());
 			 player->Update(this->last_frametime);
 		 }
 	 }

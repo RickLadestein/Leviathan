@@ -7,6 +7,7 @@
 #include <sstream>
 
 #include <unordered_map>
+#include "Leviathan/Data/Dictionary.h"
 
 #define GL_UNIFORM_NOT_FOUND -1
 
@@ -71,6 +72,28 @@ namespace Leviathan::Graphics {
 		}
 	}
 
+	void ShaderProgram::setUniform(const char* name, const int value)
+	{
+		GLint loc = glGetUniformLocation(this->id, name);
+		if (loc != -1) {
+			glUniform1i(loc, value);
+		}
+		else {
+			//std::cout << "Uniform does not exist" << std::endl;
+		}
+	}
+
+	void ShaderProgram::setUniform(const char* name, const float value)
+	{
+		GLint loc = glGetUniformLocation(this->id, name);
+		if (loc != -1) {
+			glUniform1f(loc, value);
+		}
+		else {
+			//std::cout << "Uniform does not exist" << std::endl;
+		}
+	}
+
 	void ShaderProgram::setUniform(const char* name, const glm::vec2& value)
 	{
 		GLint loc = glGetUniformLocation(this->id, name);
@@ -116,26 +139,23 @@ namespace Leviathan::Graphics {
 		}
 	}
 
-	std::unordered_map<std::string, std::shared_ptr<ShaderProgram>> programs;
-
+	Leviathan::Dictionary<std::string, ShaderReference> programs;
 	bool ShaderProgram::AddShader(std::string shader_id, std::string folder_id, std::string frag_file, std::string vert_file)
 	{
 		VertexShader v_shader(folder_id, vert_file);
 		FragmentShader f_shader(folder_id, frag_file);
-
-		try {
-			if (programs.at(shader_id)) {
-				return false;
-			}
-		}
-		catch (std::exception e) {
+		
+		ShaderReference shader;
+		bool succes = programs.try_get_value(shader_id, shader);
+		bool output = false;
+		if (!succes) {
 			std::shared_ptr<ShaderProgram> prg = std::make_shared<ShaderProgram>(v_shader, f_shader);
 			if (prg->rtg) {
 				programs[shader_id] = prg;
-				return true;
+				output = true;
 			}
 		}
-		return false;
+		return output;
 	}
 
 	bool ShaderProgram::AddShader(std::string shader_id, std::string folder_id, std::string frag_file, std::string vert_file, std::string geo_file)
@@ -143,41 +163,41 @@ namespace Leviathan::Graphics {
 		VertexShader v_shader(folder_id, vert_file);
 		FragmentShader f_shader(folder_id, frag_file);
 		GeometryShader g_shader(folder_id, geo_file);
-		try {
-			if (programs.at(shader_id)) {
-				return false;
-			}
-		}
-		catch (std::exception e) {
+
+		ShaderReference shader;
+		bool succes = programs.try_get_value(shader_id, shader);
+		bool output = false;
+		if (!succes) {
 			std::shared_ptr<ShaderProgram> prg = std::make_shared<ShaderProgram>(v_shader, g_shader, f_shader);
 			if (prg->rtg) {
 				programs[shader_id] = prg;
-				return true;
+				output = true;
 			}
 		}
-		return false;
+		return output;
 	}
 
 	std::weak_ptr<ShaderProgram> ShaderProgram::GetShader(std::string id)
 	{
-		try {
-			return programs.at(id);
+		ShaderReference program;
+		bool succes = programs.try_get_value(id, program);
+		if (succes) {
+			return program;
 		}
-		catch (std::exception e) {
-			return std::weak_ptr<ShaderProgram>();
+		else {
+			return WeakShaderReference();
 		}
 	}
 
 	bool ShaderProgram::DeleteShader(std::string id)
 	{
-		try {
-			std::weak_ptr<ShaderProgram> prg = programs.at(id);
+		ShaderReference program;
+		bool succes = programs.try_get_value(id, program);
+		if (succes) {
+			program->unbind();
 			programs.erase(id);
-			return true;
 		}
-		catch (std::exception e) {
-			return false;
-		}
+		return succes;
 	}
 
 	std::string ShaderProgram::GetInfoLog()

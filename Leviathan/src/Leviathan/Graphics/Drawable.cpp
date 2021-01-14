@@ -7,7 +7,8 @@
 #include <iostream>
 #include <memory>
 
-
+#define SHADER_DEFAULT_NAME "default"
+#define TEXTURE_DEFAULT_NAME "default"
 
 namespace Leviathan::Graphics {
 	Drawable::Drawable()
@@ -15,44 +16,66 @@ namespace Leviathan::Graphics {
 		this->position = glm::vec3(0);
 		this->rotation = glm::vec3(0);
 		this->scale = glm::vec3(1);
-
-		this->shader = "default";
-		this->texture = "default";
 		this->model_matrix_changed = true;
 		this->model_matrix = glm::mat4(1.0f);
+
+		this->shader = ShaderProgram::GetShader(SHADER_DEFAULT_NAME);
+		WeakTextureReference tref = Texture::GetTexture(TEXTURE_DEFAULT_NAME);
+		this->textures.SetTexture(tref, 0);
 	}
 
 	Drawable::Drawable(std::string shader, std::string texture)
 	{
-		this->shader = shader.c_str();
-		this->texture = texture.c_str();
 		this->position = glm::vec3(0);
 		this->rotation = glm::vec3(0);
 		this->scale = glm::vec3(1);
 		this->model_matrix_changed = true;
 		this->model_matrix = glm::mat4(1.0f);
+
+		this->shader = ShaderProgram::GetShader(shader);
+		WeakTextureReference tref = Texture::GetTexture(texture);
+		this->textures.SetTexture(tref, 0);
+	}
+
+	Drawable::Drawable(std::string shader, std::vector<std::string> textures)
+	{
+		this->position = glm::vec3(0);
+		this->rotation = glm::vec3(0);
+		this->scale = glm::vec3(1);
+		this->model_matrix_changed = true;
+		this->model_matrix = glm::mat4(1.0f);
+
+		this->shader = ShaderProgram::GetShader(shader);
+		for (int i = 0; i < MAX_MULTITEX_TEXTURES && i < textures.size(); i++) {
+			WeakTextureReference tref = Texture::GetTexture(textures[i]);
+			this->textures.SetTexture(tref, i);
+		}
+		
 	}
 
 	Drawable::Drawable(glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 	{
-		this->shader = "default";
-		this->texture = "default";
 		this->position = position;
 		this->rotation = rotation;
 		this->scale = scale;
 		this->model_matrix_changed = true;
 		this->model_matrix = glm::mat4(1.0f);
+
+		this->shader = ShaderProgram::GetShader(SHADER_DEFAULT_NAME);
+		WeakTextureReference tref = Texture::GetTexture(TEXTURE_DEFAULT_NAME);
+		this->textures.SetTexture(tref, 0);
 	}
 
 	Drawable::Drawable(std::string shader, std::string texture, glm::vec3 position, glm::vec3 rotation, glm::vec3 scale)
 	{
-		this->shader = shader.c_str();
-		this->texture = texture.c_str();
 		this->position = position;
 		this->rotation = rotation;
 		this->scale = scale;
 		this->model_matrix_changed = true;
 		this->model_matrix = glm::mat4(1.0f);
+		this->shader = ShaderProgram::GetShader(shader);
+		WeakTextureReference tref = Texture::GetTexture(texture);
+		this->textures.SetTexture(tref, 0);
 	}
 
 

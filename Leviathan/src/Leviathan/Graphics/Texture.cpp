@@ -62,9 +62,11 @@ namespace Leviathan::Graphics {
 
 	void Texture::Bind(bool finaltarget)
 	{
-		if (bound_texture != nullptr) {
-			std::cerr << "Error: Trying to bind new texture while old texture is still bound" << std::endl;
-			return;
+		if (finaltarget) {
+			if (bound_texture != nullptr) {
+				std::cerr << "Error: Trying to bind new texture while old texture is still bound" << std::endl;
+				return;
+			}
 		}
 
 		if (handle != GL_FALSE) {
@@ -80,13 +82,17 @@ namespace Leviathan::Graphics {
 
 	void Texture::Unbind(bool finaltarget)
 	{
-		if (bound_texture != this) {
-			std::cerr << "Error: Trying to unbind not bound texture" << std::endl;
-			return;
+		if (finaltarget) {
+			if (bound_texture != this) {
+				std::cerr << "Error: Trying to unbind not bound texture" << std::endl;
+				return;
+			}
 		}
 		if (handle != GL_FALSE) {
 			glBindTexture(this->textureType, 0);
-			bound_texture = nullptr;
+			if (finaltarget) {
+				bound_texture = nullptr;
+			}
 		}
 		else {
 			std::cerr << "Error: Trying to unbind uninitialized texture" << std::endl;
@@ -98,6 +104,7 @@ namespace Leviathan::Graphics {
 		this->Bind();
 		glTexParameteri((GLenum)this->type, GL_TEXTURE_WRAP_S, (GLint)s);
 		glTexParameteri((GLenum)this->type, GL_TEXTURE_WRAP_T, (GLint)t);
+		this->Unbind();
 	}
 
 	void Texture::SetMinMagSetting(MinMagSetting min, MinMagSetting mag)
@@ -105,6 +112,7 @@ namespace Leviathan::Graphics {
 		this->Bind();
 		glTexParameteri((GLenum)this->type, GL_TEXTURE_MIN_FILTER, (GLint)min);
 		glTexParameteri((GLenum)this->type, GL_TEXTURE_MAG_FILTER, (GLint)mag);
+		this->Unbind();
 	}
 
 	void Texture::SetMipMapMinMagSetting(MipmapMinMagSetting min, MipmapMinMagSetting mag)
@@ -115,6 +123,7 @@ namespace Leviathan::Graphics {
 		glTexParameteri((GLenum)this->type, GL_TEXTURE_MIN_FILTER, (GLint)min);
 		glTexParameteri((GLenum)this->type, GL_TEXTURE_MAG_FILTER, (GLint)mag);
 		this->hasMipmap = true;
+		this->Unbind();
 	}
 
 
@@ -180,8 +189,14 @@ namespace Leviathan::Graphics {
 			return false;
 		}
 	}
+
+	
 	void MultiTexture::Bind(bool finaltarget)
 	{
+		if (bound_texture != nullptr) {
+			std::cerr << "Error: Trying to bind new texture while old texture is still bound" << std::endl;
+			return;
+		}
 		for (unsigned int i = 0; i < textures.size(); i++) {
 			
 			WeakTextureReference tex = textures[i];
@@ -197,15 +212,54 @@ namespace Leviathan::Graphics {
 
 	void MultiTexture::Unbind(bool finaltarget)
 	{
+		if (bound_texture != this) {
+			std::cerr << "Error: Trying to unbind not bound texture" << std::endl;
+			return;
+		}
 		for (unsigned int i = 0; i < textures.size(); i++) {
 
 			WeakTextureReference tex = textures[i];
 			TextureReference tref = tex.lock();
 			if (tref != nullptr) {
 				glActiveTexture(GL_TEXTURE0 + i);
-				tref->Unbind();
+				tref->Unbind(false);
 			}
 		}
+		bound_texture = nullptr;
+		
 		glActiveTexture(GL_TEXTURE0);
+	}
+
+	WeakTextureReference MultiTexture::GetTexture(int texture_layer)
+	{
+		if (texture_layer >= 0 && texture_layer < MAX_MULTITEX_TEXTURES) {
+			return textures[texture_layer];
+		}
+		else {
+			std::cout << "Texture layer was outside the bounds of MAX_MULTITEX_TEXTURES or negative" << std::endl;
+			return WeakTextureReference();
+		}
+	}
+
+	void MultiTexture::SetTexture(WeakTextureReference ref, int texture_layer)
+	{
+		if (bound_texture == this) {
+			std::cout << "Could not set texture: Multitexture was already bound" << std::endl;
+			return;
+		}
+		else {
+			if (texture_layer >= 0 && texture_layer < MAX_MULTITEX_TEXTURES) {
+				textures[texture_layer] = ref;
+			}
+			else {
+				std::cout << "Texture layer was outside the bounds of MAX_MULTITEX_TEXTURES or negative" << std::endl;
+				return;
+			}
+		}
+	}
+
+	void MultiTexture::SetTexture(std::string texture_id, int texture_layer) {
+		WeakTextureReference tref = Texture::GetTexture(texture_id);
+		this->SetTexture(tref, texture_layer);
 	}
 }
