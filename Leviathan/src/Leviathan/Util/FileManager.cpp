@@ -170,7 +170,7 @@ bool FileManager::WriteDataToFile(std::string folder_id, std::string filename, c
 	return false;
 }
 
-bool FileManager::ImportObjFile(std::string folder_id, std::string filename, std::vector<Primitive>& result)
+bool FileManager::ImportObjFile(std::string folder_id, std::string filename, std::vector<byte>& result, int* primitive_count, PrimitiveType* type)
 {
 	result.clear();
 	std::string inputfile = CombinePath(folder_id, filename);
@@ -194,6 +194,11 @@ bool FileManager::ImportObjFile(std::string folder_id, std::string filename, std
 	if (!ret) {
 		return false;
 	}
+
+	if (shapes.size() == 0) {
+
+	}
+
 	try {
 		for (size_t s = 0; s < shapes.size(); s++) {
 			// Loop over faces(polygon)
@@ -225,9 +230,19 @@ bool FileManager::ImportObjFile(std::string folder_id, std::string filename, std
 				index_offset += fv;
 			}
 		}
-		for (size_t i = 0; i < components.size(); i += 3) {
-			result.push_back({ components[i], components[i + 1], components[i + 2] });
-		}
+		int total_copy_size = components.size() * sizeof(VertexData);
+		result.clear();
+		result.resize(total_copy_size);
+		memcpy(result.data(), components.data(), total_copy_size);
+		*primitive_count = components.size() / 3;
+		*type = PrimitiveType::TRIANGLES;
+
+		/*for (size_t i = 0; i < components.size(); i += 3) {
+			_Primitive pr;
+			TripleVertexData<VertexData, VertexData, VertexData> vdata = { components[i], components[i + 1], components[i + 2] };
+			pr.copyDataFromSource(&vdata, sizeof(TripleVertexData<VertexData, VertexData, VertexData>));
+			result.push_back(pr);
+		}*/
 	}
 	catch (std::exception e) {
 		throw e;

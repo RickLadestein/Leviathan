@@ -1,28 +1,21 @@
 #pragma once
 #include "Leviathan/Data/Structures.h"
 #include "glad/glad.h"
-
+#include "Leviathan/Graphics/Mesh.h"
 #include <vector>
 
 namespace Leviathan::Graphics::Buffers {
-	struct Buffer {
-		GLuint vbo_id = 0;
-		GLuint size = 0;
-		GLuint components = 0;
-	};
-
 	enum class VertexBufferLayout {
 		PNT_SERIAL,
 		PNT_INTERLEAVED,
 	};
 
-
+	
 
 	class VertexBuffer {
 	public:
 		//Construct a normal vbo
-		VertexBuffer(std::vector<Primitive>& primitives);
-
+		VertexBuffer(Mesh& mesh);
 		//Just initialize the buffers
 		VertexBuffer();
 
@@ -34,13 +27,12 @@ namespace Leviathan::Graphics::Buffers {
 		void Bind();
 		void Unbind();
 
-		void BufferData(std::vector<Primitive>& primitives);
-		void BufferData(std::vector<GLint> data, size_t components = 1);
-		void BufferData(std::vector<GLfloat> data, size_t components = 1);
+		void SetPimitiveType(PrimitiveType type) { primitive_type = static_cast<GLenum>(type); }
+		PrimitiveType GetPrimitiveType() { return static_cast<PrimitiveType>(primitive_type); }
 
-		void BufferData(std::vector<glm::vec2> data);
-		void BufferData(std::vector<glm::vec3> data);
-		void BufferData(std::vector<glm::vec4> data);
+		void BufferData(std::vector<Primitive>& primitives);
+		void BufferData(Mesh& mesh);
+		void BufferData(std::shared_ptr<Mesh> mesh);
 
 		void DestroyBuffers();
 
@@ -48,12 +40,23 @@ namespace Leviathan::Graphics::Buffers {
 		bool instance_buffer = false;
 		GLuint element_count;
 	private:
-		void BufferGeneralData(void* data, size_t buffer_size, size_t type_size, size_t components);
-
-		//TODO change to custom list
-		std::vector<Buffer> buffers;
-
+		std::vector<Attribute> attribs;
+		Handle vbo_handle;
+		Handle vao_handle;
+		GLenum primitive_type;
 		size_t current_vao_attrib;
-		GLuint vao;
+
+		size_t GetVertexCountFromPrimitive() {
+			switch (this->GetPrimitiveType()) {
+			case PrimitiveType::POINT:
+				return 1;
+			case PrimitiveType::LINE:
+				return 2;
+			case PrimitiveType::TRIANGLES:
+				return 3;
+			default:
+				return 0;
+			}
+		}
 	};
 }

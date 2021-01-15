@@ -6,7 +6,6 @@
 #include <math.h>
 #include <memory>
 #include "Player.h"
-#include "boost/container_hash/hash.hpp"
 
 using namespace Leviathan::Graphics;
 using namespace Leviathan::Graphics::Buffers;
@@ -26,7 +25,7 @@ public:
 	void Initialize(std::string mesh_name) {
 		std::shared_ptr<Mesh> mesh = Mesh::GetMesh(mesh_name).lock();
 		if (mesh) {
-			this->vertexbuffer.BufferData(mesh->data);
+			this->vertexbuffer.BufferData(mesh);
 		}
 	}
 };
@@ -40,10 +39,10 @@ public:
 	double timestamp;
 	Game() : Application{1080, 720, "Minecraft", WindowMode::WINDOWED} {
 		FileManager::RegisterDirectory("default", FileManager::GetWorkingDir());
-		FileManager::RegisterDirectory("shaders", "C:\\Users\\rladestein\\source\\repos\\Leviathan\\Sandbox\\resources\\shaders");
-		FileManager::RegisterDirectory("textures", "C:\\Users\\rladestein\\source\\repos\\Leviathan\\Sandbox\\resources\\textures");
-		FileManager::RegisterDirectory("models", "C:\\Users\\rladestein\\source\\repos\\Leviathan\\Sandbox\\resources\\models");
-		FileManager::RegisterDirectory("images", "C:\\Users\\rladestein\\source\\repos\\Leviathan\\Sandbox\\resources\\images");
+		FileManager::RegisterDirectory("shaders", "C:\\Users\\dazle\\source\\repos\\Leviathan\\Sandbox\\resources\\shaders");
+		FileManager::RegisterDirectory("textures", "C:\\Users\\dazle\\source\\repos\\Leviathan\\Sandbox\\resources\\textures");
+		FileManager::RegisterDirectory("models", "C:\\Users\\dazle\\source\\repos\\Leviathan\\Sandbox\\resources\\models");
+		FileManager::RegisterDirectory("images", "C:\\Users\\dazle\\source\\repos\\Leviathan\\Sandbox\\resources\\images");
 
 		Mesh::AddMesh("awp", "models", "AWP_Dragon_Lore.obj");
 		Mesh::AddMesh("overlay", "models", "crosshair.obj");

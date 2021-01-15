@@ -11,8 +11,9 @@ namespace Leviathan::Graphics {
 
 	Mesh::Mesh(std::string folder, std::string file)
 	{
-		FileManager::ImportObjFile(folder, file, this->data);
-		if (this->data.size() > 0) {
+		primitive_count = 0;
+		FileManager::ImportObjFile(folder, file, this->primitive_data, &primitive_count, &primitive_type);
+		if (this->primitive_data.size() > 0) {
 			this->ready = true;
 		}
 		else {

@@ -9,7 +9,9 @@ namespace Leviathan::Graphics {
 	class Mesh {
 	public:
 		std::string name;
-		std::vector<Primitive> data;
+		std::vector<byte> primitive_data;
+		int primitive_count;
+		PrimitiveType primitive_type;
 		bool ready;
 
 		Mesh(const Mesh&) = default;
