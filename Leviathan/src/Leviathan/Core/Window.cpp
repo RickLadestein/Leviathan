@@ -1,7 +1,7 @@
 #include "Window.h"
 #include "Leviathan/Graphics/Buffers/DepthBuffer.h"
 #include "Leviathan/Graphics/Buffers/StencilBuffer.h"
-
+#include "Leviathan/Input/InputCodes.h"
 #include <iostream>
 #include <sstream>
 void GLAPIENTRY OnGlError(GLenum source, GLenum type, GLuint id, GLenum severity, GLsizei length, const GLchar* message, const void* userParam);
@@ -377,21 +377,21 @@ namespace Leviathan {
 				switch (action) {
 				case GLFW_PRESS:
 				{
-					Leviathan::Events::KeyPressEvent ev(key);
+					Leviathan::Events::KeyPressEvent ev(static_cast<KeyCode>(key));
 					w_data->keyboard->onKeyEvent(&ev);
 					w_data->EventHandler.Broadcast(&ev);
 					break;
 				}
 				case GLFW_RELEASE:
 				{
-					Leviathan::Events::KeyReleaseEvent ev(key);
+					Leviathan::Events::KeyReleaseEvent ev(static_cast<KeyCode>(key));
 					w_data->keyboard->onKeyEvent(&ev);
 					w_data->EventHandler.Broadcast(&ev);
 					break;
 				}
 				case GLFW_REPEAT:
 				{
-					Leviathan::Events::KeyRepeatEvent ev(key);
+					Leviathan::Events::KeyRepeatEvent ev(static_cast<KeyCode>(key));
 					w_data->EventHandler.Broadcast(&ev);
 				}
 				break;
@@ -412,14 +412,14 @@ namespace Leviathan {
 				switch (action) {
 				case GLFW_PRESS:
 				{
-					Leviathan::Events::MousePressEvent ev(btn);
+					Leviathan::Events::MousePressEvent ev(static_cast<MouseButton>(btn));
 					w_data->mouse->onEvent(&ev);
 					w_data->EventHandler.Broadcast(&ev);
 				}
 				break;
 				case GLFW_RELEASE:
 				{
-					Leviathan::Events::MouseReleaseEvent ev(btn);
+					Leviathan::Events::MouseReleaseEvent ev(static_cast<MouseButton>(btn));
 					w_data->mouse->onEvent(&ev);
 					w_data->EventHandler.Broadcast(&ev);
 				}

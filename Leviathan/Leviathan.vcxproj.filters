@@ -103,6 +103,7 @@
     <ClInclude Include="src\Leviathan\Util\Math.h">
       <Filter>Leviathan\Util</Filter>
     </ClInclude>
+    <ClInclude Include="src\Leviathan\Input\InputCodes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Leviathan\Core\Application.cpp">

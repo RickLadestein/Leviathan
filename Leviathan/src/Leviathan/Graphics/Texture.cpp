@@ -10,6 +10,7 @@ namespace Leviathan::Graphics {
 	
 	int current_texture_layer_count = 0;
 	Texture* bound_texture;
+	const int t_units[8] = { GL_TEXTURE0,  GL_TEXTURE1, GL_TEXTURE2, GL_TEXTURE3, GL_TEXTURE4, GL_TEXTURE5, GL_TEXTURE6, GL_TEXTURE7 };
 
 	Texture2D::Texture2D(std::string folder_id, std::string texture_file, bool mipmap)
 	{
@@ -191,18 +192,19 @@ namespace Leviathan::Graphics {
 	}
 
 	
+	
 	void MultiTexture::Bind(bool finaltarget)
 	{
 		if (bound_texture != nullptr) {
 			std::cerr << "Error: Trying to bind new texture while old texture is still bound" << std::endl;
 			return;
 		}
-		for (unsigned int i = 0; i < textures.size(); i++) {
+		for (unsigned int i = 0; i < MAX_MULTITEX_TEXTURES; i++) {
 			
 			WeakTextureReference tex = textures[i];
 			TextureReference tref = tex.lock();
 			if (tref != nullptr) {
-				glActiveTexture(GL_TEXTURE0 + i);
+				glActiveTexture(t_units[i]);
 				tref->Bind(false);
 			}
 		}
@@ -216,12 +218,12 @@ namespace Leviathan::Graphics {
 			std::cerr << "Error: Trying to unbind not bound texture" << std::endl;
 			return;
 		}
-		for (unsigned int i = 0; i < textures.size(); i++) {
+		for (unsigned int i = 0; i < MAX_MULTITEX_TEXTURES; i++) {
 
 			WeakTextureReference tex = textures[i];
 			TextureReference tref = tex.lock();
 			if (tref != nullptr) {
-				glActiveTexture(GL_TEXTURE0 + i);
+				glActiveTexture(t_units[i]);
 				tref->Unbind(false);
 			}
 		}

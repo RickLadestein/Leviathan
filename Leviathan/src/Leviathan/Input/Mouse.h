@@ -1,7 +1,8 @@
 #pragma once
 #include "Leviathan/Core/Event.h"
 #include "Leviathan/Data/Object.h"
-#include "GLFW/glfw3.h"
+#include "InputCodes.h"
+#include <array>
 
 namespace Leviathan::Input {
 #define MAX_MOUSE_PRESS 5
@@ -16,10 +17,13 @@ namespace Leviathan::Input {
 		INVISIBLE,
 		CENTERED
 	};
+
+	
+
 	class Mouse : public Object {
 	public:
 		Mouse();
-		~Mouse() { delete this->mouse_btns; }
+		~Mouse() = default;
 
 		void GetMousePosition(double* x, double* y);
 		void onEvent(Leviathan::Events::Event* event);
@@ -34,13 +38,13 @@ namespace Leviathan::Input {
 	private:
 		double pos_x, pos_y;
 		double x_delta, y_delta;
-		int* mouse_btns;
+		std::array<MouseButton, MAX_MOUSE_PRESS> mouse_btns;
 		double last_mode_update;
 		MouseInputMode mouseinputmode;
 		MouseMode mousemode;
-		bool CheckIfBtnIsPressed(int btn);
-		void AddBtn(int btn);
-		void RemoveBtn(int btn);
+		bool CheckIfBtnIsPressed(MouseButton btn);
+		void AddBtn(MouseButton btn);
+		void RemoveBtn(MouseButton btn);
 
 		friend class Window;
 	};

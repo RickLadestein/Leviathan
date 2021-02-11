@@ -7,9 +7,8 @@ namespace Leviathan::Input {
 		this->x_delta = 0;
 		this->y_delta = 0;
 		this->last_mode_update = 0;
-		mouse_btns = new int[MAX_MOUSE_PRESS];
-		for (int i = 0; i < MAX_MOUSE_PRESS; i++) {
-			mouse_btns[i] = -1;
+		for (size_t i = 0; i < MAX_MOUSE_PRESS; i++) {
+			mouse_btns[i] = MouseButton::BTN_UNKNOWN;
 		}
 		this->mouseinputmode = MouseInputMode::DEFAULT;
 		this->mousemode = MouseMode::VISIBLE;
@@ -34,19 +33,21 @@ namespace Leviathan::Input {
 		case Leviathan::Events::EventType::MousePress:
 		{
 			Leviathan::Events::MousePressEvent* ev = dynamic_cast<Leviathan::Events::MousePressEvent*> (event);
-			this->AddBtn(ev->GetButton());
+			MouseButton btn = ev->GetButton();
+			this->AddBtn(btn);
 		}
 		break;
 		case Leviathan::Events::EventType::MouseRelease:
 		{
 			Leviathan::Events::MouseReleaseEvent* ev = dynamic_cast<Leviathan::Events::MouseReleaseEvent*> (event);
-			this->RemoveBtn(ev->GetButton());
+			MouseButton _btn = ev->GetButton();
+			this->RemoveBtn(_btn);
 		}
 		break;
 		}
 	}
 
-	bool Mouse::CheckIfBtnIsPressed(int btn)
+	bool Mouse::CheckIfBtnIsPressed(MouseButton btn)
 	{
 		for (int i = 0; i < MAX_MOUSE_PRESS; i++) {
 			if (mouse_btns[i] == btn) {
@@ -56,23 +57,23 @@ namespace Leviathan::Input {
 		return false;
 	}
 
-	void Mouse::AddBtn(int btn)
+	void Mouse::AddBtn(MouseButton btn)
 	{
 		if (!CheckIfBtnIsPressed(btn)) {
 			for (int i = 0; i < MAX_MOUSE_PRESS; i++) {
-				if (mouse_btns[i] == -1) {
+				if (mouse_btns[i] == MouseButton::BTN_UNKNOWN) {
 					mouse_btns[i] = btn;
 				}
 			}
 		}
 	}
 
-	void Mouse::RemoveBtn(int btn)
+	void Mouse::RemoveBtn(MouseButton btn)
 	{
 		if (CheckIfBtnIsPressed(btn)) {
 			for (int i = 0; i < MAX_MOUSE_PRESS; i++) {
 				if (mouse_btns[i] == btn) {
-					mouse_btns[i] = -1;
+					mouse_btns[i] = MouseButton::BTN_UNKNOWN;
 				}
 			}
 		}

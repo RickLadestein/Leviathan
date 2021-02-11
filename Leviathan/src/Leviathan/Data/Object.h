@@ -1,7 +1,5 @@
-#pragma once
-#include <typeinfo>
+#pragma once 
 #include <string>
-#include <sstream>   
 
 
 class Object {
@@ -12,6 +10,6 @@ public:
 	std::string GetHashCode();
 
 	virtual std::string ToString();
-protected:
-	long uuid;
+private:
+	size_t uuid;
 };

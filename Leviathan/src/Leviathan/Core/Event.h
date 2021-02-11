@@ -1,8 +1,8 @@
 #pragma once
-#include "Leviathan/Data/Object.h"
 #include "Leviathan/Data/Timestep.h"
 #include <functional>
 #include <string>
+#include "Leviathan/Input/InputCodes.h"
 
 
 
@@ -40,7 +40,7 @@ namespace Leviathan::Events {
 
 #define EVENT_CLASS_CATEGORY(category) virtual EventCategory GetCategory() const override { return EventCategory::category; }
 
-	class  Event : public Object {
+	class  Event {
 	public:
 		bool handled = false;
 		virtual ~Event() = default;
@@ -122,28 +122,27 @@ namespace Leviathan::Events {
 
 	class  MousePressEvent : public Event {
 	public:
-		MousePressEvent(int btn) :
-			button(btn) {}
+		MousePressEvent(MouseButton btn) : button(btn) {}
 
-		inline int GetButton() { return button; }
+		inline MouseButton GetButton() { return button; }
 
 		EVENT_CLASS_TYPE(MousePress)
 		EVENT_CLASS_CATEGORY(MouseEvent)
 	private:
-		int button;
+		MouseButton button;
 	};
 
 	class  MouseReleaseEvent : public Event {
 	public:
-		MouseReleaseEvent(int btn) :
+		MouseReleaseEvent(MouseButton btn) :
 			button(btn) {}
 
-		inline int GetButton() { return button; }
+		inline MouseButton GetButton() { return button; }
 
 		EVENT_CLASS_TYPE(MouseRelease)
 		EVENT_CLASS_CATEGORY(MouseEvent)
 	private:
-		int button;
+		MouseButton button;
 	};
 
 	class  MouseWheelEvent : public Event {
@@ -163,41 +162,41 @@ namespace Leviathan::Events {
 #pragma region Keyboard_Event
 	class  KeyPressEvent : public Event {
 	public:
-		KeyPressEvent(int key) :
+		KeyPressEvent(KeyCode key) :
 			press_key(key) {}
 
-		inline int GetKey() { return press_key; }
+		inline KeyCode GetKey() { return press_key; }
 
 		EVENT_CLASS_TYPE(KeyPress)
 		EVENT_CLASS_CATEGORY(KeyboardEvent)
 	private:
-		int press_key;
+		KeyCode press_key;
 	};
 
 	class  KeyReleaseEvent : public Event {
 	public:
-		KeyReleaseEvent(int key) :
+		KeyReleaseEvent(KeyCode key) :
 			release_key(key) {}
 
-		inline int GetKey() { return release_key; }
+		inline KeyCode GetKey() { return release_key; }
 
 		EVENT_CLASS_TYPE(KeyRelease)
 		EVENT_CLASS_CATEGORY(KeyboardEvent)
 	protected:
-		int release_key;
+		KeyCode release_key;
 	};
 
 	class  KeyRepeatEvent : public Event {
 	public:
-		KeyRepeatEvent(int key) :
+		KeyRepeatEvent(KeyCode key) :
 			repeat_key(key) {}
 
-		inline int GetKey() { return repeat_key; }
+		inline KeyCode GetKey() { return repeat_key; }
 
 		EVENT_CLASS_TYPE(KeyRepeat)
 		EVENT_CLASS_CATEGORY(KeyboardEvent)
 	protected:
-		int repeat_key;
+		KeyCode repeat_key;
 	};
 
 	class  KeyTypeEvent : public Event {

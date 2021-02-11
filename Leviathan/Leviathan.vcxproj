@@ -115,6 +115,7 @@
     <ClInclude Include="src\Leviathan\Graphics\Mesh.h" />
     <ClInclude Include="src\Leviathan\Graphics\Shader.h" />
     <ClInclude Include="src\Leviathan\Graphics\Texture.h" />
+    <ClInclude Include="src\Leviathan\Input\InputCodes.h" />
     <ClInclude Include="src\Leviathan\Input\Keyboard.h" />
     <ClInclude Include="src\Leviathan\Input\Mouse.h" />
     <ClInclude Include="src\Leviathan\Util\Delegate\Delegate.h" />

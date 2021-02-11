@@ -56,7 +56,6 @@ public:
 		
 		DepthBuffer::Enable();
 		DepthBuffer::SetDepthFunction(DepthFunc::LESS);
-
 		std::shared_ptr<Leviathan::Image> im = Leviathan::Image::Load("default", "logo.png");
 		std::shared_ptr<Leviathan::Window> window = this->GetWindow().lock();
 		window->SetWindowIcon(im);
@@ -74,7 +73,7 @@ public:
 		wo1->setPosition(glm::vec3(5.0f, 0.0f, 5.0f));
 		wo2->setShader("colblock");
 		wo2->setPosition(glm::vec3(0.0f, 0.0f, 5.0f));
-		
+
 		TextureReference tref = Texture::GetTexture("default").lock();
 		if (tref != nullptr) {
 			tref->SetMinMagSetting(MinMagSetting::LINEAR, MinMagSetting::LINEAR);
@@ -139,33 +138,33 @@ public:
 	 void CheckKeyboardKeys() {
 		 std::shared_ptr<Keyboard> keyboard = this->GetKeyboard().lock();
 		 if (keyboard) {
-			 std::vector<int> pressed_keys;
+			 std::vector<KeyCode> pressed_keys;
 
 			 keyboard->GetPressedKeys(&pressed_keys);
 			 for (size_t i = 0; i < pressed_keys.size(); i++) {
 				 switch (pressed_keys[i]) {
-				 case GLFW_KEY_W:
+				 case KeyCode::KEY_W:
 					 player->MoveForeward(this->last_frametime.GetSeconds() * key_mult);
 					 break;
-				 case GLFW_KEY_S:
+				 case KeyCode::KEY_S:
 					 player->MoveBackward(this->last_frametime.GetSeconds() * key_mult);
 					 break;
-				 case GLFW_KEY_A:
+				 case KeyCode::KEY_A:
 					 player->MoveLeft(this->last_frametime.GetSeconds() * key_mult);
 					 break;
-				 case GLFW_KEY_D:
+				 case KeyCode::KEY_D:
 					 player->MoveRight(this->last_frametime.GetSeconds() * key_mult);
 					 break;
-				 case GLFW_KEY_UP:
+				 case KeyCode::KEY_UP:
 					 player->AddVelocity(glm::vec3(0.0f, 1.0f, 0.0f));
 					 break;
-				 case GLFW_KEY_SPACE:
+				 case KeyCode::KEY_SPACE:
 					 player->MoveUp(this->last_frametime.GetSeconds() * key_mult);
 					 break;
-				 case GLFW_KEY_LEFT_SHIFT:
+				 case KeyCode::KEY_LEFT_SHIFT:
 					 player->MoveDown(this->last_frametime.GetSeconds() * key_mult);
 					 break;
-				 case GLFW_KEY_E:
+				 case KeyCode::KEY_E:
 				 {
 					 std::shared_ptr<Leviathan::Window> window = this->GetWindow().lock();
 					 if (window) {
@@ -178,6 +177,10 @@ public:
 					 }
 				 }
 					 break;
+				 case KeyCode::KEY_U:
+					 std::cout << player->ToString() << " | " << player->GetHashCode() << std::endl;
+					 break;
+				 
 				 default:
 					 continue;
 				 }
