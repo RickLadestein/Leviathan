@@ -1,25 +1,17 @@
 workspace "Leviathan"
 	configurations 
 	{
-		"Debug_x86",
-		"Release_x86",
-		"Debug_x64",
-		"Release_x64"
+		"Debug",
+		"Release"
 	}
-    filter "configurations:*86"
-      architecture "x86"
-
-	filter "configurations:*64"
-      architecture "x86_64"
-
+	architecture "x86_64"
+	
 outputdir = "%{prj.name}/%{cfg.buildcfg}"
 IncludeDir = {}
 IncludeDir["Glfw"] = "Leviathan/external/Glfw/include"
 IncludeDir["Glad"] = "Leviathan/external/Glad/include"
 IncludeDir["Leviathan"] = "Leviathan/src"
 IncludeDir["Boost"] = "C:/Program Files/boost/boost_1_74_0"
-
-
 
 group "Dependencies"
 	include "Leviathan/external/Glad"
@@ -61,38 +53,18 @@ project "Leviathan"
 		"GLFW_INCLUDE_NONE"
 	}
 	
-	
-	filter "configurations:*86"
-		libdirs {"%{prj.name}/external/libs/%{cfg.architecture}"}
+	libdirs {"%{prj.name}/external/libs/%{cfg.architecture}"}
 		links 
 		{
 			"opengl32.lib",
 			"Glad",
 			"Glfw"
-		}
-		
-		
-	filter "configurations:*64"
-		libdirs {"%{prj.name}/external/libs/%{cfg.architecture}"}
-		links 
-		{
-			"opengl32.lib",
-			"Glad",
-			"Glfw"
-		}
+		}	
 	
-	
-	
-	filter "configurations:Debug_x86"
+	filter "configurations:Debug"
 		defines "LV_DEBUG"
 		symbols "On"
-	filter "configurations:Release_x86"
-		defines "LV_RELEASE"
-		optimize "On"
-	filter "configurations:Debug_x64"
-		defines "LV_DEBUG"
-		symbols "On"
-	filter "configurations:Release_x64"
+	filter "configurations:Release"
 		defines "LV_RELEASE"
 		optimize "On"
 		
@@ -132,16 +104,10 @@ project "Sandbox"
 		"Leviathan"
 	}
 	
-	filter "configurations:Debug_x86"
+	filter "configurations:Debug"
 		defines "LV_DEBUG"
 		symbols "On"
-	filter "configurations:Release_x86"
-		defines "LV_RELEASE"
-		optimize "On"
-	filter "configurations:Debug_x64"
-		defines "LV_DEBUG"
-		symbols "On"
-	filter "configurations:Release_x64"
+	filter "configurations:Release"
 		defines "LV_RELEASE"
 		optimize "On"
 	

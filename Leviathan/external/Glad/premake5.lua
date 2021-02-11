@@ -6,11 +6,12 @@ project "Glad"
 	toolset "msc-v142"
 	targetdir ("bin/%{cfg.architecture}")
 	objdir ("bin-int/%{cfg.architecture}")
+	architecture "x86_64"
 	
 	configurations 
 	{
-		"Release_x64",
-		"Release_x86"
+		"Debug",
+		"Release"
 	}
 	optimize "on"
     
@@ -25,9 +26,3 @@ project "Glad"
 	{
 		"include"
 	}
-	
-	filter "configurations:*86"
-      architecture "x86"
-
-	filter "configurations:*64"
-      architecture "x86_64"
