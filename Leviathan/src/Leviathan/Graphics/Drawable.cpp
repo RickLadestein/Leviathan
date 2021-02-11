@@ -80,6 +80,11 @@ namespace Leviathan::Graphics {
 
 
 
+	void Drawable::setShader(std::string shader_id)
+	{
+		this->shader = ShaderProgram::GetShader(shader_id);
+	}
+
 	void Drawable::Translate(float x, float y, float z)
 	{
 		this->position += glm::vec3(x, y, z);

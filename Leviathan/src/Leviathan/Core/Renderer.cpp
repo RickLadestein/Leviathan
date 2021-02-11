@@ -42,6 +42,7 @@ namespace Leviathan {
 			shader->setUniform("projection", camera->GetProjectionMatrix());
 			shader->setUniform("view", camera->GetViewMatrix());
 			shader->setUniform("model", entity.GetModelMatrix());
+			shader->setUniform("time", glfwGetTime());
 			vb->Bind();
 
 			glDrawArrays(GL_TRIANGLES, 0, vb->element_count);

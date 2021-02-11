@@ -79,7 +79,22 @@ namespace Leviathan::Graphics {
 			glUniform1i(loc, value);
 		}
 		else {
-			//std::cout << "Uniform does not exist" << std::endl;
+#ifdef LEVIATHAN_DEBUG_SHADER
+			std::cout << "Uniform" << name << " does not exist" << std::endl;
+#endif
+		}
+	}
+
+	void ShaderProgram::setUniform(const char* name, const unsigned int value)
+	{
+		GLint loc = glGetUniformLocation(this->id, name);
+		if (loc != -1) {
+			glUniform1ui(loc, value);
+		}
+		else {
+#ifdef LEVIATHAN_DEBUG_SHADER
+			std::cout << "Uniform" << name << " does not exist" << std::endl;
+#endif
 		}
 	}
 
@@ -90,7 +105,22 @@ namespace Leviathan::Graphics {
 			glUniform1f(loc, value);
 		}
 		else {
-			//std::cout << "Uniform does not exist" << std::endl;
+#ifdef LEVIATHAN_DEBUG_SHADER
+			std::cout << "Uniform" << name << " does not exist" << std::endl;
+#endif
+		}
+	}
+	
+	void ShaderProgram::setUniform(const char* name, const double value)
+	{
+		GLint loc = glGetUniformLocation(this->id, name);
+		if (loc != -1) {
+			glUniform1d(loc, value);
+		}
+		else {
+#ifdef LEVIATHAN_DEBUG_SHADER
+			std::cout << "Uniform" << name << " does not exist" << std::endl;
+#endif
 		}
 	}
 
@@ -101,7 +131,35 @@ namespace Leviathan::Graphics {
 			glUniform2f(loc, value.x, value.y);
 		}
 		else {
-			//std::cout << "Uniform does not exist" << std::endl;
+#ifdef LEVIATHAN_DEBUG_SHADER
+			std::cout << "Uniform" << name << " does not exist" << std::endl;
+#endif
+		}
+	}
+
+	void ShaderProgram::setUniform(const char* name, const glm::ivec2& value)
+	{
+		GLint loc = glGetUniformLocation(this->id, name);
+		if (loc != -1) {
+			glUniform2i(loc, value.x, value.y);
+		}
+		else {
+#ifdef LEVIATHAN_DEBUG_SHADER
+			std::cout << "Uniform" << name << " does not exist" << std::endl;
+#endif
+		}
+	}
+
+	void ShaderProgram::setUniform(const char* name, const glm::dvec2& value)
+	{
+		GLint loc = glGetUniformLocation(this->id, name);
+		if (loc != -1) {
+			glUniform2d(loc, value.x, value.y);
+		}
+		else {
+#ifdef LEVIATHAN_DEBUG_SHADER
+			std::cout << "Uniform" << name << " does not exist" << std::endl;
+#endif
 		}
 	}
 
@@ -112,7 +170,35 @@ namespace Leviathan::Graphics {
 			glUniform3f(loc, value.x, value.y, value.z);
 		}
 		else {
-			//std::cout << "Uniform does not exist" << std::endl;
+#ifdef LEVIATHAN_DEBUG_SHADER
+			std::cout << "Uniform" << name << " does not exist" << std::endl;
+#endif
+		}
+	}
+
+	void ShaderProgram::setUniform(const char* name, const glm::ivec3& value)
+	{
+		GLint loc = glGetUniformLocation(this->id, name);
+		if (loc != GL_UNIFORM_NOT_FOUND) {
+			glUniform3i(loc, value.x, value.y, value.z);
+		}
+		else {
+#ifdef LEVIATHAN_DEBUG_SHADER
+			std::cout << "Uniform" << name << " does not exist" << std::endl;
+#endif
+		}
+	}
+
+	void ShaderProgram::setUniform(const char* name, const glm::dvec3& value)
+	{
+		GLint loc = glGetUniformLocation(this->id, name);
+		if (loc != GL_UNIFORM_NOT_FOUND) {
+			glUniform3d(loc, value.x, value.y, value.z);
+		}
+		else {
+#ifdef LEVIATHAN_DEBUG_SHADER
+			std::cout << "Uniform" << name << " does not exist" << std::endl;
+#endif
 		}
 	}
 
@@ -123,7 +209,35 @@ namespace Leviathan::Graphics {
 			glUniform4f(loc, value.x, value.y, value.z, value.w);
 		}
 		else {
-			//std::cout << "Uniform does not exist" << std::endl;
+#ifdef LEVIATHAN_DEBUG_SHADER
+			std::cout << "Uniform" << name << " does not exist" << std::endl;
+#endif
+		}
+	}
+
+	void ShaderProgram::setUniform(const char* name, const glm::ivec4& value)
+	{
+		GLint loc = glGetUniformLocation(this->id, name);
+		if (loc != GL_UNIFORM_NOT_FOUND) {
+			glUniform4i(loc, value.x, value.y, value.z, value.w);
+		}
+		else {
+#ifdef LEVIATHAN_DEBUG_SHADER
+			std::cout << "Uniform" << name << " does not exist" << std::endl;
+#endif
+		}
+	}
+
+	void ShaderProgram::setUniform(const char* name, const glm::dvec4& value)
+	{
+		GLint loc = glGetUniformLocation(this->id, name);
+		if (loc != GL_UNIFORM_NOT_FOUND) {
+			glUniform4d(loc, value.x, value.y, value.z, value.w);
+		}
+		else {
+#ifdef LEVIATHAN_DEBUG_SHADER
+			std::cout << "Uniform" << name << " does not exist" << std::endl;
+#endif
 		}
 	}
 
@@ -134,8 +248,9 @@ namespace Leviathan::Graphics {
 			glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(value));
 		}
 		else {
-			//std::cout << "Uniform: " << name << " does not exist" << std::endl;
-
+#ifdef LEVIATHAN_DEBUG_SHADER
+			std::cout << "Uniform" << name << " does not exist" << std::endl;
+#endif
 		}
 	}
 

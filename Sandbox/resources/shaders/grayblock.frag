@@ -6,6 +6,6 @@ in vec3 Normal;
 
 void main()
 {
-	vec4 color = vec4(vec3(abs(Normal.x), abs(Normal.y), abs(Normal.z)), 1.0);
+	vec4 color = vec4(0.75, 0.75, 0.75, 1.0);
 	FragColor = color;
 } 

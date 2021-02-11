@@ -63,10 +63,22 @@ namespace Leviathan::Graphics {
 		ShaderProgram& operator=(const ShaderProgram&) = delete;
 
 		void setUniform(const char* name, const int value);
+		void setUniform(const char* name, const unsigned int value);
 		void setUniform(const char* name, const float value);
+		void setUniform(const char* name, const double value);
+		
 		void setUniform(const char* name, const glm::vec2& value);
 		void setUniform(const char* name, const glm::vec3& value);
 		void setUniform(const char* name, const glm::vec4& value);
+
+		void setUniform(const char* name, const glm::ivec2& value);
+		void setUniform(const char* name, const glm::ivec3& value);
+		void setUniform(const char* name, const glm::ivec4& value);
+
+		void setUniform(const char* name, const glm::dvec2& value);
+		void setUniform(const char* name, const glm::dvec3& value);
+		void setUniform(const char* name, const glm::dvec4& value);
+		
 		void setUniform(const char* name, const glm::mat4& value);
 
 		static bool AddShader(std::string shader_id, std::string folder_id, std::string frag_file, std::string vert_file);

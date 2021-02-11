@@ -7,6 +7,8 @@
 #include <memory>
 #include "Player.h"
 
+#define LEVIATHAN_DEBUG_SHADER
+
 using namespace Leviathan::Graphics;
 using namespace Leviathan::Graphics::Buffers;
 using namespace Leviathan::Input;
@@ -18,7 +20,7 @@ using Leviathan::Window;
 class WorldObject: public Drawable, Entity {
 public:
 	WorldObject(std::string mesh_name)
-	: Drawable("default", "default"){
+	: Drawable(){
 		Initialize(mesh_name);
 	}
 
@@ -33,6 +35,8 @@ public:
 class Game : public Application {
 public:
 	WorldObject* wo;
+	WorldObject* wo1;
+	WorldObject* wo2;
 	Timestep last_frametime;
 	std::shared_ptr<Player> player;
 
@@ -44,12 +48,11 @@ public:
 		FileManager::RegisterDirectory("models", "C:\\Users\\dazle\\source\\repos\\Leviathan\\Sandbox\\resources\\models");
 		FileManager::RegisterDirectory("images", "C:\\Users\\dazle\\source\\repos\\Leviathan\\Sandbox\\resources\\images");
 
-		Mesh::AddMesh("awp", "models", "AWP_Dragon_Lore.obj");
-		Mesh::AddMesh("overlay", "models", "crosshair.obj");
-		ShaderProgram::AddShader("default", "shaders", "default.frag", "default.vert");
-		ShaderProgram::AddShader("crosshair", "shaders", "crosshair.frag", "crosshair.vert");
-		Texture::AddTexture("default", "textures", "awp_color.png", false);
-		Texture::AddTexture("atlas", "textures", "atlas.png", false);
+		Mesh::AddMesh("cube", "models", "cube_t.obj");
+		ShaderProgram::AddShader("block", "shaders", "block.frag", "block.vert");
+		ShaderProgram::AddShader("block", "shaders", "block.frag", "block.vert");
+		ShaderProgram::AddShader("grayblock", "shaders", "grayblock.frag", "grayblock.vert");
+		ShaderProgram::AddShader("colblock", "shaders", "colblock.frag", "colblock.vert");
 		
 		DepthBuffer::Enable();
 		DepthBuffer::SetDepthFunction(DepthFunc::LESS);
@@ -62,15 +65,21 @@ public:
 		this->last_frametime = 0.0;
 		//cam = Camera::GetPrimary();
 		this->player = std::make_shared<Player>();
-		wo = new WorldObject("awp");
+		wo = new WorldObject("cube");
+		wo1 = new WorldObject("cube");
+		wo2 = new WorldObject("cube");
+		wo->setShader("block");
+		wo->setPosition(glm::vec3(5.0f, 0.0f, 0.0f));
+		wo1->setShader("grayblock");
+		wo1->setPosition(glm::vec3(5.0f, 0.0f, 5.0f));
+		wo2->setShader("colblock");
+		wo2->setPosition(glm::vec3(0.0f, 0.0f, 5.0f));
 		
 		TextureReference tref = Texture::GetTexture("default").lock();
 		if (tref != nullptr) {
 			tref->SetMinMagSetting(MinMagSetting::LINEAR, MinMagSetting::LINEAR);
 		}
 
-		wo->GetTextures()->SetTexture("atlas", 1);
-		wo->setPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 		timestamp = 0.0;
 	}
 	~Game() = default;
@@ -126,6 +135,7 @@ public:
 		 
 	 }
 
+	 float key_mult = 0.05f;
 	 void CheckKeyboardKeys() {
 		 std::shared_ptr<Keyboard> keyboard = this->GetKeyboard().lock();
 		 if (keyboard) {
@@ -135,25 +145,25 @@ public:
 			 for (size_t i = 0; i < pressed_keys.size(); i++) {
 				 switch (pressed_keys[i]) {
 				 case GLFW_KEY_W:
-					 player->MoveForeward(this->last_frametime);
+					 player->MoveForeward(this->last_frametime.GetSeconds() * key_mult);
 					 break;
 				 case GLFW_KEY_S:
-					 player->MoveBackward(this->last_frametime);
+					 player->MoveBackward(this->last_frametime.GetSeconds() * key_mult);
 					 break;
 				 case GLFW_KEY_A:
-					 player->MoveLeft(this->last_frametime);
+					 player->MoveLeft(this->last_frametime.GetSeconds() * key_mult);
 					 break;
 				 case GLFW_KEY_D:
-					 player->MoveRight(this->last_frametime);
+					 player->MoveRight(this->last_frametime.GetSeconds() * key_mult);
 					 break;
 				 case GLFW_KEY_UP:
 					 player->AddVelocity(glm::vec3(0.0f, 1.0f, 0.0f));
 					 break;
 				 case GLFW_KEY_SPACE:
-					 player->MoveUp(this->last_frametime);
+					 player->MoveUp(this->last_frametime.GetSeconds() * key_mult);
 					 break;
 				 case GLFW_KEY_LEFT_SHIFT:
-					 player->MoveDown(this->last_frametime);
+					 player->MoveDown(this->last_frametime.GetSeconds() * key_mult);
 					 break;
 				 case GLFW_KEY_E:
 				 {
@@ -181,10 +191,16 @@ public:
 			 CheckFps();
 			 CheckKeyboardKeys();
 			 Leviathan::Renderer::Render(*wo, player->GetCamera());
+			 wo->RotateDegrees(glm::vec3(this->last_frametime, 0.0f, 0.0f));
+			 Leviathan::Renderer::Render(*wo1, player->GetCamera());
+			 wo1->RotateDegrees(glm::vec3(this->last_frametime, 0.0f, this->last_frametime));
+			 Leviathan::Renderer::Render(*wo2, player->GetCamera());
+			 wo2->RotateDegrees(glm::vec3(0.0f, this->last_frametime, 0.0f));
 			 player->Update(this->last_frametime);
 		 }
 	 }
 };
+
 int main() {
 	std::unique_ptr<Game> app = std::make_unique<Game>();
 	app->Run();
