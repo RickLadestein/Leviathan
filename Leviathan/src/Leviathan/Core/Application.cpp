@@ -53,11 +53,4 @@ namespace Leviathan {
 		}
 		return std::weak_ptr<Leviathan::Input::Mouse>();
 	}
-
-	std::string Application::ToString()
-	{
-		std::stringstream ss;
-		ss << "Application: " << this->GetHashCode();
-		return ss.str();
-	}
 }

@@ -49,9 +49,6 @@
     <ClInclude Include="src\Leviathan\Data\Image.h">
       <Filter>Leviathan\Data</Filter>
     </ClInclude>
-    <ClInclude Include="src\Leviathan\Data\Object.h">
-      <Filter>Leviathan\Data</Filter>
-    </ClInclude>
     <ClInclude Include="src\Leviathan\Data\Structures.h">
       <Filter>Leviathan\Data</Filter>
     </ClInclude>
@@ -85,6 +82,9 @@
     <ClInclude Include="src\Leviathan\Graphics\Texture.h">
       <Filter>Leviathan\Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="src\Leviathan\Input\InputCodes.h">
+      <Filter>Leviathan\Input</Filter>
+    </ClInclude>
     <ClInclude Include="src\Leviathan\Input\Keyboard.h">
       <Filter>Leviathan\Input</Filter>
     </ClInclude>
@@ -103,7 +103,6 @@
     <ClInclude Include="src\Leviathan\Util\Math.h">
       <Filter>Leviathan\Util</Filter>
     </ClInclude>
-    <ClInclude Include="src\Leviathan\Input\InputCodes.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Leviathan\Core\Application.cpp">
@@ -119,9 +118,6 @@
       <Filter>Leviathan\Data</Filter>
     </ClCompile>
     <ClCompile Include="src\Leviathan\Data\Image.cpp">
-      <Filter>Leviathan\Data</Filter>
-    </ClCompile>
-    <ClCompile Include="src\Leviathan\Data\Object.cpp">
       <Filter>Leviathan\Data</Filter>
     </ClCompile>
     <ClCompile Include="src\Leviathan\Graphics\Buffers\DepthBuffer.cpp">

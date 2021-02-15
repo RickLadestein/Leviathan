@@ -58,7 +58,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>LV_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;LV_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>external\include;..\Leviathan\src;..\Leviathan\external\include;..\Leviathan\external\Glad\include;..\Leviathan\external\Glfw\include;C:\Program Files\boost\boost_1_74_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>external\include;..\Leviathan\src;..\Leviathan\external\include;..\Leviathan\external\Glad\include;..\Leviathan\external\Glfw\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
       <LanguageStandard>stdcpp17</LanguageStandard>
@@ -73,7 +73,7 @@
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <PreprocessorDefinitions>LV_PLATFORM_WINDOWS;GLFW_INCLUDE_NONE;LV_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>external\include;..\Leviathan\src;..\Leviathan\external\include;..\Leviathan\external\Glad\include;..\Leviathan\external\Glfw\include;C:\Program Files\boost\boost_1_74_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>external\include;..\Leviathan\src;..\Leviathan\external\include;..\Leviathan\external\Glad\include;..\Leviathan\external\Glfw\include;src;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
@@ -89,11 +89,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="src\Player.h" />
+    <ClInclude Include="src\World\Chunk.h" />
     <ClInclude Include="src\World\World.h" />
+    <ClInclude Include="src\World\WorldObject.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Source.cpp" />
+    <ClCompile Include="src\World\Chunk.cpp" />
+    <ClCompile Include="src\World\WorldObject.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Leviathan\Leviathan.vcxproj">

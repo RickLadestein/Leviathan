@@ -103,7 +103,6 @@
     <ClInclude Include="src\Leviathan\Data\Dictionary.h" />
     <ClInclude Include="src\Leviathan\Data\Entity.h" />
     <ClInclude Include="src\Leviathan\Data\Image.h" />
-    <ClInclude Include="src\Leviathan\Data\Object.h" />
     <ClInclude Include="src\Leviathan\Data\Structures.h" />
     <ClInclude Include="src\Leviathan\Data\Timestep.h" />
     <ClInclude Include="src\Leviathan\Graphics\Buffers\DepthBuffer.h" />
@@ -129,7 +128,6 @@
     <ClCompile Include="src\Leviathan\Core\Window.cpp" />
     <ClCompile Include="src\Leviathan\Data\Entity.cpp" />
     <ClCompile Include="src\Leviathan\Data\Image.cpp" />
-    <ClCompile Include="src\Leviathan\Data\Object.cpp" />
     <ClCompile Include="src\Leviathan\Graphics\Buffers\DepthBuffer.cpp" />
     <ClCompile Include="src\Leviathan\Graphics\Buffers\FrameBuffer.cpp" />
     <ClCompile Include="src\Leviathan\Graphics\Buffers\StencilBuffer.cpp" />
@@ -154,4 +152,4 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-</Project>
+</Project> 

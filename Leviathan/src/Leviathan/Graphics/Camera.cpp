@@ -181,7 +181,6 @@ std::shared_ptr<Camera> Camera::GetPrimary()
 
 void Camera::CalculateViewMatrix()
 {
-	
 		glm::quat QuatAroundX = glm::quat(glm::vec3(0.0f, 0.0f, 0.0f));
 		glm::quat QuatAroundY = glm::quat(glm::vec3(0.0f, glm::radians(this->rotation.y), 0.0f));
 		glm::quat QuatAroundZ = glm::quat(glm::vec3(0.0f, 0.0f, glm::radians(-this->rotation.x)));

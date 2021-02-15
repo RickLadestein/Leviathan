@@ -6,6 +6,7 @@
 #include <math.h>
 #include <memory>
 #include "Player.h"
+#include "World/WorldObject.h"
 
 #define LEVIATHAN_DEBUG_SHADER
 
@@ -17,26 +18,9 @@ using namespace Leviathan::Events;
 
 using Leviathan::Window;
 
-class WorldObject: public Drawable, Entity {
-public:
-	WorldObject(std::string mesh_name)
-	: Drawable(){
-		Initialize(mesh_name);
-	}
-
-	void Initialize(std::string mesh_name) {
-		std::shared_ptr<Mesh> mesh = Mesh::GetMesh(mesh_name).lock();
-		if (mesh) {
-			this->vertexbuffer.BufferData(mesh);
-		}
-	}
-};
-
 class Game : public Application {
 public:
 	WorldObject* wo;
-	WorldObject* wo1;
-	WorldObject* wo2;
 	Timestep last_frametime;
 	std::shared_ptr<Player> player;
 
@@ -64,15 +48,10 @@ public:
 		this->last_frametime = 0.0;
 		//cam = Camera::GetPrimary();
 		this->player = std::make_shared<Player>();
-		wo = new WorldObject("cube");
-		wo1 = new WorldObject("cube");
-		wo2 = new WorldObject("cube");
-		wo->setShader("block");
+		wo = new WorldObject();
+		wo->setMesh("cube");
+		wo->setShader("colblock");
 		wo->setPosition(glm::vec3(5.0f, 0.0f, 0.0f));
-		wo1->setShader("grayblock");
-		wo1->setPosition(glm::vec3(5.0f, 0.0f, 5.0f));
-		wo2->setShader("colblock");
-		wo2->setPosition(glm::vec3(0.0f, 0.0f, 5.0f));
 
 		TextureReference tref = Texture::GetTexture("default").lock();
 		if (tref != nullptr) {
@@ -177,9 +156,6 @@ public:
 					 }
 				 }
 					 break;
-				 case KeyCode::KEY_U:
-					 std::cout << player->ToString() << " | " << player->GetHashCode() << std::endl;
-					 break;
 				 
 				 default:
 					 continue;
@@ -194,11 +170,7 @@ public:
 			 CheckFps();
 			 CheckKeyboardKeys();
 			 Leviathan::Renderer::Render(*wo, player->GetCamera());
-			 wo->RotateDegrees(glm::vec3(this->last_frametime, 0.0f, 0.0f));
-			 Leviathan::Renderer::Render(*wo1, player->GetCamera());
-			 wo1->RotateDegrees(glm::vec3(this->last_frametime, 0.0f, this->last_frametime));
-			 Leviathan::Renderer::Render(*wo2, player->GetCamera());
-			 wo2->RotateDegrees(glm::vec3(0.0f, this->last_frametime, 0.0f));
+			 wo->RotateDeg(glm::vec3(this->last_frametime, 0.0f, 0.0f));
 			 player->Update(this->last_frametime);
 		 }
 	 }

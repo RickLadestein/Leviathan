@@ -1,6 +1,5 @@
 #pragma once
 #include "Leviathan/Data/Structures.h"
-
 #include <string>
 #include <vector>
 #include <memory>
@@ -21,9 +20,14 @@ namespace Leviathan::Graphics {
 		Mesh() = delete;
 		~Mesh() = default;
 	public:
+		
 
 		static bool AddMesh(std::string mesh_id, std::string folder_id, std::string mesh_file);
 		static std::weak_ptr<Mesh> GetMesh(std::string id);
 		static bool DeleteMesh(std::string id);
 	};
+
+	typedef std::shared_ptr<Mesh> MeshReference;
+	typedef std::weak_ptr<Mesh> WeakMeshReference;
+	
 }

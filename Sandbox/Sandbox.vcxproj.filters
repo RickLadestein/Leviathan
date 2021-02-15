@@ -7,12 +7,24 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Player.h" />
+    <ClInclude Include="src\World\Chunk.h">
+      <Filter>World</Filter>
+    </ClInclude>
     <ClInclude Include="src\World\World.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="src\World\WorldObject.h">
       <Filter>World</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Source.cpp" />
+    <ClCompile Include="src\World\Chunk.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="src\World\WorldObject.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

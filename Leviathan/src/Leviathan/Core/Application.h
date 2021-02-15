@@ -1,5 +1,4 @@
 #pragma once
-#include "Leviathan/Data/Object.h"
 #include "Window.h"
 #include "Event.h"
 
@@ -11,7 +10,7 @@
 typedef std::shared_ptr<Leviathan::Window> WINDOW_PTR;
 
 namespace Leviathan {
-	class Application : public Object {
+	class Application {
 	protected:
 		Application();
 		Application(int width, int height, std::string title, WindowMode mode);
@@ -26,7 +25,6 @@ namespace Leviathan {
 		virtual void OnEvent(Leviathan::Events::Event* event) {};
 		inline std::weak_ptr<Window> GetWindow() { return this->window; }
 
-		std::string ToString() override;
 	private:
 		WINDOW_PTR window;
 		bool open;

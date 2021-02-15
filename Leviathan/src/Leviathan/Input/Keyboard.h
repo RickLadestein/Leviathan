@@ -1,6 +1,5 @@
 #pragma once
 #include "Leviathan/Core/Event.h"
-#include "Leviathan/Data/Object.h"
 #include "InputCodes.h"
 #include <array>
 
@@ -18,7 +17,7 @@ namespace Leviathan::Input {
 
 	
 
-	class Keyboard : public Object {
+	class Keyboard {
 	public:
 		Keyboard();
 		~Keyboard() = default;

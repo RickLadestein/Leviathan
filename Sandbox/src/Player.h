@@ -3,7 +3,6 @@
 #include "glm/glm.hpp"
 #include <memory>
 #include <Leviathan.h>
-#include "Leviathan/Data/Object.h"
 
 #define MAX_HORIZONTAL_PLAYER_VELOCITY 50
 #define MAX_VERTICAL_PLAYER_VELOCITY 100
@@ -58,7 +57,7 @@ public:
 	}
 };
 
-class Player : public Object {
+class Player {
 	friend class PlayerState;
 private:
 	glm::vec3 position;

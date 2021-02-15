@@ -4,7 +4,6 @@
 #include "Leviathan/Input/Mouse.h"
 #include "Leviathan/Data/Image.h"
 #include "Leviathan/Util/Delegate/MultiDelegate.h"
-#include "Leviathan/Data/Object.h"
 
 #include <memory>
 #include <string>
@@ -40,7 +39,7 @@ namespace Leviathan {
 		MultiDelegate<EventCallbackFn> EventHandler;
 	};
 
-	class Window : public Object {
+	class Window {
 	public:
 		Window(int width, int height, std::string title, WindowMode mode);
 		inline ~Window() { this->Close(); }

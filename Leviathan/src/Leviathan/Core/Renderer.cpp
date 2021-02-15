@@ -26,9 +26,9 @@ namespace Leviathan {
 			std::cout << "Could not load model because buffers were not initialised" << std::endl;
 			return;
 		}
-		std::shared_ptr<ShaderProgram> shader = entity.GetShader().lock();
+		std::shared_ptr<ShaderProgram> shader = entity.getShader().lock();
 		VertexBuffer* vb = entity.GetVertexBuffer();
-		MultiTexture* mtex = entity.GetTextures();
+		MultiTexture* mtex = entity.getTexture();
 		std::shared_ptr<Camera> camera = cam.lock();
 
 		if (shader && camera) {

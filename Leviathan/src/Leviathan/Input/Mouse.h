@@ -1,6 +1,5 @@
 #pragma once
 #include "Leviathan/Core/Event.h"
-#include "Leviathan/Data/Object.h"
 #include "InputCodes.h"
 #include <array>
 
@@ -20,7 +19,7 @@ namespace Leviathan::Input {
 
 	
 
-	class Mouse : public Object {
+	class Mouse {
 	public:
 		Mouse();
 		~Mouse() = default;

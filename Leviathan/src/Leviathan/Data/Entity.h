@@ -1,5 +1,4 @@
 #pragma once
-#include <sstream>
 #include <string>
 
 class Entity {
@@ -8,5 +7,7 @@ public:
 	~Entity() = default;
 
 	std::string GetUUID();
+	virtual std::string ToString();
 private:
+	size_t uuid;
 };
