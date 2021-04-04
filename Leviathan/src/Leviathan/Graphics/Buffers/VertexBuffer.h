@@ -1,7 +1,6 @@
 #pragma once
 #include "Leviathan/Data/Structures.h"
 #include "glad/glad.h"
-#include "Leviathan/Graphics/Mesh.h"
 #include <vector>
 
 namespace Leviathan::Graphics::Buffers {
@@ -14,9 +13,6 @@ namespace Leviathan::Graphics::Buffers {
 
 	class VertexBuffer {
 	public:
-		//Construct a normal vbo
-		VertexBuffer(Mesh& mesh);
-		//Just initialize the buffers
 		VertexBuffer();
 
 		~VertexBuffer();
@@ -30,9 +26,8 @@ namespace Leviathan::Graphics::Buffers {
 		void SetPimitiveType(PrimitiveType type) { primitive_type = static_cast<GLenum>(type); }
 		PrimitiveType GetPrimitiveType() { return static_cast<PrimitiveType>(primitive_type); }
 
-		void BufferData(std::vector<Primitive>& primitives);
-		void BufferData(Mesh& mesh);
-		void BufferData(std::shared_ptr<Mesh> mesh);
+		void BufferData(MeshData& mesh);
+		void BufferData(AttributeStorage& attribs);
 
 		void DestroyBuffers();
 

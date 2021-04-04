@@ -37,7 +37,7 @@ namespace Leviathan {
 				this->erase(key);
 				return true;
 			}
-			catch (std::out_of_range eor) {
+			catch (std::exception eor) {
 				return false;
 			}
 		}

@@ -2,7 +2,7 @@
 
 void WorldObject::Translate(glm::vec3& translation)
 {
-	this->setPosition(this->position + translation);
+	this->transform.position = (this->position + translation);
 }
 
 void WorldObject::Translate(float x, float y, float z)
@@ -13,7 +13,7 @@ void WorldObject::Translate(float x, float y, float z)
 
 void WorldObject::RotateDeg(glm::vec3& rotation)
 {
-	this->setRotation(this->rotation + rotation);
+	this->transform.rotation = (this->rotation + rotation);
 }
 
 void WorldObject::RotateDeg(float x_rot, float y_rot, float z_rot)
@@ -42,7 +42,7 @@ void WorldObject::RotateRad(float x_rot, float y_rot, float z_rot)
 
 void WorldObject::Scale(glm::vec3& scalar)
 {
-	this->setScale(this->scale * scalar);
+	this->transform.scale = (this->scale * scalar);
 }
 
 void WorldObject::Scale(float x_scl, float y_scl, float z_scl)

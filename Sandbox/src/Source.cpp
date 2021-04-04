@@ -25,23 +25,33 @@ public:
 	std::shared_ptr<Player> player;
 
 	double timestamp;
-	Game() : Application{1080, 720, "Minecraft", WindowMode::WINDOWED} {
+	Game() : Application{1080, 720, "Dat shit that is important", WindowMode::WINDOWED} {
 		FileManager::RegisterDirectory("default", FileManager::GetWorkingDir());
 		FileManager::RegisterDirectory("shaders", "C:\\Users\\dazle\\source\\repos\\Leviathan\\Sandbox\\resources\\shaders");
 		FileManager::RegisterDirectory("textures", "C:\\Users\\dazle\\source\\repos\\Leviathan\\Sandbox\\resources\\textures");
 		FileManager::RegisterDirectory("models", "C:\\Users\\dazle\\source\\repos\\Leviathan\\Sandbox\\resources\\models");
 		FileManager::RegisterDirectory("images", "C:\\Users\\dazle\\source\\repos\\Leviathan\\Sandbox\\resources\\images");
 
-		Mesh::AddMesh("cube", "models", "cube_t.obj");
+		std::shared_ptr<Mesh> mesh = std::make_shared<ModelMesh>("models", "AWP_Dragon_Lore.obj");
+		MeshStorage::AddMesh("awp", mesh);
+		//Mesh::AddMesh("cube", "models", "cube_t.obj");
+		//Mesh::AddMesh("awp", "models", "AWP_Dragon_Lore.obj");
 		ShaderProgram::AddShader("block", "shaders", "block.frag", "block.vert");
 		ShaderProgram::AddShader("block", "shaders", "block.frag", "block.vert");
 		ShaderProgram::AddShader("grayblock", "shaders", "grayblock.frag", "grayblock.vert");
 		ShaderProgram::AddShader("colblock", "shaders", "colblock.frag", "colblock.vert");
-		
+
+		TextureReference tref = std::make_shared<Texture2D>("textures", "awp_color.png", false);
+		TextureReference tref2 = std::make_shared<Texture2D>("textures", "Skybox.png", false);
+		TextureStorage::AddTexture("default", tref);
+		TextureStorage::AddTexture("atlas", tref2);
+
 		DepthBuffer::Enable();
 		DepthBuffer::SetDepthFunction(DepthFunc::LESS);
+
 		std::shared_ptr<Leviathan::Image> im = Leviathan::Image::Load("default", "logo.png");
 		std::shared_ptr<Leviathan::Window> window = this->GetWindow().lock();
+		
 		window->SetWindowIcon(im);
 		window->SetVSync(true);
 
@@ -49,14 +59,10 @@ public:
 		//cam = Camera::GetPrimary();
 		this->player = std::make_shared<Player>();
 		wo = new WorldObject();
-		wo->setMesh("cube");
+		wo->setMesh("awp");
 		wo->setShader("colblock");
-		wo->setPosition(glm::vec3(5.0f, 0.0f, 0.0f));
-
-		TextureReference tref = Texture::GetTexture("default").lock();
-		if (tref != nullptr) {
-			tref->SetMinMagSetting(MinMagSetting::LINEAR, MinMagSetting::LINEAR);
-		}
+		wo->getTexture()->SetTexture("default", 0);
+		wo->getTexture()->SetTexture("atlas", 1);
 
 		timestamp = 0.0;
 	}
@@ -97,17 +103,29 @@ public:
 
 	 void OnMouseEvent(Event* ev) {
 		 std::shared_ptr<Mouse> mouse = this->GetMouse().lock();
-		 if (ev->GetEventType() == EventType::MouseMove && mouse) {
-			 if (mouse->GetMouseMode() != MouseMode::CENTERED) {
-				 return;
-			 }
-			 std::shared_ptr<Camera> camera = player->GetCamera().lock();
-			 if (camera) {
-				 MouseMoveEvent* event = (MouseMoveEvent*)ev;
+		 if (mouse) {
+			 switch (ev->GetEventType()) {
+			 case EventType::MouseMove:
+			 {
+				 if (mouse->GetMouseMode() != MouseMode::CENTERED) {
+					 return;
+				 }
+				 std::shared_ptr<Camera> camera = player->GetCamera().lock();
+				 if (camera) {
+					 MouseMoveEvent* event = (MouseMoveEvent*)ev;
+					 double dx, dy;
+					 event->GetDelta(&dx, &dy);
+					 this->player->Rotate(glm::vec3((float)dy, (float)-dx, 0.0f));
+					 glm::vec3 cam_angle = camera->GetRotation();
+				 }
+			 } break;
+			 case EventType::MouseWheel:
+			 {
+				 MouseWheelEvent* event = (MouseWheelEvent*)ev;
 				 double dx, dy;
-				 event->GetDelta(&dx, &dy);
-				 this->player->Rotate(glm::vec3((float)dy, (float)-dx, 0.0f));
-				 glm::vec3 cam_angle = camera->GetRotation();
+				 event->GetScroll(&dx, &dy);
+				 wo->transform.Rotate(glm::vec3(0.0f, 1.0f, 0.0f));
+			 } break;
 			 }
 		 }
 		 
@@ -134,9 +152,6 @@ public:
 				 case KeyCode::KEY_D:
 					 player->MoveRight(this->last_frametime.GetSeconds() * key_mult);
 					 break;
-				 case KeyCode::KEY_UP:
-					 player->AddVelocity(glm::vec3(0.0f, 1.0f, 0.0f));
-					 break;
 				 case KeyCode::KEY_SPACE:
 					 player->MoveUp(this->last_frametime.GetSeconds() * key_mult);
 					 break;
@@ -156,7 +171,42 @@ public:
 					 }
 				 }
 					 break;
-				 
+				 case KeyCode::KEY_U:
+					 wo->transform.Translate(glm::vec3(0.0f, 1.0f, 0.0f));
+					 break;
+				 case KeyCode::KEY_O:
+					 wo->transform.Translate(glm::vec3(0.0f, -1.0f, 0.0f));
+					 break;
+				 case KeyCode::KEY_I:
+					 wo->transform.Translate(glm::vec3(1.0f, 0.0f, 0.0f));
+					 break;
+				 case KeyCode::KEY_J:
+					 wo->transform.Translate(glm::vec3(0.0f, 0.0f, 1.0f));
+					 break;
+				 case KeyCode::KEY_K:
+					 wo->transform.Translate(glm::vec3(-1.0f, 0.0f, 0.0f));
+					 break;
+				 case KeyCode::KEY_L:
+					 wo->transform.Translate(glm::vec3(0.0f, 0.0f, -1.0f));
+					 break;
+				 case KeyCode::KEY_KP_1:
+					 wo->transform.Rotate(glm::vec3(1.0f, 0.0f, 0.0f));
+					 break;
+				 case KeyCode::KEY_KP_3:
+					 wo->transform.Rotate(glm::vec3(-1.0f, 0.0f, 0.0f));
+					 break;
+				 case KeyCode::KEY_KP_4:
+					 wo->transform.Rotate(glm::vec3(0.0f, 1.0f, 0.0f));
+					 break;
+				 case KeyCode::KEY_KP_6:
+					 wo->transform.Rotate(glm::vec3(0.0f, -1.0f, 0.0f));
+					 break;
+				 case KeyCode::KEY_KP_7:
+					 wo->transform.Rotate(glm::vec3(0.0f, 0.0f, 1.0f));
+					 break;
+				 case KeyCode::KEY_KP_9:
+					 wo->transform.Rotate(glm::vec3(0.0f, 0.0f, -1.0f));
+					 break;
 				 default:
 					 continue;
 				 }
@@ -170,7 +220,7 @@ public:
 			 CheckFps();
 			 CheckKeyboardKeys();
 			 Leviathan::Renderer::Render(*wo, player->GetCamera());
-			 wo->RotateDeg(glm::vec3(this->last_frametime, 0.0f, 0.0f));
+			 //wo->RotateDeg(glm::vec3(this->last_frametime, 0.0f, 0.0f));
 			 player->Update(this->last_frametime);
 		 }
 	 }

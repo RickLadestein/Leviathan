@@ -56,7 +56,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>LV_PLATFORM_WINDOWS;STB_IMAGE_IMPLEMENTATION;TINYOBJLOADER_IMPLEMENTATION;GLFW_INCLUDE_NONE;LV_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LV_PLATFORM_WINDOWS;STB_IMAGE_IMPLEMENTATION;TINYOBJLOADER_IMPLEMENTATION;GLFW_INCLUDE_NONE;FNL_IMPL;LV_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>external\include;external\Glad\include;external\Glfw\include;external\Tinyobj;src;C:\Program Files\boost\boost_1_74_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
       <Optimization>Disabled</Optimization>
@@ -75,7 +75,7 @@
     <ClCompile>
       <PrecompiledHeader>NotUsing</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
-      <PreprocessorDefinitions>LV_PLATFORM_WINDOWS;STB_IMAGE_IMPLEMENTATION;TINYOBJLOADER_IMPLEMENTATION;GLFW_INCLUDE_NONE;LV_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>LV_PLATFORM_WINDOWS;STB_IMAGE_IMPLEMENTATION;TINYOBJLOADER_IMPLEMENTATION;GLFW_INCLUDE_NONE;FNL_IMPL;LV_RELEASE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>external\include;external\Glad\include;external\Glfw\include;external\Tinyobj;src;C:\Program Files\boost\boost_1_74_0;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization>Full</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
@@ -102,9 +102,11 @@
     <ClInclude Include="src\Leviathan\Core\Window.h" />
     <ClInclude Include="src\Leviathan\Data\Dictionary.h" />
     <ClInclude Include="src\Leviathan\Data\Entity.h" />
+    <ClInclude Include="src\Leviathan\Data\FastNoise.h" />
     <ClInclude Include="src\Leviathan\Data\Image.h" />
     <ClInclude Include="src\Leviathan\Data\Structures.h" />
     <ClInclude Include="src\Leviathan\Data\Timestep.h" />
+    <ClInclude Include="src\Leviathan\Data\Transform.h" />
     <ClInclude Include="src\Leviathan\Graphics\Buffers\DepthBuffer.h" />
     <ClInclude Include="src\Leviathan\Graphics\Buffers\FrameBuffer.h" />
     <ClInclude Include="src\Leviathan\Graphics\Buffers\StencilBuffer.h" />
@@ -152,4 +154,4 @@
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
-</Project> 
+</Project>

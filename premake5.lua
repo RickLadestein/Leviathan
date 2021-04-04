@@ -50,7 +50,8 @@ project "Leviathan"
 		"LV_PLATFORM_WINDOWS",
 		"STB_IMAGE_IMPLEMENTATION",
 		"TINYOBJLOADER_IMPLEMENTATION",
-		"GLFW_INCLUDE_NONE"
+		"GLFW_INCLUDE_NONE",
+		"FNL_IMPL"
 	}
 	
 	libdirs {"%{prj.name}/external/libs/%{cfg.architecture}"}
@@ -96,7 +97,8 @@ project "Sandbox"
 	defines
 	{
 		"LV_PLATFORM_WINDOWS",
-		"GLFW_INCLUDE_NONE"
+		"GLFW_INCLUDE_NONE",
+		"FNL_IMPL"
 	}
 	
 	links 

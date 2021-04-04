@@ -3,31 +3,67 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include "Leviathan/Graphics/Buffers/VertexBuffer.h"
 
 namespace Leviathan::Graphics {
+	enum class MeshStatus {
+		NOT_READY = -1,			//Object is created but nothing was done/imported yet
+		IMPORTING_DATA = 1,		//Importing obj data from file
+		FAILED_IMPORT = -2,		//Failed obj data import
+		PARSING_DATA = 2,		//Parsing the vertex/normal/texture data from loaded file
+		FAILED_PARSE = -3,		//Failed parsing the vertex/normal/texture data from loaded file
+		BUILDING_BUFFER = 3,    //Creating the vertex buffer in memory
+		FAILED_BUILD = -4,		//Failed creating vertex buffer
+		READY = 0				//All set to go
+	};
+
 	class Mesh {
 	public:
-		std::string name;
-		std::vector<byte> primitive_data;
-		int primitive_count;
-		PrimitiveType primitive_type;
-		bool ready;
-
-		Mesh(const Mesh&) = default;
-		Mesh& operator=(const Mesh&) = default;
-		Mesh(std::string src);
-		Mesh(std::string folder, std::string file);
-		Mesh() = delete;
+		Mesh(const Mesh&) = delete;
+		Mesh& operator=(const Mesh&) = delete;
 		~Mesh() = default;
-	public:
 		
-
-		static bool AddMesh(std::string mesh_id, std::string folder_id, std::string mesh_file);
-		static std::weak_ptr<Mesh> GetMesh(std::string id);
-		static bool DeleteMesh(std::string id);
+		Leviathan::Graphics::Buffers::VertexBuffer vertex_buffer;
+		inline MeshStatus GetStatus() { return this->status; }
+		PrimitiveType GetPrimitiveType() { return this->primitive_type; }
+		unsigned int GetPrimitiveCount();
+		int primitive_count;
+	protected:
+		Mesh() = default;
+		MeshStatus status;
+		std::string name;
+		PrimitiveType primitive_type;
+		
+		MeshData meshdata;
 	};
 
 	typedef std::shared_ptr<Mesh> MeshReference;
 	typedef std::weak_ptr<Mesh> WeakMeshReference;
+
+	class ModelMesh : public Mesh {
+	public:
+		ModelMesh(std::string folder, std::string file);
+		~ModelMesh() = default;
+
+		AttributeStorage attribs;
+	};
+
+	class CustomMesh: public Mesh {
+	public: 
+		CustomMesh(PrimitiveType type, size_t expectedsize = 100);
+		void AddMeshData(glm::vec3& vertex_pos, glm::vec3& normal, glm::vec3& texture_coord);
+		void AddMeshData(VertexData& vdata);
+		void ClearMeshData();
+		void Build();
+	};
+
+	class MeshStorage {
+	public:
+		static bool AddMesh(std::string mesh_id, MeshReference mesh);
+		static bool DeleteMesh(std::string mesh_id);
+		static WeakMeshReference GetMesh(std::string mesh_id);
+	};
+
+	
 	
 }

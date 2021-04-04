@@ -3,6 +3,8 @@
 #include "glm/glm.hpp"
 #include "Leviathan/Graphics/Drawable.h"
 #include "Leviathan/Data/Entity.h"
+
+#include "TerrainGenerators/TerrainGenerator.h"
 #define CHUNK_WIDTH 16
 #define CHUNK_HEIGHT 256
 #define CHUNK_WATER_START 62
@@ -40,7 +42,7 @@ public:
 			uint8_t emission_factor;
 
 			/// <summary>
-			/// transperantcy (0-255)
+			/// transparency (0-255)
 			/// </summary>
 			uint8_t transperantcy;
 
@@ -63,6 +65,7 @@ public:
 
 class Chunk : public Drawable, Entity {
 private:
+	TerrainGenerator tgen;
 	Block blocks[CHUNK_WIDTH][CHUNK_HEIGHT][CHUNK_WIDTH];
 public:
 	Chunk(glm::vec2 chunk_start);

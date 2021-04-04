@@ -19,5 +19,5 @@ public:
 	static bool WriteStringToFile(std::string folder_id, std::string filename, std::string content, bool trunc = true);
 	static bool WriteDataToFile(std::string folder_id, std::string filename, char* data, size_t size, bool trunc = true);
 
-	static bool ImportObjFile(std::string folder_id, std::string filename, std::vector<byte>& result, int* primitive_count, PrimitiveType* type);
+	static bool ImportObjFile(std::string folder_id, std::string filename, std::shared_ptr<Attribute> vert, std::shared_ptr<Attribute> norm, std::shared_ptr<Attribute> tex);
 };

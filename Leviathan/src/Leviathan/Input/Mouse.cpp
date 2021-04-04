@@ -28,22 +28,19 @@ namespace Leviathan::Input {
 			Leviathan::Events::MouseMoveEvent* ev = dynamic_cast<Leviathan::Events::MouseMoveEvent*> (event);
 			ev->GetPosition(&this->pos_x, &this->pos_y);
 			ev->GetDelta(&this->x_delta, &this->y_delta);
-		}
-		break;
+		} break;
 		case Leviathan::Events::EventType::MousePress:
 		{
 			Leviathan::Events::MousePressEvent* ev = dynamic_cast<Leviathan::Events::MousePressEvent*> (event);
 			MouseButton btn = ev->GetButton();
 			this->AddBtn(btn);
-		}
-		break;
+		} break;
 		case Leviathan::Events::EventType::MouseRelease:
 		{
 			Leviathan::Events::MouseReleaseEvent* ev = dynamic_cast<Leviathan::Events::MouseReleaseEvent*> (event);
 			MouseButton _btn = ev->GetButton();
 			this->RemoveBtn(_btn);
-		}
-		break;
+		} break;
 		}
 	}
 

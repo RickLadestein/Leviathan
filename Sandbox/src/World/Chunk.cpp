@@ -1,4 +1,7 @@
 #include "Chunk.h"
+#include "Leviathan/Data/FastNoise.h"
+
+
 
 void Block::setNeighbours(bool up, bool down, bool front, bool back, bool left, bool right)
 {

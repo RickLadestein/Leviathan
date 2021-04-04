@@ -46,6 +46,9 @@
     <ClInclude Include="src\Leviathan\Data\Entity.h">
       <Filter>Leviathan\Data</Filter>
     </ClInclude>
+    <ClInclude Include="src\Leviathan\Data\FastNoise.h">
+      <Filter>Leviathan\Data</Filter>
+    </ClInclude>
     <ClInclude Include="src\Leviathan\Data\Image.h">
       <Filter>Leviathan\Data</Filter>
     </ClInclude>
@@ -103,6 +106,7 @@
     <ClInclude Include="src\Leviathan\Util\Math.h">
       <Filter>Leviathan\Util</Filter>
     </ClInclude>
+    <ClInclude Include="src\Leviathan\Data\Transform.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Leviathan\Core\Application.cpp">

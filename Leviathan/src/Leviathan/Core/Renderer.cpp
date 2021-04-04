@@ -22,12 +22,17 @@ namespace Leviathan {
 	const char* texes[8] = {"texture0", "texture1", "texture2" , "texture3", "texture4", "texture5", "texture6", "texture7" };
 	void Renderer::Render(Drawable& entity, std::weak_ptr<Camera> cam)
 	{
-		if (!entity.GetVertexBuffer()->buffers_ready) {
+		MeshReference mref = entity.getMesh().lock();
+		if (mref == nullptr) {
+			std::cout << "Could not render drawable because it has no mesh" << std::endl;
+		}
+		if (mref->GetStatus() != MeshStatus::READY) {
 			std::cout << "Could not load model because buffers were not initialised" << std::endl;
 			return;
 		}
+
 		std::shared_ptr<ShaderProgram> shader = entity.getShader().lock();
-		VertexBuffer* vb = entity.GetVertexBuffer();
+		VertexBuffer* vb = &mref->vertex_buffer;
 		MultiTexture* mtex = entity.getTexture();
 		std::shared_ptr<Camera> camera = cam.lock();
 
@@ -41,11 +46,17 @@ namespace Leviathan {
 
 			shader->setUniform("projection", camera->GetProjectionMatrix());
 			shader->setUniform("view", camera->GetViewMatrix());
-			shader->setUniform("model", entity.GetModelMatrix());
-			shader->setUniform("time", glfwGetTime());
+			shader->setUniform("model", entity.transform.GetTransformMatrix());
+			shader->setUniform("time", (float)glfwGetTime());
+
+			for (int i = 0; i < MAX_MULTITEX_TEXTURES; i++) {
+				if (mtex->texture_names[i].length() != 0) {
+					shader->setUniform(mtex->texture_names[i].c_str(), i);
+				}
+			}
 			vb->Bind();
 
-			glDrawArrays(GL_TRIANGLES, 0, vb->element_count);
+			glDrawArrays(GL_TRIANGLES, 0, mref->vertex_buffer.element_count);
 			shader->unbind();
 			mtex->Unbind();
 			vb->Unbind();

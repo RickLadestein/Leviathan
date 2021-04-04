@@ -150,17 +150,12 @@ namespace Leviathan::Graphics {
 		Texture() = default;
 		~Texture() = default;
 
-		virtual void Bind(bool finaltarget = true);
-		virtual void Unbind(bool finaltarget = true);
+		virtual void Bind();
+		virtual void Unbind();
 		void SetTextureWrapSetting(TextureWrapSetting s, TextureWrapSetting t);
 		void SetMinMagSetting(MinMagSetting min, MinMagSetting mag);
 		void SetMipMapMinMagSetting(MipmapMinMagSetting min, MipmapMinMagSetting mag);
 		GLuint GetHandle() { return this->handle; }
-
-		static bool AddTexture(std::string texture_id, std::string folder_id, std::string texture_file, bool mipmap);
-		static bool AddTexture(std::string texture_id, int width, int height);
-		static std::weak_ptr<Texture> GetTexture(std::string id);
-		static bool DeleteTexture(std::string id);
 	protected:
 
 
@@ -174,20 +169,10 @@ namespace Leviathan::Graphics {
 	typedef std::shared_ptr<Texture> TextureReference;
 	typedef std::weak_ptr<Texture> WeakTextureReference;
 
-	class Texture1D : public Texture {
-	public:
-		inline Texture1D(std::string folder_id, std::string texture_file, bool mipmap = false) { throw new std::exception("Not implemented yet"); };
-	};
-
 	class Texture2D : public Texture {
 	public:
 		Texture2D(std::string folder_id, std::string texture_file, bool mipmap = false);
 		Texture2D(int width, int height);
-	};
-
-	class Texture3D : public Texture {
-	public:
-		inline Texture3D(std::string folder_id, std::vector<std::string> tex_files, bool mipmap = false) { throw new std::exception("Not implemented yet"); };
 	};
 
 	class TextureCubemap : public Texture {
@@ -197,25 +182,41 @@ namespace Leviathan::Graphics {
 	
 
 #define MAX_MULTITEX_TEXTURES 8
-	class MultiTexture : public Texture {
+	class MultiTexture {
 	public:
 		std::array<WeakTextureReference, MAX_MULTITEX_TEXTURES> textures;
+		std::array<std::string, MAX_MULTITEX_TEXTURES> texture_names;
 
+		MultiTexture() {
+			for (int i = 0; i < MAX_MULTITEX_TEXTURES; i++) {
+				texture_names[i] = "";
+			}
+		}
 
 		WeakTextureReference& operator[](unsigned int index) {
 			return textures[index];
 		}
 
-		void Bind(bool finaltarget = true) override;
-		void Unbind(bool finaltarget = true) override;
+		void Bind();
+		void Unbind();
 
 		void SetTexture(WeakTextureReference ref, int texture_layer);
 		void SetTexture(std::string texture_id, int texture_layer);
 		WeakTextureReference GetTexture(int texture_layer);
 	};
 
-
+	class TextureStorage {
+		TextureStorage() = delete;
+		~TextureStorage() = delete;
+	public:
+		static WeakTextureReference GetTextureById(std::string texture_id);
+		static bool AddTexture(std::string texture_id, TextureReference texture_ref);
+		static bool RemoveTexture(std::string texture_id);
+	};
 }
+
+
+
 
 
 

@@ -170,9 +170,12 @@ bool FileManager::WriteDataToFile(std::string folder_id, std::string filename, c
 	return false;
 }
 
-bool FileManager::ImportObjFile(std::string folder_id, std::string filename, std::vector<byte>& result, int* primitive_count, PrimitiveType* type)
+bool FileManager::ImportObjFile(std::string folder_id, std::string filename, std::shared_ptr<Attribute> vert, std::shared_ptr<Attribute> norm, std::shared_ptr<Attribute> tex)
 {
-	result.clear();
+	vert->ClearData();
+	norm->ClearData();
+	tex->ClearData();
+
 	std::string inputfile = CombinePath(folder_id, filename);
 	std::string basedir = GetDirectory(folder_id);
 	tinyobj::attrib_t attrib;
@@ -182,6 +185,10 @@ bool FileManager::ImportObjFile(std::string folder_id, std::string filename, std
 
 	std::string warn;
 	std::string err;
+
+	std::vector<glm::vec3> vertices;
+	std::vector<glm::vec3> normals;
+	std::vector<glm::vec3> texture_coords;
 
 	bool ret = tinyobj::LoadObj(&attrib, &shapes, &materials, &warn, &err, inputfile.c_str(), basedir.c_str() , true, true);
 	if (!warn.empty()) {
@@ -222,27 +229,17 @@ bool FileManager::ImportObjFile(std::string folder_id, std::string filename, std
 					glm::vec3 vertex(vx, vy, vz);
 					glm::vec3 normal(nx, nx, vz);
 					glm::vec3 texture(tx, ty, 0.0f);
-					components.push_back({
-						vertex,
-						normal,
-						texture });
+					
+					vertices.push_back(vertex);
+					normals.push_back(normal);
+					texture_coords.push_back(texture);
 				}
 				index_offset += fv;
 			}
 		}
-		int total_copy_size = components.size() * sizeof(VertexData);
-		result.clear();
-		result.resize(total_copy_size);
-		memcpy(result.data(), components.data(), total_copy_size);
-		*primitive_count = components.size() / 3;
-		*type = PrimitiveType::TRIANGLES;
-
-		/*for (size_t i = 0; i < components.size(); i += 3) {
-			_Primitive pr;
-			TripleVertexData<VertexData, VertexData, VertexData> vdata = { components[i], components[i + 1], components[i + 2] };
-			pr.copyDataFromSource(&vdata, sizeof(TripleVertexData<VertexData, VertexData, VertexData>));
-			result.push_back(pr);
-		}*/
+		vert->AddData(vertices);
+		norm->AddData(normals);
+		tex->AddData(texture_coords);
 	}
 	catch (std::exception e) {
 		throw e;

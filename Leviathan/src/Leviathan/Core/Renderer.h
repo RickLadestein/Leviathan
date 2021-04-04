@@ -46,11 +46,13 @@ namespace Leviathan {
 		static void Render(std::vector<Drawable>& entities, std::weak_ptr<Camera> cam, std::weak_ptr<Leviathan::Graphics::Buffers::FrameBuffer> fbo);
 
 		//Face culling
+		static void SetRenderTarget(Leviathan::Graphics::Buffers::FrameBuffer& fbuf);
 		static void SetFaceCulling(bool enabled);
 		static void SetFaceCullSide(FaceCullSide side);
 		static void SetFrontFaceCullingOrientation(FrontFaceOrientation orientation);
 		static bool IsFaceCullingEnabled();
 		static void ResetCulling();
+		static void ReleaseRenderTarget();
 
 		//Blend mode
 		static void SetBlending(bool enabled);

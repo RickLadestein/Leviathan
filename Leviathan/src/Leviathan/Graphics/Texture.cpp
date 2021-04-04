@@ -3,13 +3,14 @@
 #include "Leviathan/Data/Dictionary.h"
 #include <unordered_map>
 #include <iostream>
+#include <sstream>
 
 
 
 namespace Leviathan::Graphics {
 	
 	int current_texture_layer_count = 0;
-	Texture* bound_texture;
+	MultiTexture* bound_texture;
 	const int t_units[8] = { GL_TEXTURE0,  GL_TEXTURE1, GL_TEXTURE2, GL_TEXTURE3, GL_TEXTURE4, GL_TEXTURE5, GL_TEXTURE6, GL_TEXTURE7 };
 
 	Texture2D::Texture2D(std::string folder_id, std::string texture_file, bool mipmap)
@@ -61,39 +62,20 @@ namespace Leviathan::Graphics {
 		this->rtg = true;
 	}
 
-	void Texture::Bind(bool finaltarget)
+	void Texture::Bind()
 	{
-		if (finaltarget) {
-			if (bound_texture != nullptr) {
-				std::cerr << "Error: Trying to bind new texture while old texture is still bound" << std::endl;
-				return;
-			}
-		}
-
 		if (handle != GL_FALSE) {
 			glBindTexture(this->textureType, this->handle);
-			if (finaltarget) {
-				bound_texture = this;
-			}
 		}
 		else {
 			std::cerr << "Error: Trying to bind uninitialized texture" << std::endl;
 		}
 	}
 
-	void Texture::Unbind(bool finaltarget)
+	void Texture::Unbind()
 	{
-		if (finaltarget) {
-			if (bound_texture != this) {
-				std::cerr << "Error: Trying to unbind not bound texture" << std::endl;
-				return;
-			}
-		}
 		if (handle != GL_FALSE) {
 			glBindTexture(this->textureType, 0);
-			if (finaltarget) {
-				bound_texture = nullptr;
-			}
 		}
 		else {
 			std::cerr << "Error: Trying to unbind uninitialized texture" << std::endl;
@@ -127,76 +109,12 @@ namespace Leviathan::Graphics {
 		this->Unbind();
 	}
 
-
-	Leviathan::Dictionary<std::string, TextureReference> textures;
-	
-	bool Texture::AddTexture(std::string texture_id, std::string folder_id, std::string texture_file, bool mipmap)
-	{
-		try {
-			if (textures.at(texture_id)) {
-				return false;
-			}
-		}
-		catch (std::exception e) {
-			std::shared_ptr<Texture> tex = std::make_shared<Texture2D>(folder_id, texture_file, mipmap);
-			if (tex->rtg) {
-				textures[texture_id] = tex;
-				return true;
-			}
-		}
-		return false;
-	}
-
-	bool Texture::AddTexture(std::string texture_id, int width, int height)
-	{
-		try {
-			if (textures.at(texture_id)) {
-				return false;
-			}
-		}
-		catch (std::exception e) {
-			std::shared_ptr<Texture> tex = std::make_shared<Texture2D>(width, height);
-			if (tex->rtg) {
-				textures[texture_id] = tex;
-				return true;
-			}
-		}
-		return false;
-	}
-
-	std::weak_ptr<Texture> Texture::GetTexture(std::string id)
-	{
-		TextureReference texture;
-		bool succes = textures.try_get_value(id, texture);
-		if (succes) {
-			return texture;
-		}
-		else {
-			return std::weak_ptr<Texture>();
-		}
-	}
-
-	bool Texture::DeleteTexture(std::string id)
-	{
-		TextureReference t_ref;
-		bool get_succes = textures.try_get_value(id, t_ref);
-		t_ref->Unbind();
-		try {
-			std::weak_ptr<Texture> prg = textures.at(id);
-			textures.erase(id);
-			return true;
-		}
-		catch (std::exception e) {
-			return false;
-		}
-	}
-
 	
 	
-	void MultiTexture::Bind(bool finaltarget)
+	void MultiTexture::Bind()
 	{
 		if (bound_texture != nullptr) {
-			std::cerr << "Error: Trying to bind new texture while old texture is still bound" << std::endl;
+			std::cerr << "Error: Trying to bind new multitexture while old multitexture is still bound" << std::endl;
 			return;
 		}
 		for (unsigned int i = 0; i < MAX_MULTITEX_TEXTURES; i++) {
@@ -205,17 +123,17 @@ namespace Leviathan::Graphics {
 			TextureReference tref = tex.lock();
 			if (tref != nullptr) {
 				glActiveTexture(t_units[i]);
-				tref->Bind(false);
+				tref->Bind();
 			}
 		}
 		bound_texture = this;
 		glActiveTexture(GL_TEXTURE0);
 	}
 
-	void MultiTexture::Unbind(bool finaltarget)
+	void MultiTexture::Unbind()
 	{
 		if (bound_texture != this) {
-			std::cerr << "Error: Trying to unbind not bound texture" << std::endl;
+			std::cerr << "Error: Trying to unbind not bound multitexture" << std::endl;
 			return;
 		}
 		for (unsigned int i = 0; i < MAX_MULTITEX_TEXTURES; i++) {
@@ -224,7 +142,7 @@ namespace Leviathan::Graphics {
 			TextureReference tref = tex.lock();
 			if (tref != nullptr) {
 				glActiveTexture(t_units[i]);
-				tref->Unbind(false);
+				tref->Unbind();
 			}
 		}
 		bound_texture = nullptr;
@@ -252,6 +170,9 @@ namespace Leviathan::Graphics {
 		else {
 			if (texture_layer >= 0 && texture_layer < MAX_MULTITEX_TEXTURES) {
 				textures[texture_layer] = ref;
+				std::stringstream ss;
+				ss << "texture_" << texture_layer;
+				texture_names[texture_layer] = ss.str();
 			}
 			else {
 				std::cout << "Texture layer was outside the bounds of MAX_MULTITEX_TEXTURES or negative" << std::endl;
@@ -261,7 +182,35 @@ namespace Leviathan::Graphics {
 	}
 
 	void MultiTexture::SetTexture(std::string texture_id, int texture_layer) {
-		WeakTextureReference tref = Texture::GetTexture(texture_id);
+		WeakTextureReference tref = TextureStorage::GetTextureById(texture_id);
 		this->SetTexture(tref, texture_layer);
+	}
+
+	Leviathan::Dictionary<std::string, TextureReference> texture_storage;
+
+	WeakTextureReference TextureStorage::GetTextureById(std::string texture_id)
+	{
+		TextureReference found_texture;
+		texture_storage.try_get_value(texture_id, found_texture);
+		return found_texture;
+	}
+	bool TextureStorage::AddTexture(std::string texture_id, TextureReference texture_ref)
+	{
+		TextureReference found_texture;
+		texture_storage.try_get_value(texture_id, found_texture);
+		if (found_texture == nullptr) {
+			//Texture does not exist yet
+			texture_storage[texture_id] = texture_ref;
+			return true;
+		}
+		else {
+			//Texture exists
+			throw std::exception("A texture with that id already exists");
+			return false;
+		}
+	}
+	bool TextureStorage::RemoveTexture(std::string texture_id)
+	{
+		return texture_storage.try_erase(texture_id);
 	}
 }

@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
+    <Filter Include="TerrainGenerators">
+      <UniqueIdentifier>{34F6D60C-A00C-D5A2-E983-60C455D9A52A}</UniqueIdentifier>
+    </Filter>
     <Filter Include="World">
       <UniqueIdentifier>{4D25640E-B939-8CBF-82BB-2F1FEE8E88F0}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Player.h" />
+    <ClInclude Include="src\TerrainGenerators\BaseTerrainGenerator.h">
+      <Filter>TerrainGenerators</Filter>
+    </ClInclude>
+    <ClInclude Include="src\TerrainGenerators\TerrainGenerator.h">
+      <Filter>TerrainGenerators</Filter>
+    </ClInclude>
     <ClInclude Include="src\World\Chunk.h">
       <Filter>World</Filter>
     </ClInclude>

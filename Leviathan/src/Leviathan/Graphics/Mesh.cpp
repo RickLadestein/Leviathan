@@ -1,64 +1,109 @@
 #include "Mesh.h"
 #include "Leviathan/Util/FileManager.h"
-
+#include "Leviathan/Data/Dictionary.h"
 #include <unordered_map>
 
 namespace Leviathan::Graphics {
-	Mesh::Mesh(std::string src)
+	unsigned int Mesh::GetPrimitiveCount()
 	{
-
+		int primitive_vertex_count;
+		switch (this->primitive_type) {
+		case PrimitiveType::POINT:
+			primitive_vertex_count = 1;
+			break;
+		case PrimitiveType::LINE:
+			primitive_vertex_count = 2;
+			break;
+		case PrimitiveType::TRIANGLES:
+			primitive_vertex_count = 3;
+			break;
+		}
+		return this->meshdata.verts.size() / primitive_vertex_count;
 	}
 
-	Mesh::Mesh(std::string folder, std::string file)
+	ModelMesh::ModelMesh(std::string folder, std::string file)
 	{
-		primitive_count = 0;
-		FileManager::ImportObjFile(folder, file, this->primitive_data, &primitive_count, &primitive_type);
-		if (this->primitive_data.size() > 0) {
-			this->ready = true;
+		//import the mesh data from file
+		this->attribs.AddAttribute<glm::vec3>("vertices");
+		this->attribs.AddAttribute<glm::vec3>("normals");
+		this->attribs.AddAttribute<glm::vec3>("texcoords");
+
+		this->primitive_type = PrimitiveType::TRIANGLES;
+		std::shared_ptr<Attribute> vertex_attrib = this->attribs.GetAttribute("vertices");
+		std::shared_ptr<Attribute> normal_attrib = this->attribs.GetAttribute("normals");
+		std::shared_ptr<Attribute> texcoord_attrib = this->attribs.GetAttribute("texcoords");
+
+		this->status = MeshStatus::IMPORTING_DATA;
+		bool succes = FileManager::ImportObjFile(folder, file, vertex_attrib, normal_attrib, texcoord_attrib);
+		if (!succes) {
+			this->status = MeshStatus::FAILED_IMPORT;
+			return;
 		}
-		else {
-			this->ready = false;
-		}
+		this->status = MeshStatus::BUILDING_BUFFER;
+		this->vertex_buffer.BufferData(this->attribs);
+		this->primitive_count = vertex_attrib->data.size() / (3 * sizeof(glm::vec3));
+
+		this->status = MeshStatus::READY;
+	}
+
+	CustomMesh::CustomMesh(PrimitiveType type,size_t expectedsize)
+	{
+		this->primitive_type = type;
+		this->meshdata.verts.reserve(expectedsize);
+		this->meshdata.norms.reserve(expectedsize);
+		this->meshdata.texts.reserve(expectedsize);
+	}
+
+	void CustomMesh::AddMeshData(glm::vec3& vertex_pos, glm::vec3& normal, glm::vec3& texture_coord)
+	{
+		this->meshdata.verts.push_back(vertex_pos);
+		this->meshdata.norms.push_back(normal);
+		this->meshdata.texts.push_back(texture_coord);
+	}
+
+	void CustomMesh::AddMeshData(VertexData& vdata)
+	{
+		this->meshdata.verts.push_back(vdata.vertex);
+		this->meshdata.norms.push_back(vdata.normal);
+		this->meshdata.texts.push_back(vdata.texture);
+	}
+
+	void CustomMesh::ClearMeshData()
+	{
+		this->meshdata.verts.clear();
+		this->meshdata.norms.clear();
+		this->meshdata.texts.clear();
+	}
+	void CustomMesh::Build()
+	{
 	}
 
 
-	std::unordered_map<std::string, std::shared_ptr<Mesh>> meshes;
-	bool Mesh::AddMesh(std::string mesh_id, std::string folder_id, std::string mesh_file)
+	Leviathan::Dictionary<std::string, MeshReference> mesh_storage;
+	bool MeshStorage::AddMesh(std::string mesh_id, MeshReference mesh)
 	{
-		try {
-			if (meshes.at(mesh_id)) {
-				return false;
-			}
-		}
-		catch (std::exception e) {
-			std::shared_ptr<Mesh> mesh = std::make_shared<Mesh>(folder_id, mesh_file);
-			if (mesh->ready) {
-				meshes[mesh_id] = mesh;
-				return true;
-			}
-		}
-		return false;
-	}
-
-	std::weak_ptr<Mesh> Mesh::GetMesh(std::string id)
-	{
-		try {
-			return meshes.at(id);
-		}
-		catch (std::exception e) {
-			return std::weak_ptr<Mesh>();
-		}
-	}
-
-	bool Mesh::DeleteMesh(std::string id)
-	{
-		try {
-			std::weak_ptr<Mesh> prg = meshes.at(id);
-			meshes.erase(id);
-			return true;
-		}
-		catch (std::exception e) {
+		MeshReference found;
+		bool succes = mesh_storage.try_get_value(mesh_id, found);
+		if (succes) {
+			throw std::exception("Could not add mesh: mesh already exists");
 			return false;
 		}
+		else {
+			mesh_storage[mesh_id] = mesh;
+			return true;
+		}
+	}
+	bool MeshStorage::DeleteMesh(std::string mesh_id)
+	{
+		MeshReference found;
+		bool succes = mesh_storage.try_erase(mesh_id);
+		return succes;
+
+	}
+	WeakMeshReference MeshStorage::GetMesh(std::string mesh_id)
+	{
+		MeshReference found;
+		mesh_storage.try_get_value(mesh_id, found);
+		return found;
 	}
 }
