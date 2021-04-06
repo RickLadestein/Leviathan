@@ -26,7 +26,6 @@ namespace Leviathan::Graphics::Buffers {
 		void SetPimitiveType(PrimitiveType type) { primitive_type = static_cast<GLenum>(type); }
 		PrimitiveType GetPrimitiveType() { return static_cast<PrimitiveType>(primitive_type); }
 
-		void BufferData(MeshData& mesh);
 		void BufferData(AttributeStorage& attribs);
 
 		void DestroyBuffers();
@@ -39,7 +38,7 @@ namespace Leviathan::Graphics::Buffers {
 		Handle vbo_handle;
 		Handle vao_handle;
 		GLenum primitive_type;
-		size_t current_vao_attrib;
+		GLuint current_vao_attrib;
 
 		size_t GetVertexCountFromPrimitive() {
 			switch (this->GetPrimitiveType()) {

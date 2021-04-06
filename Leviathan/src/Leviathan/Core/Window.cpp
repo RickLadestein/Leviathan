@@ -15,7 +15,8 @@ void APIENTRY OnGlError(GLenum source, GLenum type, GLuint id, GLenum severity, 
 		<< message;
 	std::cout << ss.str() << std::endl;
 	if (severity == GL_DEBUG_SEVERITY_HIGH || severity == GL_DEBUG_SEVERITY_MEDIUM)
-		__debugbreak();
+		return;
+		//__debugbreak();
 }
 
 

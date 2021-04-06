@@ -26,15 +26,12 @@ namespace Leviathan::Graphics {
 		Leviathan::Graphics::Buffers::VertexBuffer vertex_buffer;
 		inline MeshStatus GetStatus() { return this->status; }
 		PrimitiveType GetPrimitiveType() { return this->primitive_type; }
-		unsigned int GetPrimitiveCount();
 		int primitive_count;
 	protected:
 		Mesh() = default;
 		MeshStatus status;
 		std::string name;
 		PrimitiveType primitive_type;
-		
-		MeshData meshdata;
 	};
 
 	typedef std::shared_ptr<Mesh> MeshReference;
@@ -44,17 +41,16 @@ namespace Leviathan::Graphics {
 	public:
 		ModelMesh(std::string folder, std::string file);
 		~ModelMesh() = default;
-
+	private:
 		AttributeStorage attribs;
 	};
 
 	class CustomMesh: public Mesh {
 	public: 
 		CustomMesh(PrimitiveType type, size_t expectedsize = 100);
-		void AddMeshData(glm::vec3& vertex_pos, glm::vec3& normal, glm::vec3& texture_coord);
-		void AddMeshData(VertexData& vdata);
-		void ClearMeshData();
 		void Build();
+
+		AttributeStorage attribs;
 	};
 
 	class MeshStorage {

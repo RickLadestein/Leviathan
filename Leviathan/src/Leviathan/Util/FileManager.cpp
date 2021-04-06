@@ -181,7 +181,6 @@ bool FileManager::ImportObjFile(std::string folder_id, std::string filename, std
 	tinyobj::attrib_t attrib;
 	std::vector<tinyobj::shape_t> shapes;
 	std::vector<tinyobj::material_t> materials;
-	std::vector<VertexData> components;
 
 	std::string warn;
 	std::string err;

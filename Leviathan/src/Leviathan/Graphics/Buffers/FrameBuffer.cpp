@@ -1,5 +1,4 @@
 #include "FrameBuffer.h"
-
 #include <iostream>
 using Leviathan::Graphics::Texture;
 namespace Leviathan::Graphics::Buffers {
@@ -8,7 +7,7 @@ namespace Leviathan::Graphics::Buffers {
 		this->id = 0;
 		this->width = 100;
 		this->height = 100;
-		this->name = "default";
+		this->name = "default_fb";
 		this->rbo = 0;
 		this->Generate();
 	}
@@ -32,6 +31,8 @@ namespace Leviathan::Graphics::Buffers {
 	{
 		if (TextureStorage::GetTextureById(this->name).lock()) {
 			glBindFramebuffer(GL_FRAMEBUFFER, this->id);
+			//glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+			glClear(GL_COLOR_BUFFER_BIT);
 		}
 		else {
 			std::cout << "Could not bind framebuffer: target texture does not exist!" << std::endl;
@@ -98,9 +99,10 @@ namespace Leviathan::Graphics::Buffers {
 		glGenFramebuffers(1, &this->id);
 		glBindFramebuffer(GL_FRAMEBUFFER, this->id);
 		bool tex_result = this->GenerateTexture();
-		bool rbuff_result = this->GenerateRenderBuffer();
+		//bool rbuff_result = this->GenerateRenderBuffer();
+		//bool rbuff_result = true;
 		if (!this->Verify()) {
-			std::cout << "Could not generate framebuffer tex = " << tex_result << " rbuff" << rbuff_result << std::endl;
+			std::cout << "Could not generate framebuffer tex = " << tex_result << std::endl;
 			this->Destroy();
 		}
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -113,7 +115,8 @@ namespace Leviathan::Graphics::Buffers {
 		if (succes) {
 			tref->Bind();
 			tref->SetMinMagSetting(MinMagSetting::LINEAR, MinMagSetting::LINEAR);
-			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_FRAMEBUFFER, GL_TEXTURE_2D, tref->GetHandle(), 0);
+			//tref->SetTextureWrapSetting(TextureWrapSetting::REPEAT, TextureWrapSetting::REPEAT);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, tref->GetHandle(), 0);
 		}
 		return succes;
 	}

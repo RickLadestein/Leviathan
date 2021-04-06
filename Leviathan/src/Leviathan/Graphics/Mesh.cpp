@@ -4,23 +4,6 @@
 #include <unordered_map>
 
 namespace Leviathan::Graphics {
-	unsigned int Mesh::GetPrimitiveCount()
-	{
-		int primitive_vertex_count;
-		switch (this->primitive_type) {
-		case PrimitiveType::POINT:
-			primitive_vertex_count = 1;
-			break;
-		case PrimitiveType::LINE:
-			primitive_vertex_count = 2;
-			break;
-		case PrimitiveType::TRIANGLES:
-			primitive_vertex_count = 3;
-			break;
-		}
-		return this->meshdata.verts.size() / primitive_vertex_count;
-	}
-
 	ModelMesh::ModelMesh(std::string folder, std::string file)
 	{
 		//import the mesh data from file
@@ -49,30 +32,6 @@ namespace Leviathan::Graphics {
 	CustomMesh::CustomMesh(PrimitiveType type,size_t expectedsize)
 	{
 		this->primitive_type = type;
-		this->meshdata.verts.reserve(expectedsize);
-		this->meshdata.norms.reserve(expectedsize);
-		this->meshdata.texts.reserve(expectedsize);
-	}
-
-	void CustomMesh::AddMeshData(glm::vec3& vertex_pos, glm::vec3& normal, glm::vec3& texture_coord)
-	{
-		this->meshdata.verts.push_back(vertex_pos);
-		this->meshdata.norms.push_back(normal);
-		this->meshdata.texts.push_back(texture_coord);
-	}
-
-	void CustomMesh::AddMeshData(VertexData& vdata)
-	{
-		this->meshdata.verts.push_back(vdata.vertex);
-		this->meshdata.norms.push_back(vdata.normal);
-		this->meshdata.texts.push_back(vdata.texture);
-	}
-
-	void CustomMesh::ClearMeshData()
-	{
-		this->meshdata.verts.clear();
-		this->meshdata.norms.clear();
-		this->meshdata.texts.clear();
 	}
 	void CustomMesh::Build()
 	{

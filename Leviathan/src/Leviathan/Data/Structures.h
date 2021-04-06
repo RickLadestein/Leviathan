@@ -10,6 +10,8 @@
 
 typedef std::uint8_t byte;
 typedef unsigned int Handle;
+struct PlayerCoords;
+struct Attribute;
 
 enum class PrimitiveType : GLenum {
     TRIANGLES = GL_TRIANGLES,
@@ -27,58 +29,6 @@ enum class AttributeType : GLenum {
 struct PlayerCoords {
     float x;
     float y;
-};
-
-struct MeshData {
-    /// <summary>
-    /// Vertex data container
-    /// </summary>
-    std::vector<glm::vec3> verts;
-
-    /// <summary>
-    /// Normal data container
-    /// </summary>
-    std::vector<glm::vec3> norms;
-
-    /// <summary>
-    /// Texture data container
-    /// </summary>
-    std::vector<glm::vec3> texts;
-
-    //The amount of primitives stored inside this data
-    int primitive_count;
-
-    //The type of primitive
-    PrimitiveType primitive_type;
-};
-
-union VertexData {
-    struct
-    {
-        glm::vec3 vertex;
-        glm::vec3 normal;
-        glm::vec3 texture;
-    };
-    float data[(sizeof(glm::vec3) / sizeof(float)) * 3];
-};
-
-union TrianglePrimitive {
-    struct
-    {
-        VertexData v1;
-        VertexData v2;
-        VertexData v3;
-    };
-    float data[(sizeof(VertexData) / sizeof(float)) * 3];
-};
-
-union LinePrimitive {
-    struct
-    {
-        VertexData v1;
-        VertexData v2;
-    };
-    float data[(sizeof(VertexData) / sizeof(float)) * 2];
 };
 
 struct Attribute {

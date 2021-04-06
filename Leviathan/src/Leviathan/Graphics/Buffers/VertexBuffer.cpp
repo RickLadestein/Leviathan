@@ -43,41 +43,6 @@ namespace Leviathan::Graphics::Buffers {
 		}
 	}
 
-	void VertexBuffer::BufferData(MeshData& mesh) {
-		if (this->vao_handle != HANDLE_DEFAULT_VALUE || this->vbo_handle != HANDLE_DEFAULT_VALUE) {
-			this->DestroyBuffers();
-		}
-		std::vector<glm::vec3> byte_vector;
-		byte_vector.resize(mesh.verts.size() * 3);
-		//memcpy(&mesh.verts.begin(), )
-		//this->element_count = mesh.primitive_count * GetVertexCountFromPrimitive();
-		glGenBuffers(1, &this->vbo_handle);
-		glBindBuffer(GL_ARRAY_BUFFER, this->vbo_handle);
-		//glBufferData(GL_ARRAY_BUFFER, byte_vector->size(), byte_vector->data(), GL_STATIC_DRAW);
-
-		glGenVertexArrays(1, &this->vao_handle);
-		glBindVertexArray(this->vao_handle);
-
-		//Position data
-		glVertexAttribPointer(this->current_vao_attrib, 3, GL_FLOAT, GL_FALSE, (9 * sizeof(GLfloat)), 0);
-		glEnableVertexAttribArray(this->current_vao_attrib);
-		this->current_vao_attrib += 1;
-		//Normal data
-		glVertexAttribPointer(this->current_vao_attrib, 3, GL_FLOAT, GL_FALSE, (9 * sizeof(GLfloat)), (GLvoid*)(3 * sizeof(GLfloat)));
-		glEnableVertexAttribArray(this->current_vao_attrib);
-		this->current_vao_attrib += 1;
-
-		//Texture data
-		glVertexAttribPointer(this->current_vao_attrib, 3, GL_FLOAT, GL_FALSE, (9 * sizeof(GLfloat)), (GLvoid*)(6 * sizeof(GLfloat)));
-		glEnableVertexAttribArray(this->current_vao_attrib);
-		this->current_vao_attrib += 1;
-
-		glBindVertexArray(0);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		this->buffers_ready = true;
-		this->instance_buffer = false;
-	}
-
 	void VertexBuffer::BufferData(AttributeStorage& attribs)
 	{
 		if (this->vao_handle != HANDLE_DEFAULT_VALUE || this->vbo_handle != HANDLE_DEFAULT_VALUE) {
